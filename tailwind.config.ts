@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -57,11 +58,36 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        category: {
+          venue: "hsl(var(--venue-color))",
+          studio: "hsl(var(--studio-color))",
+          festival: "hsl(var(--festival-color))",
+          label: "hsl(var(--label-color))",
+          management: "hsl(var(--management-color))",
+          services: "hsl(var(--services-color))",
+          education: "hsl(var(--education-color))",
+          government: "hsl(var(--government-color))",
+          community: "hsl(var(--community-color))",
+          coworking: "hsl(var(--coworking-color))",
+          gallery: "hsl(var(--gallery-color))",
+          other: "hsl(var(--other-color))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      backgroundImage: {
+        "gradient-sunset": "var(--gradient-sunset)",
+        "gradient-overlay": "var(--gradient-overlay)",
+      },
+      boxShadow: {
+        warm: "var(--shadow-warm)",
+        glow: "var(--shadow-glow)",
+      },
+      fontFamily: {
+        sans: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

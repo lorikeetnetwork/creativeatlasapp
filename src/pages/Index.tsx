@@ -1,11 +1,203 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { MapPin, Plus, LogOut, User } from "lucide-react";
+import MapView from "@/components/MapView";
+import LocationList from "@/components/LocationList";
+import LocationDetail from "@/components/LocationDetail";
+import SearchFilters from "@/components/SearchFilters";
+import type { Tables } from "@/integrations/supabase/types";
+import { useToast } from "@/hooks/use-toast";
+import type { Session } from "@supabase/supabase-js";
 
 const Index = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const [locations, setLocations] = useState<Tables<"locations">[]>([]);
+  const [filteredLocations, setFilteredLocations] = useState<Tables<"locations">[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<Tables<"locations"> | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [region, setRegion] = useState("All Australia");
+  const [showDetail, setShowDetail] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  useEffect(() => {
+    filterLocations();
+  }, [locations, searchQuery, selectedCategories, region]);
+
+  const fetchLocations = async () => {
+    const { data, error } = await supabase
+      .from("locations")
+      .select("*")
+      .eq("status", "Active")
+      .order("name");
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load locations",
+        variant: "destructive",
+      });
+    } else {
+      setLocations(data || []);
+    }
+  };
+
+  const filterLocations = () => {
+    let filtered = [...locations];
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (loc) =>
+          loc.name.toLowerCase().includes(query) ||
+          loc.suburb.toLowerCase().includes(query) ||
+          loc.state.toLowerCase().includes(query) ||
+          loc.description?.toLowerCase().includes(query)
+      );
+    }
+
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((loc) => selectedCategories.includes(loc.category));
+    }
+
+    if (region !== "All Australia") {
+      filtered = filtered.filter((loc) => {
+        if (region === "Gold Coast") return loc.suburb.toLowerCase().includes("gold coast");
+        if (region === "Northern Rivers") return loc.state === "NSW" && loc.suburb.toLowerCase().includes("byron");
+        if (region === "Brisbane") return loc.suburb.toLowerCase().includes("brisbane");
+        if (region === "Sydney") return loc.suburb.toLowerCase().includes("sydney");
+        if (region === "Melbourne") return loc.suburb.toLowerCase().includes("melbourne");
+        return true;
+      });
+    }
+
+    setFilteredLocations(filtered);
+  };
+
+  const handleLocationSelect = (location: Tables<"locations">) => {
+    setSelectedLocation(location);
+    setShowDetail(true);
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Signed out",
+      description: "You have been signed out successfully",
+    });
+  };
+
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="h-screen flex flex-col bg-background">
+      {/* Header */}
+      <header className="flex-shrink-0 border-b bg-card shadow-sm">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-sunset flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold">Creative Map Australia</h1>
+              <p className="text-xs text-muted-foreground">
+                Connecting Australia's creative community
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {session ? (
+              <>
+                <Button variant="outline" size="sm">
+                  <User className="w-4 h-4 mr-2" />
+                  My Listings
+                </Button>
+                <Button onClick={handleSignOut} variant="ghost" size="sm">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => navigate("/auth")} variant="outline" size="sm">
+                Sign In
+              </Button>
+            )}
+            <Button className="shadow-warm" size="sm">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Listing
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="container mx-auto px-4 py-4">
+          <SearchFilters
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedCategories={selectedCategories}
+            onCategoryToggle={handleCategoryToggle}
+            region={region}
+            onRegionChange={setRegion}
+          />
+        </div>
+
+        <div className="flex-1 container mx-auto px-4 pb-4 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+            {/* List View */}
+            <div className="lg:col-span-1 h-[400px] lg:h-full">
+              <LocationList
+                locations={filteredLocations}
+                selectedLocation={selectedLocation}
+                onLocationSelect={handleLocationSelect}
+              />
+            </div>
+
+            {/* Map View */}
+            <div className="lg:col-span-2 h-[400px] lg:h-full relative">
+              {showDetail && selectedLocation ? (
+                <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
+                  <LocationDetail
+                    location={selectedLocation}
+                    onClose={() => setShowDetail(false)}
+                  />
+                </div>
+              ) : null}
+              <MapView
+                locations={filteredLocations}
+                selectedLocation={selectedLocation}
+                onLocationSelect={handleLocationSelect}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
