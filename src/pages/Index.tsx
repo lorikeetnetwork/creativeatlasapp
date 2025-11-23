@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import MapView from "@/components/MapView";
 import LocationDetail from "@/components/LocationDetail";
 import Sidebar from "@/components/Sidebar";
+import Topbar from "@/components/Topbar";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -18,6 +20,7 @@ const Index = () => {
   const [region, setRegion] = useState("All Australia");
   const [showDetail, setShowDetail] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -132,40 +135,69 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen flex bg-background">
-      {/* Sidebar */}
-      <Sidebar
+    <div className="h-screen flex flex-col bg-background">
+      {/* Topbar */}
+      <Topbar
         session={session}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedCategories={selectedCategories}
-        onCategoryToggle={handleCategoryToggle}
-        region={region}
-        onRegionChange={setRegion}
-        locations={filteredLocations}
-        selectedLocation={selectedLocation}
-        onLocationSelect={handleLocationSelect}
-        onOpenForm={handleOpenForm}
         onSignOut={handleSignOut}
         onSignIn={() => navigate("/auth")}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
       />
 
-      {/* Map View - Full width */}
-      <div className="flex-1 relative">
-        {showDetail && selectedLocation ? (
-          <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
-            <LocationDetail
-              location={selectedLocation}
-              onClose={() => setShowDetail(false)}
+      {/* Resizable Layout */}
+      <ResizablePanelGroup direction="horizontal" className="flex-1">
+        {/* Sidebar Panel */}
+        <ResizablePanel
+          defaultSize={20}
+          minSize={15}
+          maxSize={40}
+          collapsible={true}
+          collapsedSize={0}
+          onCollapse={() => setIsSidebarCollapsed(true)}
+          onExpand={() => setIsSidebarCollapsed(false)}
+        >
+          {!isSidebarCollapsed && (
+            <Sidebar
+              session={session}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+              region={region}
+              onRegionChange={setRegion}
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onOpenForm={handleOpenForm}
+              onSignOut={handleSignOut}
+              onSignIn={() => navigate("/auth")}
+            />
+          )}
+        </ResizablePanel>
+
+        {/* Resize Handle */}
+        {!isSidebarCollapsed && <ResizableHandle withHandle />}
+
+        {/* Map Panel */}
+        <ResizablePanel defaultSize={80}>
+          <div className="h-full relative">
+            {showDetail && selectedLocation ? (
+              <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
+                <LocationDetail
+                  location={selectedLocation}
+                  onClose={() => setShowDetail(false)}
+                />
+              </div>
+            ) : null}
+            <MapView
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
             />
           </div>
-        ) : null}
-        <MapView
-          locations={filteredLocations}
-          selectedLocation={selectedLocation}
-          onLocationSelect={handleLocationSelect}
-        />
-      </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };
