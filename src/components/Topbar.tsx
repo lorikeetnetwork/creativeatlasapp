@@ -1,6 +1,7 @@
-import { MapPin, LogOut, User, Menu, ChevronRight, ChevronLeft } from "lucide-react";
+import { LogOut, User, Menu, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Session } from "@supabase/supabase-js";
+import logoImage from "@/assets/creative-atlas-logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,15 +40,11 @@ const Topbar = ({
           )}
         </Button>
         
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-sunset flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-sm font-bold text-foreground">CREATIVE MAP</h1>
-            <p className="text-[10px] text-muted-foreground">AUSTRALIA</p>
-          </div>
-        </div>
+        <img 
+          src={logoImage} 
+          alt="Creative Atlas" 
+          className="h-10 w-auto object-contain"
+        />
       </div>
 
       {/* User Menu */}
