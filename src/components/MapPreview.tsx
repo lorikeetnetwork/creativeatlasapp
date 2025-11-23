@@ -58,7 +58,6 @@ const MapPreview = () => {
     localStorage.setItem("mapbox_token", token);
     setSavedToken(token);
     setError(null);
-    window.location.reload();
   };
 
   // Initialize map
