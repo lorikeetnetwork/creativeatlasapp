@@ -8,37 +8,37 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Dark theme - Australian sunset on dark background */
-    --background: 25 25% 8%;
-    --foreground: 25 10% 95%;
-    --card: 0 0% 10%;
-    --card-foreground: 25 10% 95%;
-    --popover: 25 20% 12%;
-    --popover-foreground: 25 10% 95%;
+    /* Dark theme - minimal dark grey palette */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
     
-    /* Burnt orange primary - like sunset over the outback */
-    --primary: 15 85% 55%;
+    /* Dark grey primary #191919 */
+    --primary: 0 0% 10%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 20 95% 65%;
+    --primary-glow: 0 0% 15%;
     
-    /* Warm terracotta secondary */
-    --secondary: 10 70% 45%;
+    /* Medium grey secondary */
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 100%;
     
     /* Muted dark tones */
-    --muted: 25 15% 18%;
-    --muted-foreground: 25 10% 65%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
     
-    /* Golden accent */
-    --accent: 40 90% 60%;
-    --accent-foreground: 25 20% 10%;
+    /* Light grey accent */
+    --accent: 0 0% 30%;
+    --accent-foreground: 0 0% 100%;
     
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;
     
     --border: 0 0% 25%;
     --input: 0 0% 25%;
-    --ring: 15 85% 55%;
+    --ring: 0 0% 40%;
     --radius: 0.75rem;
     
     /* Category colors - vibrant and distinct */
@@ -56,12 +56,12 @@ All colors MUST be HSL.
     --other-color: 0 0% 50%;
     
     /* Gradients */
-    --gradient-sunset: linear-gradient(135deg, hsl(15, 85%, 55%), hsl(40, 90%, 60%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(25 25% 8% / 0.9));
+    --gradient-sunset: linear-gradient(135deg, hsl(0, 0%, 10%), hsl(0, 0%, 20%));
+    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 8% / 0.9));
     
     /* Shadows */
-    --shadow-warm: 0 10px 40px -15px hsl(15 85% 55% / 0.5);
-    --shadow-glow: 0 0 50px hsl(20 95% 65% / 0.6);
+    --shadow-warm: 0 10px 40px -15px hsl(0 0% 10% / 0.5);
+    --shadow-glow: 0 0 50px hsl(0 0% 15% / 0.6);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -74,38 +74,38 @@ All colors MUST be HSL.
   }
   
   .dark {
-    --background: 25 25% 8%;
-    --foreground: 25 10% 95%;
-    --card: 0 0% 10%;
-    --card-foreground: 25 10% 95%;
-    --popover: 25 20% 10%;
-    --popover-foreground: 25 10% 95%;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
     
-    --primary: 15 85% 55%;
+    --primary: 0 0% 10%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 20 95% 65%;
+    --primary-glow: 0 0% 15%;
     
-    --secondary: 10 70% 45%;
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 100%;
     
-    --muted: 25 15% 15%;
-    --muted-foreground: 25 10% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
     
-    --accent: 40 90% 60%;
-    --accent-foreground: 25 20% 10%;
+    --accent: 0 0% 30%;
+    --accent-foreground: 0 0% 100%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     
     --border: 0 0% 25%;
     --input: 0 0% 25%;
-    --ring: 15 85% 55%;
+    --ring: 0 0% 40%;
     
-    --gradient-sunset: linear-gradient(135deg, hsl(15, 85%, 55%), hsl(40, 90%, 60%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(25 25% 8% / 0.9));
+    --gradient-sunset: linear-gradient(135deg, hsl(0, 0%, 10%), hsl(0, 0%, 20%));
+    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 8% / 0.9));
     
-    --shadow-warm: 0 10px 40px -15px hsl(15 85% 55% / 0.5);
-    --shadow-glow: 0 0 50px hsl(20 95% 65% / 0.6);
+    --shadow-warm: 0 10px 40px -15px hsl(0 0% 10% / 0.5);
+    --shadow-glow: 0 0 50px hsl(0 0% 15% / 0.6);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
