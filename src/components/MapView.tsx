@@ -46,7 +46,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v12",
+        style: "mapbox://styles/mapbox/dark-v11",
         center: [153.4, -28.0], // Gold Coast / Northern Rivers area
         zoom: 8,
       });
