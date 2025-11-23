@@ -4,7 +4,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "./ui/button";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { Input } from "./ui/input";
+import { ArrowRight, Loader2, AlertCircle, MapPin } from "lucide-react";
 import { useLocations } from "@/hooks/useLocations";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -37,14 +38,34 @@ const MapPreview = () => {
   const markers = useRef<mapboxgl.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [userInteracting, setUserInteracting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [tokenInput, setTokenInput] = useState("");
+  const [savedToken, setSavedToken] = useState<string | null>(
+    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token")
+  );
   const autoPanInterval = useRef<NodeJS.Timeout | null>(null);
 
-  const savedToken = import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token");
+  const handleSaveToken = () => {
+    const token = tokenInput.trim();
+    if (!token) {
+      setError("Please enter a token");
+      return;
+    }
+    if (!token.startsWith("pk.")) {
+      setError("Invalid token format. Mapbox public tokens start with 'pk.'");
+      return;
+    }
+    localStorage.setItem("mapbox_token", token);
+    setSavedToken(token);
+    setError(null);
+    window.location.reload();
+  };
 
   // Initialize map
   useEffect(() => {
     if (!mapContainer.current || map.current || !savedToken) return;
 
+    console.log("Initializing map preview with token:", savedToken?.substring(0, 10) + "...");
     mapboxgl.accessToken = savedToken;
 
     try {
@@ -64,8 +85,23 @@ const MapPreview = () => {
       map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
       map.current.on("load", () => {
+        console.log("Map preview loaded successfully");
         setMapLoaded(true);
+        setError(null);
       });
+
+      map.current.on("error", (e) => {
+        console.error("Map error:", e);
+        setError(`Map failed to load: ${e.error?.message || "Unknown error"}`);
+      });
+
+      // Timeout if map doesn't load
+      const loadTimeout = setTimeout(() => {
+        if (!mapLoaded) {
+          console.error("Map load timeout");
+          setError("Map took too long to load. Please check your token and try again.");
+        }
+      }, 10000);
 
       // Detect user interaction
       map.current.on("mousedown", () => setUserInteracting(true));
@@ -76,16 +112,18 @@ const MapPreview = () => {
       map.current.on("touchend", () => {
         setUserInteracting(false);
       });
+
+      return () => {
+        clearTimeout(loadTimeout);
+        if (autoPanInterval.current) clearInterval(autoPanInterval.current);
+        markers.current.forEach((marker) => marker.remove());
+        map.current?.remove();
+      };
     } catch (err) {
       console.error("Failed to initialize map:", err);
+      setError(err instanceof Error ? err.message : "Failed to initialize map");
     }
-
-    return () => {
-      if (autoPanInterval.current) clearInterval(autoPanInterval.current);
-      markers.current.forEach((marker) => marker.remove());
-      map.current?.remove();
-    };
-  }, [savedToken]);
+  }, [savedToken, mapLoaded]);
 
   // Add markers
   useEffect(() => {
@@ -169,10 +207,59 @@ const MapPreview = () => {
 
   if (!savedToken) {
     return (
-      <div className="w-full h-[600px] lg:h-[700px] bg-muted/50 rounded-lg flex items-center justify-center">
-        <div className="text-center space-y-4 p-6">
-          <p className="text-foreground">Map preview unavailable</p>
-          <Button onClick={() => navigate("/map")}>View Full Map</Button>
+      <div className="w-full h-[400px] md:h-[600px] lg:h-[700px] bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+        <div className="text-center space-y-4 p-6 max-w-md">
+          <MapPin className="w-12 h-12 mx-auto text-muted-foreground" />
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Map Preview Requires Mapbox Token</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Enter your Mapbox public token to enable the map preview. Get one free at{" "}
+              <a 
+                href="https://account.mapbox.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                mapbox.com
+              </a>
+            </p>
+          </div>
+          {error && (
+            <p className="text-sm text-destructive">{error}</p>
+          )}
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="pk.ey..."
+              value={tokenInput}
+              onChange={(e) => setTokenInput(e.target.value)}
+              className="flex-1"
+            />
+            <Button onClick={handleSaveToken}>Save</Button>
+          </div>
+          <Button variant="outline" onClick={() => navigate("/map")} className="w-full">
+            View Full Map Instead
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-[400px] md:h-[600px] lg:h-[700px] bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+        <div className="text-center space-y-4 p-6 max-w-md">
+          <AlertCircle className="w-12 h-12 mx-auto text-destructive" />
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Map Failed to Load</h3>
+            <p className="text-sm text-muted-foreground mb-4">{error}</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+            <Button variant="outline" onClick={() => navigate("/map")}>
+              View Full Map Instead
+            </Button>
+          </div>
         </div>
       </div>
     );
