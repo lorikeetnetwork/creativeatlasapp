@@ -1,8 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, ExternalLink } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface LocationListProps {
   locations: Tables<"locations">[];
@@ -11,69 +10,56 @@ interface LocationListProps {
 }
 
 const LocationList = ({ locations, selectedLocation, onLocationSelect }: LocationListProps) => {
-  return (
-    <ScrollArea className="h-full">
-      <div className="space-y-3 p-4">
-        {locations.length === 0 ? (
-          <Card>
-            <CardContent className="p-6 text-center text-muted-foreground">
-              No locations found. Try adjusting your filters.
-            </CardContent>
-          </Card>
-        ) : (
-          locations.map((location) => (
-            <Card
-              key={location.id}
-              className={`cursor-pointer transition-all hover:shadow-warm ${
-                selectedLocation?.id === location.id
-                  ? "ring-2 ring-primary shadow-warm"
-                  : ""
-              }`}
-              onClick={() => onLocationSelect(location)}
-            >
-              <CardContent className="p-4">
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-lg leading-tight">{location.name}</h3>
-                    {location.website && (
-                      <a
-                        href={location.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    )}
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">{location.category}</Badge>
-                    {location.subcategory && (
-                      <Badge variant="outline">{location.subcategory}</Badge>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                    <span>
-                      {location.suburb}, {location.state}
-                    </span>
-                  </div>
-                  
-                  {location.description && (
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {location.description}
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
+  if (locations.length === 0) {
+    return (
+      <div className="py-8">
+        <p className="text-muted-foreground text-center text-sm">
+          No locations found
+        </p>
       </div>
-    </ScrollArea>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      {locations.map((location) => {
+        const isSelected = selectedLocation?.id === location.id;
+        return (
+          <Card
+            key={location.id}
+            className={`p-3 cursor-pointer transition-all hover:shadow-md ${
+              isSelected ? "ring-2 ring-primary shadow-sm" : ""
+            }`}
+            onClick={() => onLocationSelect(location)}
+          >
+            <div className="flex gap-3">
+              {/* Thumbnail Placeholder */}
+              <div className="w-14 h-14 flex-shrink-0 rounded bg-gradient-sunset opacity-10" />
+              
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-sm text-foreground truncate mb-0.5">
+                  {location.name}
+                </h3>
+                <p className="text-xs text-muted-foreground truncate">
+                  {location.category} • {location.suburb}, {location.state}
+                </p>
+              </div>
+
+              {/* Open Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs flex-shrink-0"
+              >
+                OPEN
+                <ArrowRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+          </Card>
+        );
+      })}
+    </div>
   );
 };
 
