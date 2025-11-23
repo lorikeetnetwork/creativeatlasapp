@@ -11,7 +11,7 @@ All colors MUST be HSL.
     /* Dark theme - Australian sunset on dark background */
     --background: 25 25% 8%;
     --foreground: 25 10% 95%;
-    --card: 25 20% 12%;
+    --card: 0 0% 10%;
     --card-foreground: 25 10% 95%;
     --popover: 25 20% 12%;
     --popover-foreground: 25 10% 95%;
@@ -76,7 +76,7 @@ All colors MUST be HSL.
   .dark {
     --background: 25 25% 8%;
     --foreground: 25 10% 95%;
-    --card: 25 20% 10%;
+    --card: 0 0% 10%;
     --card-foreground: 25 10% 95%;
     --popover: 25 20% 10%;
     --popover-foreground: 25 10% 95%;
