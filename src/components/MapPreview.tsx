@@ -41,7 +41,7 @@ const MapPreview = () => {
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
   const [savedToken, setSavedToken] = useState<string | null>(
-    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token")
+    typeof window !== "undefined" ? localStorage.getItem("mapbox_token") : null,
   );
   const autoPanInterval = useRef<NodeJS.Timeout | null>(null);
 
