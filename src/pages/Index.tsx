@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import MapView from "@/components/MapView";
 import LocationDetail from "@/components/LocationDetail";
+import LocationSubmissionForm from "@/components/LocationSubmissionForm";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -19,6 +21,7 @@ const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [region, setRegion] = useState("All Australia");
   const [showDetail, setShowDetail] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -127,11 +130,7 @@ const Index = () => {
   };
 
   const handleOpenForm = () => {
-    // Placeholder for opening listing form
-    toast({
-      title: "Coming Soon",
-      description: "Listing submission form will be available soon",
-    });
+    setIsFormOpen(true);
   };
 
   return (
@@ -198,6 +197,20 @@ const Index = () => {
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      {/* Location Submission Form Dialog */}
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <LocationSubmissionForm
+            session={session}
+            onSuccess={() => {
+              setIsFormOpen(false);
+              fetchLocations();
+            }}
+            onCancel={() => setIsFormOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

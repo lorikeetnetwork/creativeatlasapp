@@ -29,6 +29,7 @@ export type Database = {
           instagram: string | null
           last_verified_at: string | null
           latitude: number
+          logo_url: string | null
           longitude: number
           name: string
           other_social: string | null
@@ -57,6 +58,7 @@ export type Database = {
           instagram?: string | null
           last_verified_at?: string | null
           latitude: number
+          logo_url?: string | null
           longitude: number
           name: string
           other_social?: string | null
@@ -85,6 +87,7 @@ export type Database = {
           instagram?: string | null
           last_verified_at?: string | null
           latitude?: number
+          logo_url?: string | null
           longitude?: number
           name?: string
           other_social?: string | null
