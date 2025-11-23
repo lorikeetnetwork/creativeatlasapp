@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import MapPreview from "@/components/MapPreview";
 import { 
   Map, 
   Search, 
@@ -157,6 +158,21 @@ const Landing = () => {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Map Preview Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              See Creative Australia in Action
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Explore hundreds of creative spaces across the country. Pan, zoom, and discover the vibrant creative scene near you.
+            </p>
+          </div>
+          <MapPreview />
         </div>
       </section>
 
