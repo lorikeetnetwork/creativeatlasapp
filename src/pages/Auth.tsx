@@ -20,7 +20,7 @@ const Auth = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/");
+        navigate("/map");
       }
     });
   }, [navigate]);
@@ -34,7 +34,7 @@ const Auth = () => {
       password,
       options: {
         data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/`,
+        emailRedirectTo: `${window.location.origin}/map`,
       },
     });
 
@@ -72,7 +72,7 @@ const Auth = () => {
         variant: "destructive",
       });
     } else {
-      navigate("/");
+      navigate("/map");
     }
   };
 
