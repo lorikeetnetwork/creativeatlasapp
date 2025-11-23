@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { Tables } from "@/integrations/supabase/types";
-
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 interface MapViewProps {
   locations: Tables<"locations">[];
@@ -32,16 +32,32 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
   const markers = useRef<mapboxgl.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tokenInput, setTokenInput] = useState("");
+  const [savedToken, setSavedToken] = useState<string | null>(
+    localStorage.getItem("mapbox_token")
+  );
+
+  const handleSaveToken = () => {
+    if (tokenInput.trim()) {
+      localStorage.setItem("mapbox_token", tokenInput.trim());
+      setSavedToken(tokenInput.trim());
+      mapboxgl.accessToken = tokenInput.trim();
+      setTokenInput("");
+      window.location.reload();
+    }
+  };
 
   // Initialize map
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
     // Check if token is available
-    if (!mapboxgl.accessToken) {
+    if (!savedToken) {
       setError("Mapbox token not configured");
       return;
     }
+
+    mapboxgl.accessToken = savedToken;
 
     try {
       map.current = new mapboxgl.Map({
@@ -70,7 +86,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
       markers.current.forEach((marker) => marker.remove());
       map.current?.remove();
     };
-  }, []);
+  }, [savedToken]);
 
   // Update markers when locations change
   useEffect(() => {
@@ -147,10 +163,35 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
 
   if (error) {
     return (
-      <div className="w-full h-full rounded-lg bg-muted flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-muted-foreground mb-2">{error}</p>
-          <p className="text-sm text-muted-foreground">The map could not be loaded, but the location list is still available.</p>
+      <div className="w-full h-full rounded-lg bg-card border border-border flex items-center justify-center p-8">
+        <div className="text-center max-w-md space-y-4">
+          <p className="text-foreground font-medium mb-2">{error}</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            Enter your Mapbox public token (starts with pk.) to load the map.
+          </p>
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="pk.your_mapbox_token_here"
+              value={tokenInput}
+              onChange={(e) => setTokenInput(e.target.value)}
+              className="flex-1"
+            />
+            <Button onClick={handleSaveToken} disabled={!tokenInput.trim()}>
+              Save Token
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Get your token at{" "}
+            <a
+              href="https://account.mapbox.com/access-tokens/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              mapbox.com
+            </a>
+          </p>
         </div>
       </div>
     );
