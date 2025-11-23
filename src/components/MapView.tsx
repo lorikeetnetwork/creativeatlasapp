@@ -31,23 +31,40 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize map
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
-      center: [153.4, -28.0], // Gold Coast / Northern Rivers area
-      zoom: 8,
-    });
+    // Check if token is available
+    if (!mapboxgl.accessToken) {
+      setError("Mapbox token not configured");
+      return;
+    }
 
-    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: [153.4, -28.0], // Gold Coast / Northern Rivers area
+        zoom: 8,
+      });
 
-    map.current.on("load", () => {
-      setMapLoaded(true);
-    });
+      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+      map.current.on("load", () => {
+        setMapLoaded(true);
+      });
+
+      map.current.on("error", (e) => {
+        console.error("Map error:", e);
+        setError("Failed to load map");
+      });
+    } catch (err) {
+      console.error("Failed to initialize map:", err);
+      setError("Failed to initialize map");
+    }
 
     return () => {
       markers.current.forEach((marker) => marker.remove());
@@ -127,6 +144,17 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
       }
     });
   }, [selectedLocation, locations]);
+
+  if (error) {
+    return (
+      <div className="w-full h-full rounded-lg bg-muted flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-2">{error}</p>
+          <p className="text-sm text-muted-foreground">The map could not be loaded, but the location list is still available.</p>
+        </div>
+      </div>
+    );
+  }
 
   return <div ref={mapContainer} className="w-full h-full rounded-lg" />;
 };

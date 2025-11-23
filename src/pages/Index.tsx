@@ -20,12 +20,15 @@ const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [region, setRegion] = useState("All Australia");
   const [showDetail, setShowDetail] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("Index component mounted");
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      console.log("Session loaded:", session ? "authenticated" : "not authenticated");
     });
 
     const {
@@ -46,20 +49,29 @@ const Index = () => {
   }, [locations, searchQuery, selectedCategories, region]);
 
   const fetchLocations = async () => {
-    const { data, error } = await supabase
-      .from("locations")
-      .select("*")
-      .eq("status", "Active")
-      .order("name");
+    try {
+      console.log("Fetching locations...");
+      const { data, error } = await supabase
+        .from("locations")
+        .select("*")
+        .eq("status", "Active")
+        .order("name");
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load locations",
-        variant: "destructive",
-      });
-    } else {
-      setLocations(data || []);
+      if (error) {
+        console.error("Error fetching locations:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load locations",
+          variant: "destructive",
+        });
+      } else {
+        console.log("Locations loaded:", data?.length || 0);
+        setLocations(data || []);
+      }
+    } catch (err) {
+      console.error("Exception fetching locations:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,7 +136,7 @@ const Index = () => {
               <MapPin className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Creative Map Australia</h1>
+              <h1 className="text-xl font-bold text-foreground">Creative Map Australia</h1>
               <p className="text-xs text-muted-foreground">
                 Connecting Australia's creative community
               </p>
