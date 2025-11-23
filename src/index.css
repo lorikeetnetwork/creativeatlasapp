@@ -8,13 +8,13 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Australian sunset-inspired warm palette */
-    --background: 25 95% 98%;
-    --foreground: 25 20% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 25 20% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 25 20% 15%;
+    /* Dark theme - Australian sunset on dark background */
+    --background: 25 25% 8%;
+    --foreground: 25 10% 95%;
+    --card: 25 20% 12%;
+    --card-foreground: 25 10% 95%;
+    --popover: 25 20% 12%;
+    --popover-foreground: 25 10% 95%;
     
     /* Burnt orange primary - like sunset over the outback */
     --primary: 15 85% 55%;
@@ -25,19 +25,19 @@ All colors MUST be HSL.
     --secondary: 10 70% 45%;
     --secondary-foreground: 0 0% 100%;
     
-    /* Muted warm tones */
-    --muted: 25 50% 92%;
-    --muted-foreground: 25 15% 45%;
+    /* Muted dark tones */
+    --muted: 25 15% 18%;
+    --muted-foreground: 25 10% 65%;
     
     /* Golden accent */
     --accent: 40 90% 60%;
-    --accent-foreground: 25 20% 15%;
+    --accent-foreground: 25 20% 10%;
     
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 25 30% 88%;
-    --input: 25 30% 88%;
+    --border: 25 15% 22%;
+    --input: 25 15% 22%;
     --ring: 15 85% 55%;
     --radius: 0.75rem;
     
@@ -57,19 +57,19 @@ All colors MUST be HSL.
     
     /* Gradients */
     --gradient-sunset: linear-gradient(135deg, hsl(15, 85%, 55%), hsl(40, 90%, 60%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(25 95% 98% / 0.8));
+    --gradient-overlay: linear-gradient(180deg, transparent, hsl(25 25% 8% / 0.9));
     
     /* Shadows */
-    --shadow-warm: 0 10px 40px -15px hsl(15 85% 55% / 0.3);
-    --shadow-glow: 0 0 50px hsl(20 95% 65% / 0.4);
+    --shadow-warm: 0 10px 40px -15px hsl(15 85% 55% / 0.5);
+    --shadow-glow: 0 0 50px hsl(20 95% 65% / 0.6);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   
