@@ -9,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { Upload, Loader2, X } from "lucide-react";
+import { Upload, Loader2, X, MapPin } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
+import AddressAutocomplete, { type ParsedAddress } from "./AddressAutocomplete";
 
 const CATEGORIES = [
   "Venue",
@@ -58,6 +59,8 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [showManualAddress, setShowManualAddress] = useState(false);
+  const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -66,6 +69,18 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
       state: "QLD",
     }
   });
+
+  const handleAddressSelect = (parsedAddress: ParsedAddress) => {
+    setValue("address", parsedAddress.address);
+    setValue("suburb", parsedAddress.suburb);
+    setValue("state", parsedAddress.state);
+    setValue("postcode", parsedAddress.postcode);
+    setValue("country", parsedAddress.country);
+    setCoordinates({
+      latitude: parsedAddress.latitude,
+      longitude: parsedAddress.longitude,
+    });
+  };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -165,16 +180,20 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
     setIsSubmitting(true);
 
     try {
-      // Geocode the address
-      const coordinates = await geocodeAddress(
-        data.address,
-        data.suburb,
-        data.state,
-        data.postcode,
-        data.country
-      );
+      // Use coordinates from autocomplete or geocode manually entered address
+      let finalCoordinates = coordinates;
+      
+      if (!finalCoordinates) {
+        finalCoordinates = await geocodeAddress(
+          data.address,
+          data.suburb,
+          data.state,
+          data.postcode,
+          data.country
+        );
+      }
 
-      if (!coordinates) {
+      if (!finalCoordinates) {
         toast({
           title: "Address not found",
           description: "Could not find coordinates for this address. Please check the address details.",
@@ -197,8 +216,8 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
           state: data.state,
           postcode: data.postcode,
           country: data.country,
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
+          latitude: finalCoordinates.latitude,
+          longitude: finalCoordinates.longitude,
           email: data.email || null,
           phone: data.phone || null,
           website: data.website || null,
@@ -333,48 +352,87 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
 
       {/* Address Information */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Address</h3>
-        
-        <div>
-          <Label htmlFor="address">Street Address *</Label>
-          <Input id="address" {...register("address")} />
-          {errors.address && <p className="text-sm text-destructive mt-1">{errors.address.message}</p>}
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Address</h3>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowManualAddress(!showManualAddress)}
+            className="text-xs"
+          >
+            <MapPin className="w-3 h-3 mr-1" />
+            {showManualAddress ? "Use address search" : "Enter manually"}
+          </Button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="suburb">Suburb *</Label>
-            <Input id="suburb" {...register("suburb")} />
-            {errors.suburb && <p className="text-sm text-destructive mt-1">{errors.suburb.message}</p>}
-          </div>
+        {!showManualAddress ? (
+          <>
+            <div>
+              <Label>Search Address *</Label>
+              <AddressAutocomplete
+                onAddressSelect={handleAddressSelect}
+                placeholder="Start typing an address..."
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Search for your address to auto-fill all fields
+              </p>
+            </div>
 
-          <div>
-            <Label htmlFor="state">State *</Label>
-            <Select onValueChange={(value) => setValue("state", value)} defaultValue="QLD">
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {STATES.map((state) => (
-                  <SelectItem key={state} value={state}>{state}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+            {/* Show filled values as preview */}
+            {watch("address") && (
+              <div className="p-3 rounded-lg bg-muted/50 border border-border text-sm space-y-1">
+                <p className="font-medium">{watch("address")}</p>
+                <p className="text-muted-foreground">
+                  {watch("suburb")}, {watch("state")} {watch("postcode")}
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div>
+              <Label htmlFor="address">Street Address *</Label>
+              <Input id="address" {...register("address")} />
+              {errors.address && <p className="text-sm text-destructive mt-1">{errors.address.message}</p>}
+            </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="postcode">Postcode *</Label>
-            <Input id="postcode" {...register("postcode")} />
-            {errors.postcode && <p className="text-sm text-destructive mt-1">{errors.postcode.message}</p>}
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="suburb">Suburb *</Label>
+                <Input id="suburb" {...register("suburb")} />
+                {errors.suburb && <p className="text-sm text-destructive mt-1">{errors.suburb.message}</p>}
+              </div>
 
-          <div>
-            <Label htmlFor="country">Country *</Label>
-            <Input id="country" {...register("country")} defaultValue="Australia" />
-          </div>
-        </div>
+              <div>
+                <Label htmlFor="state">State *</Label>
+                <Select onValueChange={(value) => setValue("state", value)} defaultValue="QLD">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {STATES.map((state) => (
+                      <SelectItem key={state} value={state}>{state}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="postcode">Postcode *</Label>
+                <Input id="postcode" {...register("postcode")} />
+                {errors.postcode && <p className="text-sm text-destructive mt-1">{errors.postcode.message}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="country">Country *</Label>
+                <Input id="country" {...register("country")} defaultValue="Australia" />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Contact & Social */}
