@@ -1,11 +1,15 @@
-import { LogOut, User, Menu, ChevronRight, ChevronLeft } from "lucide-react";
+import { LogOut, User, Menu, ChevronRight, ChevronLeft, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -24,6 +28,31 @@ const Topbar = ({
   isSidebarCollapsed,
   onToggleSidebar,
 }: TopbarProps) => {
+  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    checkAdminStatus();
+  }, [session]);
+
+  const checkAdminStatus = async () => {
+    if (!session?.user) {
+      setIsAdmin(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .rpc('has_role', { _user_id: session.user.id, _role: 'admin' });
+
+      if (!error && data) {
+        setIsAdmin(true);
+      }
+    } catch (error) {
+      console.error("Error checking admin status:", error);
+    }
+  };
+
   return (
     <header className="h-14 flex-shrink-0 border-b bg-card flex items-center px-4 justify-between">
       <div className="flex items-center gap-3">
@@ -57,6 +86,15 @@ const Topbar = ({
         <DropdownMenuContent align="end">
           {session ? (
             <>
+              {isAdmin && (
+                <>
+                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    <Shield className="w-4 h-4 mr-2" />
+                    Admin Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <DropdownMenuItem>
                 <User className="w-4 h-4 mr-2" />
                 My Listings
