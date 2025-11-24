@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable";
+import { BulkImport } from "@/components/admin/BulkImport";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -86,6 +87,7 @@ export default function Admin() {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="pending">Pending Reviews</TabsTrigger>
             <TabsTrigger value="all">All Locations</TabsTrigger>
+            <TabsTrigger value="bulk-import">Bulk Import</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -98,6 +100,10 @@ export default function Admin() {
 
           <TabsContent value="all">
             <PendingLocationsTable status="all" />
+          </TabsContent>
+
+          <TabsContent value="bulk-import">
+            <BulkImport />
           </TabsContent>
         </Tabs>
       </div>
