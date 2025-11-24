@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Globe, Mail, Phone, Instagram, X, Users, Accessibility } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
+import { PhotoGallery } from "./PhotoGallery";
 
 interface LocationDetailProps {
   location: Tables<"locations"> | null;
@@ -11,6 +14,31 @@ interface LocationDetailProps {
 }
 
 const LocationDetail = ({ location, onClose }: LocationDetailProps) => {
+  const [photos, setPhotos] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (location?.id) {
+      fetchPhotos();
+    }
+  }, [location?.id]);
+
+  const fetchPhotos = async () => {
+    if (!location) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('location_photos')
+        .select('*')
+        .eq('location_id', location.id)
+        .order('display_order');
+
+      if (error) throw error;
+      setPhotos(data || []);
+    } catch (error) {
+      console.error("Error fetching photos:", error);
+    }
+  };
+
   if (!location) return null;
 
   return (
@@ -34,6 +62,11 @@ const LocationDetail = ({ location, onClose }: LocationDetailProps) => {
 
       <ScrollArea className="flex-1">
         <CardContent className="p-6 space-y-6">
+          {/* Photo Gallery */}
+          {photos.length > 0 && (
+            <PhotoGallery photos={photos} />
+          )}
+
           {/* Address */}
           <div className="space-y-2">
             <div className="flex items-start gap-3">

@@ -9,9 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { Upload, Loader2, X, MapPin } from "lucide-react";
+import { Upload, Loader2, X, MapPin, CheckCircle2 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import AddressAutocomplete, { type ParsedAddress } from "./AddressAutocomplete";
+import { PhotoUploader } from "./PhotoUploader";
+import { FieldWrapper } from "./FieldWrapper";
 
 const CATEGORIES = [
   "Venue",
@@ -55,15 +57,24 @@ interface LocationSubmissionFormProps {
   onCancel: () => void;
 }
 
+interface PhotoFile {
+  file: File;
+  preview: string;
+  caption: string;
+}
+
 export default function LocationSubmissionForm({ session, onSuccess, onCancel }: LocationSubmissionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [showManualAddress, setShowManualAddress] = useState(false);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [photoFiles, setPhotoFiles] = useState<PhotoFile[]>([]);
 
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors, touchedFields }, setValue, watch } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     defaultValues: {
       country: "Australia",
       state: "QLD",
@@ -167,6 +178,48 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
     return publicUrl;
   };
 
+  const uploadPhotos = async (locationId: string, userId: string) => {
+    try {
+      for (let i = 0; i < photoFiles.length; i++) {
+        const photoFile = photoFiles[i];
+        const fileExt = photoFile.file.name.split('.').pop();
+        const filePath = `${userId}/${locationId}/${Date.now()}_${i}.${fileExt}`;
+
+        // Upload to storage
+        const { error: uploadError } = await supabase.storage
+          .from('location-photos')
+          .upload(filePath, photoFile.file);
+
+        if (uploadError) {
+          console.error("Photo upload error:", uploadError);
+          continue;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('location-photos')
+          .getPublicUrl(filePath);
+
+        // Insert photo record
+        const { error: insertError } = await supabase
+          .from('location_photos')
+          .insert({
+            location_id: locationId,
+            photo_url: publicUrl,
+            caption: photoFile.caption || null,
+            display_order: i,
+            uploaded_by: userId,
+          });
+
+        if (insertError) {
+          console.error("Photo record insert error:", insertError);
+        }
+      }
+    } catch (error) {
+      console.error("Error uploading photos:", error);
+    }
+  };
+
   const onSubmit = async (data: FormData) => {
     if (!session?.user?.id) {
       toast({
@@ -249,6 +302,11 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
         }
       }
 
+      // Upload photos if provided
+      if (photoFiles.length > 0) {
+        await uploadPhotos(insertedData.id, session.user.id);
+      }
+
       toast({
         title: "Success!",
         description: "Your location has been submitted and is pending review.",
@@ -292,8 +350,15 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
         
         <div>
           <Label htmlFor="name">Name *</Label>
-          <Input id="name" {...register("name")} />
-          {errors.name && <p className="text-sm text-destructive mt-1">{errors.name.message}</p>}
+          <FieldWrapper
+            error={errors.name?.message}
+            touched={touchedFields.name}
+            isValid={!errors.name && watch("name")?.length > 0}
+            currentLength={watch("name")?.length || 0}
+            maxLength={100}
+          >
+            <Input id="name" {...register("name")} className="pr-10" />
+          </FieldWrapper>
         </div>
 
         <div>
@@ -441,8 +506,13 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
         
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" {...register("email")} />
-          {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
+          <FieldWrapper
+            error={errors.email?.message}
+            touched={touchedFields.email}
+            isValid={!errors.email && watch("email")?.includes('@')}
+          >
+            <Input id="email" type="email" {...register("email")} placeholder="your@email.com" className="pr-10" />
+          </FieldWrapper>
         </div>
 
         <div>
@@ -452,8 +522,13 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
 
         <div>
           <Label htmlFor="website">Website</Label>
-          <Input id="website" type="url" {...register("website")} placeholder="https://" />
-          {errors.website && <p className="text-sm text-destructive mt-1">{errors.website.message}</p>}
+          <FieldWrapper
+            error={errors.website?.message}
+            touched={touchedFields.website}
+            isValid={!errors.website && watch("website")?.startsWith('http')}
+          >
+            <Input id="website" type="url" {...register("website")} placeholder="https://yourwebsite.com" className="pr-10" />
+          </FieldWrapper>
         </div>
 
         <div>
@@ -489,6 +564,15 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
           <Label htmlFor="accessibility_notes">Accessibility Notes</Label>
           <Textarea id="accessibility_notes" {...register("accessibility_notes")} rows={2} />
         </div>
+      </div>
+
+      {/* Photo Gallery */}
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg font-semibold">Photo Gallery (Optional)</h3>
+          <p className="text-sm text-muted-foreground">Upload up to 10 photos to showcase your space</p>
+        </div>
+        <PhotoUploader photos={photoFiles} onPhotosChange={setPhotoFiles} maxPhotos={10} />
       </div>
 
       {/* Actions */}
