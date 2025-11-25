@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import MapPreview from "@/components/MapPreview";
+import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
 import { 
   Map, 
   Search, 
@@ -104,31 +105,7 @@ const Landing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-accent/10">
-        <div className="container mx-auto px-4 py-20 md:py-32">
-          <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
-            <Badge variant="secondary" className="text-sm px-4 py-1">
-              Australia's Creative Directory
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              Discover Australia's{" "}
-              <span className="text-primary">Creative Landscape</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Your interactive map to venues, studios, festivals, and creative spaces across Australia
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" onClick={() => navigate("/map")} className="text-lg h-12 px-8">
-                Explore the Map
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg h-12 px-8">
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FuturisticAlienHero />
 
       {/* Features Section */}
       <section className="py-20 bg-muted/30">
