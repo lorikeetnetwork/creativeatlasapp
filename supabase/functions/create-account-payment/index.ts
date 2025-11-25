@@ -52,13 +52,14 @@ serve(async (req) => {
       .eq('id', user.id)
       .single();
     
-    logStep("Current profile status", { account_type: profile?.account_type });
+    const currentAccountType = profile?.account_type || 'free';
+    logStep("Current profile status", { account_type: currentAccountType });
 
-    if (payment_type === 'basic_account' && profile?.account_type !== 'free') {
+    if (payment_type === 'basic_account' && currentAccountType !== 'free') {
       throw new Error("User already has a paid account");
     }
 
-    if (payment_type === 'creative_listing' && profile?.account_type === 'creative_entity') {
+    if (payment_type === 'creative_listing' && currentAccountType === 'creative_entity') {
       throw new Error("User already has a creative entity listing");
     }
 
