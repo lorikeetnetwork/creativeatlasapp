@@ -95,6 +95,9 @@ const Topbar = ({
                   <DropdownMenuSeparator />
                 </>
               )}
+              <DropdownMenuItem onClick={() => navigate('/pricing')}>
+                Pricing
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <User className="w-4 h-4 mr-2" />
                 My Listings
@@ -105,9 +108,14 @@ const Topbar = ({
               </DropdownMenuItem>
             </>
           ) : (
-            <DropdownMenuItem onClick={onSignIn}>
-              Sign In
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem onClick={() => navigate('/pricing')}>
+                Pricing
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onSignIn}>
+                Sign In
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
