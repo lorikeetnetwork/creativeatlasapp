@@ -94,6 +94,9 @@ const Landing = () => {
             />
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="ghost" onClick={() => navigate("/pricing")}>
+              Pricing
+            </Button>
             <Button variant="ghost" onClick={() => navigate("/map")}>
               Explore Map
             </Button>

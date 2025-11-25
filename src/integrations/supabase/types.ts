@@ -14,6 +14,227 @@ export type Database = {
   }
   public: {
     Tables: {
+      business_offerings: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          is_featured: boolean | null
+          location_id: string
+          price_range: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_featured?: boolean | null
+          location_id: string
+          price_range?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_featured?: boolean | null
+          location_id?: string
+          price_range?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_offerings_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_profiles: {
+        Row: {
+          about: string | null
+          awards_recognition: string[] | null
+          business_hours: Json | null
+          created_at: string | null
+          current_project_description: string | null
+          current_project_end_date: string | null
+          current_project_image_url: string | null
+          current_project_start_date: string | null
+          current_project_status: string | null
+          current_project_title: string | null
+          founded_year: number | null
+          id: string
+          last_updated: string | null
+          location_id: string
+          profile_views: number | null
+          specialties: string[] | null
+          tagline: string | null
+          team_size: string | null
+        }
+        Insert: {
+          about?: string | null
+          awards_recognition?: string[] | null
+          business_hours?: Json | null
+          created_at?: string | null
+          current_project_description?: string | null
+          current_project_end_date?: string | null
+          current_project_image_url?: string | null
+          current_project_start_date?: string | null
+          current_project_status?: string | null
+          current_project_title?: string | null
+          founded_year?: number | null
+          id?: string
+          last_updated?: string | null
+          location_id: string
+          profile_views?: number | null
+          specialties?: string[] | null
+          tagline?: string | null
+          team_size?: string | null
+        }
+        Update: {
+          about?: string | null
+          awards_recognition?: string[] | null
+          business_hours?: Json | null
+          created_at?: string | null
+          current_project_description?: string | null
+          current_project_end_date?: string | null
+          current_project_image_url?: string | null
+          current_project_start_date?: string | null
+          current_project_status?: string | null
+          current_project_title?: string | null
+          founded_year?: number | null
+          id?: string
+          last_updated?: string | null
+          location_id?: string
+          profile_views?: number | null
+          specialties?: string[] | null
+          tagline?: string | null
+          team_size?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_profiles_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: true
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_videos: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          location_id: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string | null
+          video_platform: string | null
+          video_url: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          location_id: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string | null
+          video_platform?: string | null
+          video_url: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          location_id?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string | null
+          video_platform?: string | null
+          video_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_videos_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contact_form_submissions: {
+        Row: {
+          created_at: string | null
+          id: string
+          inquiry_type: string | null
+          location_id: string
+          message: string
+          read_at: string | null
+          replied_at: string | null
+          sender_email: string
+          sender_name: string
+          sender_phone: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inquiry_type?: string | null
+          location_id: string
+          message: string
+          read_at?: string | null
+          replied_at?: string | null
+          sender_email: string
+          sender_name: string
+          sender_phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inquiry_type?: string | null
+          location_id?: string
+          message?: string
+          read_at?: string | null
+          replied_at?: string | null
+          sender_email?: string
+          sender_name?: string
+          sender_phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_form_submissions_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       location_photos: {
         Row: {
           caption: string | null
@@ -147,11 +368,15 @@ export type Database = {
       }
       payments: {
         Row: {
+          account_type_granted:
+            | Database["public"]["Enums"]["account_type"]
+            | null
           amount: number
           created_at: string
           currency: string
           id: string
           location_id: string | null
+          payment_type: string | null
           status: string
           stripe_payment_intent_id: string | null
           stripe_session_id: string | null
@@ -159,11 +384,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          account_type_granted?:
+            | Database["public"]["Enums"]["account_type"]
+            | null
           amount: number
           created_at?: string
           currency?: string
           id?: string
           location_id?: string | null
+          payment_type?: string | null
           status: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null
@@ -171,11 +400,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          account_type_granted?:
+            | Database["public"]["Enums"]["account_type"]
+            | null
           amount?: number
           created_at?: string
           currency?: string
           id?: string
           location_id?: string | null
+          payment_type?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null
@@ -194,24 +427,39 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_type: Database["public"]["Enums"]["account_type"] | null
           created_at: string
           email: string
           full_name: string | null
           id: string
+          payment_date: string | null
+          payment_verified: boolean | null
+          stripe_customer_id: string | null
+          stripe_payment_intent_id: string | null
           updated_at: string
         }
         Insert: {
+          account_type?: Database["public"]["Enums"]["account_type"] | null
           created_at?: string
           email: string
           full_name?: string | null
           id: string
+          payment_date?: string | null
+          payment_verified?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
           updated_at?: string
         }
         Update: {
+          account_type?: Database["public"]["Enums"]["account_type"] | null
           created_at?: string
           email?: string
           full_name?: string | null
           id?: string
+          payment_date?: string | null
+          payment_verified?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_payment_intent_id?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -251,6 +499,7 @@ export type Database = {
       }
     }
     Enums: {
+      account_type: "free" | "basic_paid" | "creative_entity"
       app_role: "public" | "owner" | "admin"
       location_category:
         | "Venue"
@@ -399,6 +648,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      account_type: ["free", "basic_paid", "creative_entity"],
       app_role: ["public", "owner", "admin"],
       location_category: [
         "Venue",
