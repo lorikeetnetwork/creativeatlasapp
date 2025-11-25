@@ -49,8 +49,10 @@ const Auth = () => {
     } else {
       toast({
         title: "Success!",
-        description: "Your account has been created. You can now log in.",
+        description: "Redirecting you to choose your plan...",
       });
+      // Redirect to pricing page after successful signup
+      setTimeout(() => navigate("/pricing"), 1500);
     }
   };
 
