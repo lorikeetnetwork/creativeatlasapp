@@ -11,7 +11,6 @@ import logoImage from "@/assets/creative-atlas-logo.png";
 
 const Pricing = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [isLoadingBasic, setIsLoadingBasic] = useState(false);
   const [isLoadingListing, setIsLoadingListing] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -30,7 +29,7 @@ const Pricing = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handlePayment = async (paymentType: 'basic_account' | 'creative_listing') => {
+  const handlePayment = async () => {
     // Check if user is logged in
     if (!session) {
       toast({
@@ -41,12 +40,11 @@ const Pricing = () => {
       return;
     }
 
-    const setLoading = paymentType === 'basic_account' ? setIsLoadingBasic : setIsLoadingListing;
-    setLoading(true);
+    setIsLoadingListing(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('create-account-payment', {
-        body: { payment_type: paymentType }
+        body: { payment_type: 'creative_listing' }
       });
 
       if (error) throw error;
@@ -68,20 +66,11 @@ const Pricing = () => {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsLoadingListing(false);
     }
   };
 
-  const basicFeatures = [
-    "Browse all locations on the map",
-    "Search and filter creative spaces",
-    "Save favorite locations",
-    "Access contact information",
-    "Community member status",
-  ];
-
   const listingFeatures = [
-    "Everything in Basic Account",
     "Your location on the map",
     "Full business profile page",
     "Photo & offerings galleries",
@@ -89,20 +78,6 @@ const Pricing = () => {
     "Contact forms & social links",
     "Admin dashboard access",
     "Priority support",
-  ];
-
-  const comparisonFeatures = [
-    { name: "Map browsing", basic: true, listing: true },
-    { name: "Search & filters", basic: true, listing: true },
-    { name: "Save favorites", basic: true, listing: true },
-    { name: "Location on map", basic: false, listing: true },
-    { name: "Business profile page", basic: false, listing: true },
-    { name: "Photo gallery", basic: false, listing: true },
-    { name: "Offerings showcase", basic: false, listing: true },
-    { name: "Video embeds", basic: false, listing: true },
-    { name: "Current projects", basic: false, listing: true },
-    { name: "Contact forms", basic: false, listing: true },
-    { name: "Admin dashboard", basic: false, listing: true },
   ];
 
   return (
@@ -137,40 +112,40 @@ const Pricing = () => {
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5">
         <div className="container mx-auto px-4 text-center">
-          <Badge className="mb-4" variant="secondary">One-Time Payments</Badge>
+          <Badge className="mb-4" variant="secondary">One-Time Payment</Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Choose Your Creative Atlas Plan
+            List Your Creative Business
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            One-time payments. No subscriptions. Own your presence in Australia's creative community.
+            Free to browse. One-time payment to list your business on Australia's creative community map.
           </p>
         </div>
       </section>
 
       {/* Pricing Cards */}
       <section className="py-20 container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-          {/* Basic Account Card */}
-          <Card className="hover-scale">
-            <CardHeader>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="outline" className="gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  For Explorers
+        <div className="max-w-2xl mx-auto mb-20">
+          {/* Creative Listing Card */}
+          <Card className="hover-scale border-primary/50 relative">
+            <CardHeader className="text-center">
+              <div className="flex justify-center mb-4">
+                <Badge variant="outline" className="gap-2 border-primary text-primary">
+                  <Building2 className="w-4 h-4" />
+                  For Creative Businesses
                 </Badge>
               </div>
-              <CardTitle className="text-3xl">Basic User Account</CardTitle>
+              <CardTitle className="text-4xl">Creative Entity Listing</CardTitle>
               <CardDescription className="text-lg mt-2">
-                Browse and discover creative spaces
+                Full business profile with showcase features
               </CardDescription>
               <div className="mt-6">
-                <span className="text-5xl font-bold">$5</span>
+                <span className="text-6xl font-bold">$15</span>
                 <span className="text-muted-foreground ml-2">AUD one-time</span>
               </div>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {basicFeatures.map((feature, index) => (
+                {listingFeatures.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span>{feature}</span>
@@ -182,100 +157,13 @@ const Pricing = () => {
               <Button 
                 className="w-full" 
                 size="lg"
-                onClick={() => handlePayment('basic_account')}
-                disabled={isLoadingBasic}
-              >
-                {isLoadingBasic ? "Processing..." : "Get Started - $5"}
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </CardFooter>
-          </Card>
-
-          {/* Creative Listing Card */}
-          <Card className="hover-scale border-primary/50 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <Badge className="bg-primary text-primary-foreground px-4 py-1">
-                Most Popular
-              </Badge>
-            </div>
-            <CardHeader>
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="outline" className="gap-2 border-primary text-primary">
-                  <Building2 className="w-4 h-4" />
-                  For Creative Businesses
-                </Badge>
-              </div>
-              <CardTitle className="text-3xl">Creative Entity Listing</CardTitle>
-              <CardDescription className="text-lg mt-2">
-                Full business profile with showcase features
-              </CardDescription>
-              <div className="mt-6">
-                <span className="text-5xl font-bold">$15</span>
-                <span className="text-muted-foreground ml-2">AUD one-time</span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {listingFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span className={index === 0 ? "text-muted-foreground" : ""}>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full" 
-                size="lg"
-                onClick={() => handlePayment('creative_listing')}
+                onClick={handlePayment}
                 disabled={isLoadingListing}
               >
                 {isLoadingListing ? "Processing..." : "List Your Business - $15"}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </CardFooter>
-          </Card>
-        </div>
-
-        {/* Comparison Table */}
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Feature Comparison</h2>
-          <Card>
-            <CardContent className="p-6">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-4 px-4">Feature</th>
-                      <th className="text-center py-4 px-4">Basic ($5)</th>
-                      <th className="text-center py-4 px-4">Listing ($15)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comparisonFeatures.map((feature, index) => (
-                      <tr key={index} className="border-b last:border-0">
-                        <td className="py-4 px-4">{feature.name}</td>
-                        <td className="text-center py-4 px-4">
-                          {feature.basic ? (
-                            <Check className="w-5 h-5 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </td>
-                        <td className="text-center py-4 px-4">
-                          {feature.listing ? (
-                            <Check className="w-5 h-5 text-primary mx-auto" />
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
           </Card>
         </div>
 
@@ -297,12 +185,12 @@ const Pricing = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Can I upgrade later?</CardTitle>
+                <CardTitle>Is it really free to browse?</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Yes! If you start with a Basic Account, you can upgrade to a Creative Entity Listing at any time 
-                  by paying the difference ($10 AUD).
+                  Yes! You can create a free account and browse all locations on the map with no payment required. 
+                  Only pay if you want to list your creative business.
                 </p>
               </CardContent>
             </Card>
