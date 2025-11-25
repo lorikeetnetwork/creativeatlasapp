@@ -99,8 +99,6 @@ const Dashboard = () => {
     switch (accountType) {
       case 'free':
         return <Badge variant="secondary">Free Account</Badge>;
-      case 'basic_paid':
-        return <Badge variant="default" className="bg-primary">Basic Account</Badge>;
       case 'creative_entity':
         return <Badge variant="default" className="bg-gradient-to-r from-primary to-accent">Creative Entity</Badge>;
       default:
@@ -154,7 +152,7 @@ const Dashboard = () => {
     );
   }
 
-  const canUpgrade = profile.account_type === 'free' || profile.account_type === 'basic_paid';
+  const canUpgrade = profile.account_type === 'free';
 
   return (
     <div className="min-h-screen bg-background">
@@ -214,22 +212,10 @@ const Dashboard = () => {
                   {profile.account_type === 'free' && (
                     <div className="bg-muted/50 p-4 rounded-lg">
                       <p className="text-sm mb-3">
-                        <strong>Upgrade your account</strong> to unlock full access to the Creative Atlas platform.
+                        <strong>List your creative business</strong> on the map to reach more customers.
                       </p>
                       <Button size="sm" onClick={() => navigate('/pricing')}>
                         View Pricing
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </div>
-                  )}
-
-                  {profile.account_type === 'basic_paid' && (
-                    <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
-                      <p className="text-sm mb-3">
-                        <strong>Upgrade to Creative Entity</strong> for just $10 more to list your business on the map.
-                      </p>
-                      <Button size="sm" onClick={() => navigate('/pricing')}>
-                        Upgrade Now
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
                     </div>
@@ -268,7 +254,7 @@ const Dashboard = () => {
               )}
               {canUpgrade && (
                 <Button className="w-full justify-start" onClick={() => navigate('/pricing')}>
-                  Upgrade Account
+                  List Your Business
                 </Button>
               )}
             </CardContent>
@@ -310,9 +296,7 @@ const Dashboard = () => {
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <p className="font-medium">
-                            {payment.payment_type === 'basic_account' && 'Basic Account'}
-                            {payment.payment_type === 'creative_listing' && 'Creative Entity Listing'}
-                            {!payment.payment_type && 'Payment'}
+                            {payment.payment_type === 'creative_listing' ? 'Creative Entity Listing' : 'Payment'}
                           </p>
                           {getStatusBadge(payment.status)}
                         </div>
@@ -329,11 +313,8 @@ const Dashboard = () => {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">{formatAmount(payment.amount, payment.currency)}</p>
-                      {payment.account_type_granted && (
-                        <p className="text-xs text-muted-foreground">
-                          {payment.account_type_granted === 'basic_paid' && 'Basic Account'}
-                          {payment.account_type_granted === 'creative_entity' && 'Creative Entity'}
-                        </p>
+                      {payment.account_type_granted === 'creative_entity' && (
+                        <p className="text-xs text-muted-foreground">Creative Entity</p>
                       )}
                     </div>
                   </div>
