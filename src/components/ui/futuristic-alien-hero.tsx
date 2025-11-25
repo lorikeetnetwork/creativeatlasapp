@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
+import heroLogo from '@/assets/creative-atlas-hero-logo.png';
 
 // --- Simplex Noise Library ---
 // Included directly to resolve dependency issues in this environment.
@@ -407,45 +408,25 @@ export const FuturisticAlienHero = () => {
         };
     }, []);
 
-    // Framer Motion variants for staggered fade-in animation
-    const fadeUpVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i,
-                duration: 1.5,
-                ease: [0.23, 0.86, 0.39, 0.96] as any
-            },
-        }),
-    };
-
     return (
         <div className="relative h-screen w-full overflow-hidden bg-black" style={{ cursor: 'crosshair' }}>
             <canvas ref={mountRef} className="absolute top-0 left-0 w-full h-full z-0" />
             <section className="relative h-screen flex items-center justify-center overflow-hidden z-10">
-                <div className="text-center p-4">
-                    <motion.h1
-                        className="font-orbitron text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-wider"
-                        style={{ textShadow: '0 0 8px rgba(0, 255, 255, 0.7), 0 0 15px rgba(0, 255, 255, 0.5), 0 0 25px rgba(173, 216, 230, 0.5)' }}
-                    >
-                        <motion.span variants={fadeUpVariants} custom={0.5} initial="hidden" animate="visible" className="block">
-                            Transcend
-                        </motion.span>
-                        <motion.span variants={fadeUpVariants} custom={1.5} initial="hidden" animate="visible" className="block mt-4">
-                            The Known
-                        </motion.span>
-                    </motion.h1>
-                    <motion.div variants={fadeUpVariants} custom={2} initial="hidden" animate="visible" className="mt-12">
-                        <a
-                            href="#"
-                            className="inline-block bg-cyan-400/10 border-2 border-cyan-400 text-cyan-300 font-bold uppercase tracking-widest py-3 px-8 rounded-md transition-all duration-300 hover:bg-cyan-400 hover:text-black hover:shadow-lg hover:shadow-cyan-400/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-50"
-                        >
-                            Initiate Contact
-                        </a>
-                    </motion.div>
-                </div>
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.5, ease: [0.23, 0.86, 0.39, 0.96] }}
+                    className="flex items-center justify-center"
+                >
+                    <img 
+                        src={heroLogo} 
+                        alt="Creative Atlas" 
+                        className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] max-w-[90vw] h-auto"
+                        style={{
+                            filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))'
+                        }}
+                    />
+                </motion.div>
             </section>
         </div>
     );
