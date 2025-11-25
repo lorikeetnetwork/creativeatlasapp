@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  useState(() => {
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -28,7 +28,7 @@ const Pricing = () => {
     });
 
     return () => subscription.unsubscribe();
-  });
+  }, []);
 
   const handlePayment = async (paymentType: 'basic_account' | 'creative_listing') => {
     // Check if user is logged in
