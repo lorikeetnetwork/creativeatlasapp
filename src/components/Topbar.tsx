@@ -95,12 +95,12 @@ const Topbar = ({
                   <DropdownMenuSeparator />
                 </>
               )}
+              <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                <User className="w-4 h-4 mr-2" />
+                Dashboard
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate('/pricing')}>
                 Pricing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <User className="w-4 h-4 mr-2" />
-                My Listings
               </DropdownMenuItem>
               <DropdownMenuItem onClick={onSignOut}>
                 <LogOut className="w-4 h-4 mr-2" />

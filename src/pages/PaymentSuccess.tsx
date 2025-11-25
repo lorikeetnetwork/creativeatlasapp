@@ -178,7 +178,7 @@ const PaymentSuccess = () => {
                           className="flex-1" 
                           variant="outline"
                           size="lg"
-                          onClick={() => navigate("/map")}
+                          onClick={() => navigate("/dashboard")}
                         >
                           View Dashboard
                         </Button>
