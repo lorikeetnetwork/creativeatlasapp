@@ -54,8 +54,8 @@ const Topbar = ({
   };
 
   return (
-    <header className="h-14 flex-shrink-0 border-b bg-card flex items-center justify-between w-full p-0 m-0">
-      <div className="flex items-center h-full">
+    <header className="h-14 flex-shrink-0 border-b bg-white flex items-center justify-between w-full p-0 m-0">
+      <div className="flex items-center h-full pl-5">
         <Button
           variant="ghost"
           size="icon"
@@ -77,12 +77,13 @@ const Topbar = ({
       </div>
 
       {/* User Menu */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-full w-14 rounded-none p-0 m-0">
-            <Menu className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
+      <div className="pr-5">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-full w-14 rounded-none p-0 m-0">
+              <Menu className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {session ? (
             <>
@@ -118,7 +119,8 @@ const Topbar = ({
             </>
           )}
         </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
+      </div>
     </header>
   );
 };
