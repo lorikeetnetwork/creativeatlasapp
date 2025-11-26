@@ -104,7 +104,7 @@ const Landing = () => {
       <FuturisticAlienHero />
 
       {/* Features Section */}
-      <section className="py-20 text-yellow-500 border-red-600 border-4 bg-cyan-950">
+      <section className="py-20 text-yellow-500 border-slate-950 border-0 bg-neutral-900">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -133,13 +133,11 @@ const Landing = () => {
       </section>
 
       {/* Map Preview Section */}
-      <section className="py-20 border-red-600 border-4">
-        <div className="container mx-auto px-4">
+      <section className="py-20 border-red-600 border-0 bg-neutral-900">
+        <div className="container mx-auto px-4 border-slate-900 border bg-zinc-600">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              See Creative Australia in Action
-            </h2>
-            <p className="text-lg text-muted-foreground">
+            
+            <p className="text-lg text-gray-950">
               Explore hundreds of creative spaces across the country. Pan, zoom, and discover the vibrant creative scene near you.
             </p>
           </div>
@@ -148,7 +146,7 @@ const Landing = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-indigo-900">
+      <section className="py-20 bg-zinc-800">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -172,7 +170,7 @@ const Landing = () => {
       </section>
 
       {/* Categories Preview */}
-      <section className="py-20 border-red-500 bg-pink-700">
+      <section className="py-20 border-red-500 bg-neutral-700">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -192,7 +190,7 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 bg-teal-400">
+      <section className="py-20 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 bg-category-festival">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-3xl md:text-5xl font-bold text-slate-950">
@@ -216,14 +214,12 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-card py-12">
+      <footer className="border-t py-12 bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
               <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto object-contain" />
-              <span className="text-sm text-muted-foreground">
-                © 2024 Creative Atlas. Mapping Australia's creative spaces.
-              </span>
+              <span className="text-sm text-muted-foreground">© 2025 Creative Atlas. Mapping Australia's music, creative & arts sectors.</span>
             </div>
             <div className="flex gap-6 text-sm">
               <button className="text-muted-foreground hover:text-foreground transition-colors">
