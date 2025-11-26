@@ -81,12 +81,12 @@ const Landing = () => {
   }];
   return <div className="min-h-screen bg-background">
     {/* Header */}
-    <header className="border-b bg-zinc-600">
-      <div className="h-16 flex items-center justify-between w-full px-0 mx-0 border-sidebar-border border-2 text-slate-950 bg-slate-950">
-        <div className="flex items-center gap-3 pl-0 ml-0">
+    <header className="border-b bg-white">
+      <div className="h-16 flex items-center justify-between w-full px-0 mx-0 text-slate-950 bg-white">
+        <div className="flex items-center gap-3 pl-[20px]">
           <img src={logoImage} alt="Creative Atlas" className="h-10 w-auto object-contain" />
         </div>
-        <div className="flex items-center gap-3 pr-0 mr-0 ml-auto">
+        <div className="flex items-center gap-3 pr-[20px] ml-auto">
           <Button variant="ghost" onClick={() => navigate("/pricing")}>
             Pricing
           </Button>
