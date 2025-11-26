@@ -34,7 +34,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
   const [savedToken, setSavedToken] = useState<string | null>(
-    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token")
+    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token") || "pk.eyJ1IjoibG9yaWtlZXRuZXR3b3JrIiwiYSI6ImNtaThya2R6bDBmNnQyaXBydDV6dGdocjgifQ.iGQZTbQ3tP_hHIQQcae9Qw"
   );
 
   const handleSaveToken = () => {
