@@ -54,13 +54,13 @@ const Topbar = ({
   };
 
   return (
-    <header className="h-14 flex-shrink-0 border-b bg-card flex items-center justify-between">
-      <div className="flex items-center gap-3">
+    <header className="h-14 flex-shrink-0 border-b bg-card flex items-center justify-between w-full">
+      <div className="flex items-center">
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleSidebar}
-          className="h-8 w-8"
+          className="h-14 w-14 rounded-none"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -72,14 +72,14 @@ const Topbar = ({
         <img 
           src={logoImage} 
           alt="Creative Atlas" 
-          className="h-10 w-auto object-contain"
+          className="h-10 w-auto object-contain ml-2"
         />
       </div>
 
       {/* User Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button variant="ghost" size="icon" className="h-14 w-14 rounded-none">
             <Menu className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
