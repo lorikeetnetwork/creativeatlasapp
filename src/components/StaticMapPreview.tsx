@@ -15,7 +15,7 @@ export default function StaticMapPreview({ latitude, longitude, name }: StaticMa
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem('mapboxToken');
+    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem('mapbox_token');
     
     if (!mapboxToken) {
       return;
