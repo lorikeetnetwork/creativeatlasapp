@@ -80,25 +80,25 @@ const Landing = () => {
     description: "Sign up to add your venue and connect with the creative community"
   }];
   return <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-zinc-600">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={logoImage} alt="Creative Atlas" className="h-10 w-auto object-contain" />
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => navigate("/pricing")}>
-              Pricing
-            </Button>
-            <Button variant="ghost" onClick={() => navigate("/map")}>
-              Explore Map
-            </Button>
-            <Button onClick={() => navigate("/auth")}>
-              Sign In
-            </Button>
-          </div>
+    {/* Header */}
+    <header className="border-b bg-zinc-600">
+      <div className="h-16 flex items-center justify-between w-full px-0 mx-0">
+        <div className="flex items-center gap-3 pl-0 ml-0">
+          <img src={logoImage} alt="Creative Atlas" className="h-10 w-auto object-contain" />
         </div>
-      </header>
+        <div className="flex items-center gap-3 pr-0 mr-0 ml-auto">
+          <Button variant="ghost" onClick={() => navigate("/pricing")}>
+            Pricing
+          </Button>
+          <Button variant="ghost" onClick={() => navigate("/map")}>
+            Explore Map
+          </Button>
+          <Button onClick={() => navigate("/auth")}>
+            Sign In
+          </Button>
+        </div>
+      </div>
+    </header>
 
       {/* Hero Section */}
       <FuturisticAlienHero />
