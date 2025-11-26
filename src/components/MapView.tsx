@@ -163,7 +163,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
 
   if (error) {
     return (
-      <div className="w-full h-full rounded-lg bg-card border border-border flex items-center justify-center p-8">
+      <div className="w-full h-full bg-card border border-border flex items-center justify-center p-8">
         <div className="text-center max-w-md space-y-4">
           <p className="text-foreground font-medium mb-2">{error}</p>
           <p className="text-sm text-muted-foreground mb-4">
@@ -197,7 +197,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
     );
   }
 
-  return <div ref={mapContainer} className="w-full h-full rounded-lg" />;
+  return <div ref={mapContainer} className="w-full h-full" />;
 };
 
 export default MapView;
