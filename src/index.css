@@ -8,37 +8,37 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Dark theme - minimal dark grey palette */
-    --background: 0 0% 8%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 95%;
+    /* Light theme - clean and minimal like Luma */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
     
-    /* Dark grey primary #191919 */
-    --primary: 0 0% 10%;
+    /* Primary - vibrant purple/violet */
+    --primary: 270 70% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 15%;
+    --primary-glow: 270 70% 65%;
     
-    /* Medium grey secondary */
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - soft purple */
+    --secondary: 240 15% 96%;
+    --secondary-foreground: 270 70% 55%;
     
-    /* Muted dark tones */
-    --muted: 0 0% 18%;
-    --muted-foreground: 0 0% 65%;
+    /* Muted - light grey tones */
+    --muted: 220 13% 96%;
+    --muted-foreground: 220 9% 46%;
     
-    /* Light grey accent */
-    --accent: 0 0% 30%;
+    /* Accent - pink/purple gradient feeling */
+    --accent: 280 80% 60%;
     --accent-foreground: 0 0% 100%;
     
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 0 0% 40%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 270 70% 55%;
     --radius: 0.75rem;
     
     /* Category colors - vibrant and distinct */
@@ -55,13 +55,13 @@ All colors MUST be HSL.
     --gallery-color: 310 75% 55%;
     --other-color: 0 0% 50%;
     
-    /* Gradients */
-    --gradient-sunset: linear-gradient(135deg, hsl(0, 0%, 10%), hsl(0, 0%, 20%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 8% / 0.9));
+    /* Gradients - purple to pink like Luma */
+    --gradient-sunset: linear-gradient(135deg, hsl(270, 70%, 55%), hsl(320, 80%, 60%));
+    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 100% / 0.95));
     
-    /* Shadows */
-    --shadow-warm: 0 10px 40px -15px hsl(0 0% 10% / 0.5);
-    --shadow-glow: 0 0 50px hsl(0 0% 15% / 0.6);
+    /* Shadows - soft and elevated */
+    --shadow-warm: 0 4px 24px -4px hsl(220 13% 50% / 0.12);
+    --shadow-glow: 0 8px 40px -8px hsl(270 70% 55% / 0.25);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -74,38 +74,38 @@ All colors MUST be HSL.
   }
   
   .dark {
-    --background: 0 0% 8%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 95%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
     
-    --primary: 0 0% 10%;
+    --primary: 270 70% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 15%;
+    --primary-glow: 270 70% 65%;
     
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 240 15% 96%;
+    --secondary-foreground: 270 70% 55%;
     
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 220 13% 96%;
+    --muted-foreground: 220 9% 46%;
     
-    --accent: 0 0% 30%;
+    --accent: 280 80% 60%;
     --accent-foreground: 0 0% 100%;
     
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 0 0% 40%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 270 70% 55%;
     
-    --gradient-sunset: linear-gradient(135deg, hsl(0, 0%, 10%), hsl(0, 0%, 20%));
-    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 8% / 0.9));
+    --gradient-sunset: linear-gradient(135deg, hsl(270, 70%, 55%), hsl(320, 80%, 60%));
+    --gradient-overlay: linear-gradient(180deg, transparent, hsl(0 0% 100% / 0.95));
     
-    --shadow-warm: 0 10px 40px -15px hsl(0 0% 10% / 0.5);
-    --shadow-glow: 0 0 50px hsl(0 0% 15% / 0.6);
+    --shadow-warm: 0 4px 24px -4px hsl(220 13% 50% / 0.12);
+    --shadow-glow: 0 8px 40px -8px hsl(270 70% 55% / 0.25);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -125,7 +125,7 @@ All colors MUST be HSL.
   
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
