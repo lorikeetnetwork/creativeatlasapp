@@ -6,6 +6,7 @@ import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
 import { Map, Search, MapPin, Users, Sparkles, ArrowRight, Building2, Music, Palette, Camera, Radio, Megaphone, GraduationCap, Building, Heart, Briefcase } from "lucide-react";
 import logoImage from "@/assets/creative-atlas-logo.png";
+import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 const Landing = () => {
   const navigate = useNavigate();
   const features = [{
@@ -235,6 +236,29 @@ const Landing = () => {
                 Privacy
               </button>
             </div>
+          </div>
+          
+          {/* Lorikeet Network Attribution */}
+          <div className="flex flex-col items-center gap-3 mt-8 pt-8 border-t border-border/50">
+            <a 
+              href="https://www.lorikeet.network" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img src={lorikeetLogo} alt="Lorikeet Network" className="h-12 w-auto object-contain" />
+            </a>
+            <p className="text-sm text-muted-foreground">
+              This app/site is a project of the{" "}
+              <a 
+                href="https://www.lorikeet.network" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors underline"
+              >
+                Lorikeet Network
+              </a>
+            </p>
           </div>
         </div>
       </footer>
