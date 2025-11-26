@@ -54,7 +54,7 @@ const Topbar = ({
   };
 
   return (
-    <header className="h-14 flex-shrink-0 border-b bg-card flex items-center px-4 justify-between">
+    <header className="h-14 flex-shrink-0 border-b bg-card flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
