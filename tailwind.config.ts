@@ -87,7 +87,7 @@ export default {
         glow: "var(--shadow-glow)",
       },
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
