@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [locations, setLocations] = useState<Tables<"locations">[]>([]);
@@ -25,47 +24,47 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     console.log("Index component mounted");
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({
+      data: {
+        session
+      }
+    }) => {
       setSession(session);
       console.log("Session loaded:", session ? "authenticated" : "not authenticated");
     });
-
     const {
-      data: { subscription },
+      data: {
+        subscription
+      }
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
     return () => subscription.unsubscribe();
   }, []);
-
   useEffect(() => {
     fetchLocations();
   }, []);
-
   useEffect(() => {
     filterLocations();
   }, [locations, searchQuery, selectedCategories, region]);
-
   const fetchLocations = async () => {
     try {
       console.log("Fetching locations...");
-      const { data, error } = await supabase
-        .from("locations")
-        .select("*")
-        .eq("status", "Active")
-        .order("name");
-
+      const {
+        data,
+        error
+      } = await supabase.from("locations").select("*").eq("status", "Active").order("name");
       if (error) {
         console.error("Error fetching locations:", error);
         toast({
           title: "Error",
           description: "Failed to load locations",
-          variant: "destructive",
+          variant: "destructive"
         });
       } else {
         console.log("Locations loaded:", data?.length || 0);
@@ -77,27 +76,17 @@ const Index = () => {
       setIsLoading(false);
     }
   };
-
   const filterLocations = () => {
     let filtered = [...locations];
-
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (loc) =>
-          loc.name.toLowerCase().includes(query) ||
-          loc.suburb.toLowerCase().includes(query) ||
-          loc.state.toLowerCase().includes(query) ||
-          loc.description?.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter(loc => loc.name.toLowerCase().includes(query) || loc.suburb.toLowerCase().includes(query) || loc.state.toLowerCase().includes(query) || loc.description?.toLowerCase().includes(query));
     }
-
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((loc) => selectedCategories.includes(loc.category));
+      filtered = filtered.filter(loc => selectedCategories.includes(loc.category));
     }
-
     if (region !== "All Australia") {
-      filtered = filtered.filter((loc) => {
+      filtered = filtered.filter(loc => {
         if (region === "Gold Coast") return loc.suburb.toLowerCase().includes("gold coast");
         if (region === "Northern Rivers") return loc.state === "NSW" && loc.suburb.toLowerCase().includes("byron");
         if (region === "Brisbane") return loc.suburb.toLowerCase().includes("brisbane");
@@ -106,73 +95,34 @@ const Index = () => {
         return true;
       });
     }
-
     setFilteredLocations(filtered);
   };
-
   const handleLocationSelect = (location: Tables<"locations">) => {
     setSelectedLocation(location);
     setShowDetail(true);
   };
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast({
       title: "Signed out",
-      description: "You have been signed out successfully",
+      description: "You have been signed out successfully"
     });
   };
-
   const handleCategoryToggle = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
+    setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
   };
-
   const handleOpenForm = () => {
     setIsFormOpen(true);
   };
-
-  return (
-    <div className="h-screen flex flex-col bg-background">
+  return <div className="h-screen flex flex-col bg-background">
       {/* Topbar */}
-      <Topbar
-        session={session}
-        onSignOut={handleSignOut}
-        onSignIn={() => navigate("/auth")}
-        isSidebarCollapsed={isSidebarCollapsed}
-        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-      />
+      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-secondary-foreground" />
 
       {/* Resizable Layout */}
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         {/* Sidebar Panel */}
-        <ResizablePanel
-          defaultSize={20}
-          minSize={15}
-          maxSize={40}
-          collapsible={true}
-          collapsedSize={0}
-          onCollapse={() => setIsSidebarCollapsed(true)}
-          onExpand={() => setIsSidebarCollapsed(false)}
-        >
-          {!isSidebarCollapsed && (
-            <Sidebar
-              session={session}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedCategories={selectedCategories}
-              onCategoryToggle={handleCategoryToggle}
-              region={region}
-              onRegionChange={setRegion}
-              locations={filteredLocations}
-              selectedLocation={selectedLocation}
-              onLocationSelect={handleLocationSelect}
-              onOpenForm={handleOpenForm}
-              onSignOut={handleSignOut}
-              onSignIn={() => navigate("/auth")}
-            />
-          )}
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={40} collapsible={true} collapsedSize={0} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)}>
+          {!isSidebarCollapsed && <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onOpenForm={handleOpenForm} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />}
         </ResizablePanel>
 
         {/* Resize Handle */}
@@ -181,19 +131,10 @@ const Index = () => {
         {/* Map Panel */}
         <ResizablePanel defaultSize={80}>
           <div className="h-full relative">
-            {showDetail && selectedLocation ? (
-              <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
-                <LocationDetail
-                  location={selectedLocation}
-                  onClose={() => setShowDetail(false)}
-                />
-              </div>
-            ) : null}
-            <MapView
-              locations={filteredLocations}
-              selectedLocation={selectedLocation}
-              onLocationSelect={handleLocationSelect}
-            />
+            {showDetail && selectedLocation ? <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
+                <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
+              </div> : null}
+            <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -201,18 +142,12 @@ const Index = () => {
       {/* Location Submission Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <LocationSubmissionForm
-            session={session}
-            onSuccess={() => {
-              setIsFormOpen(false);
-              fetchLocations();
-            }}
-            onCancel={() => setIsFormOpen(false)}
-          />
+          <LocationSubmissionForm session={session} onSuccess={() => {
+          setIsFormOpen(false);
+          fetchLocations();
+        }} onCancel={() => setIsFormOpen(false)} />
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

@@ -7,22 +7,8 @@ import LocationList from "./LocationList";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const REGIONS = [
-  "All Australia",
-  "Gold Coast",
-  "Northern Rivers",
-  "Brisbane",
-  "Sydney",
-  "Melbourne",
-];
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+const REGIONS = ["All Australia", "Gold Coast", "Northern Rivers", "Brisbane", "Sydney", "Melbourne"];
 interface SidebarProps {
   session: Session | null;
   searchQuery: string;
@@ -38,7 +24,6 @@ interface SidebarProps {
   onSignOut: () => void;
   onSignIn: () => void;
 }
-
 const Sidebar = ({
   session,
   searchQuery,
@@ -52,39 +37,28 @@ const Sidebar = ({
   onLocationSelect,
   onOpenForm,
   onSignOut,
-  onSignIn,
+  onSignIn
 }: SidebarProps) => {
-  return (
-    <div className="h-full flex flex-col bg-card border-r shadow-sm">
+  return <div className="h-full flex flex-col bg-card border-r shadow-sm">
       {/* Scrollable Content */}
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6">
+        <div className="p-4 space-y-6 bg-secondary-foreground">
           {/* SEARCH Section */}
           <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
               Search
             </h2>
             <div className="space-y-3">
-              <CategoryPills
-                selectedCategories={selectedCategories}
-                onCategoryToggle={onCategoryToggle}
-              />
-              <Input
-                placeholder="Search by keyword"
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="text-sm"
-              />
+              <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
+              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="text-sm" />
               <Select value={region} onValueChange={onRegionChange}>
                 <SelectTrigger className="text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {REGIONS.map((r) => (
-                    <SelectItem key={r} value={r}>
+                  {REGIONS.map(r => <SelectItem key={r} value={r}>
                       {r}
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
@@ -95,10 +69,7 @@ const Sidebar = ({
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
               Submit
             </h2>
-            <Button
-              onClick={onOpenForm}
-              className="w-full justify-between shadow-warm"
-            >
+            <Button onClick={onOpenForm} className="w-full justify-between shadow-warm">
               OPEN FORM
               <Plus className="w-4 h-4" />
             </Button>
@@ -109,16 +80,10 @@ const Sidebar = ({
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
               Creative Entities
             </h2>
-            <LocationList
-              locations={locations}
-              selectedLocation={selectedLocation}
-              onLocationSelect={onLocationSelect}
-            />
+            <LocationList locations={locations} selectedLocation={selectedLocation} onLocationSelect={onLocationSelect} />
           </div>
         </div>
       </ScrollArea>
-    </div>
-  );
+    </div>;
 };
-
 export default Sidebar;
