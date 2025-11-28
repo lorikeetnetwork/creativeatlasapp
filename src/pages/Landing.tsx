@@ -82,8 +82,8 @@ const Landing = () => {
   }];
   return <div className="min-h-screen bg-background">
     {/* Header */}
-    <header className="border-b bg-white">
-      <div className="h-16 flex items-center justify-between w-full px-0 mx-0 text-slate-950 bg-white">
+    <header className="border-b bg-background">
+      <div className="h-16 flex items-center justify-between w-full px-0 mx-0 text-foreground bg-background">
         <div className="flex items-center gap-3 pl-[20px]">
           <img src={logoImage} alt="Creative Atlas" className="h-14 w-auto object-contain" />
         </div>
