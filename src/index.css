@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Claude Theme from TweakCN */
+/* Definition of the design system using OKLCH colors */
 
 @layer base {
   :root {
@@ -27,8 +27,6 @@
     --input: oklch(0.7621 0.0156 98.3528);
     --ring: oklch(0.6171 0.1375 39.0427);
     --radius: 0.5rem;
-    --tracking-normal: 0em;
-    --spacing: 0.25rem;
     
     /* Chart colors */
     --chart-1: oklch(0.5583 0.1276 42.9956);
@@ -37,7 +35,7 @@
     --chart-4: oklch(0.8822 0.0403 298.1792);
     --chart-5: oklch(0.5608 0.1348 42.0584);
     
-    /* Category colors */
+    /* Category colors - vibrant and distinct */
     --venue-color: oklch(0.65 0.2 10);
     --studio-color: oklch(0.55 0.18 280);
     --festival-color: oklch(0.8 0.15 85);
@@ -53,7 +51,7 @@
     
     /* Gradients */
     --gradient-sunset: linear-gradient(135deg, oklch(0.6171 0.1375 39.0427), oklch(0.65 0.18 350));
-    --gradient-overlay: linear-gradient(180deg, transparent, oklch(0.9818 0.0054 95.0986 / 0.95));
+    --gradient-overlay: linear-gradient(180deg, transparent, oklch(0.98 0.005 95 / 0.95));
     
     /* Shadows */
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
@@ -103,7 +101,7 @@
     --chart-5: oklch(0.5608 0.1348 42.0584);
     
     --gradient-sunset: linear-gradient(135deg, oklch(0.6724 0.1308 38.7559), oklch(0.65 0.18 350));
-    --gradient-overlay: linear-gradient(180deg, transparent, oklch(0.2679 0.0036 106.6427 / 0.95));
+    --gradient-overlay: linear-gradient(180deg, transparent, oklch(0.27 0.004 107 / 0.95));
     
     --shadow-warm: 0 4px 24px -4px hsl(0 0% 0% / 0.25);
     --shadow-glow: 0 8px 40px -8px oklch(0.6724 0.1308 38.7559 / 0.3);
@@ -129,7 +127,6 @@
     background-color: var(--background);
     color: var(--foreground);
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-    letter-spacing: var(--tracking-normal);
   }
   
   h1, h2, h3, h4, h5, h6 {

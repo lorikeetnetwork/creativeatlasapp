@@ -157,20 +157,20 @@ export default function AddressAutocomplete({
           height: 2.5rem;
           padding: 0.5rem 0.75rem;
           font-size: 0.875rem;
-          background: var(--background);
-          color: var(--foreground);
-          border: 1px solid var(--input);
+          background: hsl(var(--background));
+          color: hsl(var(--foreground));
+          border: 1px solid hsl(var(--input));
           border-radius: calc(var(--radius) - 2px);
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--input:focus {
           outline: none;
-          border-color: var(--ring);
-          box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+          border-color: hsl(var(--ring));
+          box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--icon {
-          fill: var(--muted-foreground);
+          fill: hsl(var(--muted-foreground));
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--button {
@@ -178,34 +178,34 @@ export default function AddressAutocomplete({
         }
         
         .address-autocomplete-wrapper .suggestions-wrapper {
-          background: var(--popover);
-          border: 1px solid var(--border);
+          background: hsl(var(--popover));
+          border: 1px solid hsl(var(--border));
           border-radius: calc(var(--radius) - 2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
           z-index: 50;
         }
         
         .address-autocomplete-wrapper .suggestions {
-          background: var(--popover);
+          background: hsl(var(--popover));
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--suggestion {
-          color: var(--popover-foreground);
+          color: hsl(var(--popover-foreground));
           padding: 0.5rem 0.75rem;
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--suggestion:hover,
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--suggestion.active {
-          background: var(--accent);
-          color: var(--accent-foreground);
+          background: hsl(var(--accent));
+          color: hsl(var(--accent-foreground));
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--suggestion-title {
-          color: var(--foreground);
+          color: hsl(var(--foreground));
         }
         
         .address-autocomplete-wrapper .mapboxgl-ctrl-geocoder--suggestion-address {
-          color: var(--muted-foreground);
+          color: hsl(var(--muted-foreground));
           font-size: 0.75rem;
         }
         

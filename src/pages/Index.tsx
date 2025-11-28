@@ -116,7 +116,7 @@ const Index = () => {
   };
   return <div className="h-screen flex flex-col bg-background">
       {/* Topbar */}
-      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
+      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-secondary-foreground" />
 
       {/* Resizable Layout */}
       <ResizablePanelGroup direction="horizontal" className="flex-1">
