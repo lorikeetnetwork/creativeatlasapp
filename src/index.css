@@ -137,7 +137,7 @@
 
 /* Mapbox overrides */
 .mapboxgl-canvas {
-  @apply rounded-lg;
+  border-radius: 0;
 }
 
 .mapboxgl-popup-content {
