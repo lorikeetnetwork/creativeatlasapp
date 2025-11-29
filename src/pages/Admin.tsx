@@ -5,16 +5,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable";
 import { BulkImport } from "@/components/admin/BulkImport";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 
 export default function Admin() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchingImages, setFetchingImages] = useState(false);
+  const [fetchProgress, setFetchProgress] = useState({ current: 0, total: 0 });
 
   useEffect(() => {
     checkAdminAccess();
@@ -64,6 +67,68 @@ export default function Admin() {
     }
   };
 
+  const handleFetchOgImages = async () => {
+    setFetchingImages(true);
+    try {
+      // Get locations with website but no og_image_url
+      const { data: locations, error } = await supabase
+        .from("locations")
+        .select("id, website")
+        .not("website", "is", null)
+        .is("og_image_url", null);
+
+      if (error) throw error;
+
+      if (!locations || locations.length === 0) {
+        toast({
+          title: "No locations to process",
+          description: "All locations with websites already have OG images.",
+        });
+        setFetchingImages(false);
+        return;
+      }
+
+      setFetchProgress({ current: 0, total: locations.length });
+
+      let successCount = 0;
+      for (let i = 0; i < locations.length; i++) {
+        const loc = locations[i];
+        setFetchProgress({ current: i + 1, total: locations.length });
+
+        try {
+          const response = await supabase.functions.invoke("fetch-og-image", {
+            body: { url: loc.website },
+          });
+
+          if (response.data?.ogImage) {
+            await supabase
+              .from("locations")
+              .update({ og_image_url: response.data.ogImage })
+              .eq("id", loc.id);
+            successCount++;
+          }
+        } catch (err) {
+          console.error(`Failed to fetch OG image for ${loc.website}:`, err);
+        }
+      }
+
+      toast({
+        title: "OG Images Fetched",
+        description: `Successfully fetched ${successCount} of ${locations.length} images.`,
+      });
+    } catch (error) {
+      console.error("Error fetching OG images:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch OG images.",
+        variant: "destructive",
+      });
+    } finally {
+      setFetchingImages(false);
+      setFetchProgress({ current: 0, total: 0 });
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#121212]">
@@ -108,6 +173,43 @@ export default function Admin() {
 
           <TabsContent value="overview" className="space-y-6">
             <AdminStats />
+            
+            {/* Fetch OG Images Section */}
+            <div className="p-4 bg-[#1a1a1a] border border-[#333] rounded-lg">
+              <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
+                <ImageIcon className="w-4 h-4" />
+                Fetch Social Images
+              </h3>
+              <p className="text-gray-400 text-sm mb-4">
+                Fetch Open Graph images from websites for locations that have a website but no OG image yet.
+              </p>
+              {fetchingImages && (
+                <div className="mb-4">
+                  <Progress value={(fetchProgress.current / fetchProgress.total) * 100} className="h-2" />
+                  <p className="text-xs text-gray-400 mt-1">
+                    Processing {fetchProgress.current} of {fetchProgress.total} locations...
+                  </p>
+                </div>
+              )}
+              <Button
+                onClick={handleFetchOgImages}
+                disabled={fetchingImages}
+                variant="outline"
+                className="bg-transparent border-[#333] text-white hover:bg-[#333]"
+              >
+                {fetchingImages ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Fetching...
+                  </>
+                ) : (
+                  <>
+                    <ImageIcon className="w-4 h-4 mr-2" />
+                    Fetch OG Images
+                  </>
+                )}
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="pending">

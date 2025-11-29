@@ -139,7 +139,8 @@ const BusinessProfile = () => {
     );
   }
 
-  const coverPhoto = photos[0]?.photo_url || "/placeholder.svg";
+  // Priority: og_image_url > logo_url > first photo > placeholder
+  const coverPhoto = location.og_image_url || location.logo_url || photos[0]?.photo_url || "/placeholder.svg";
 
   return (
     <div className="min-h-screen bg-[#121212]">
