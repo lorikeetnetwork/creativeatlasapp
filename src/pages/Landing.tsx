@@ -87,7 +87,7 @@ const Landing = () => {
 
       {/* Header */}
       <header className="border-b border-border bg-background sticky top-0 z-50">
-        <div className="h-16 flex items-center justify-between w-full px-5 bg-[#eeff00]">
+        <div className="h-16 flex items-center justify-between w-full px-5 bg-[#121212]">
           <div className="flex items-center gap-3">
             <img src={logoImage} alt="Creative Atlas" className="h-14 w-auto object-contain" />
           </div>
@@ -113,7 +113,7 @@ const Landing = () => {
       {/* Features Section */}
       <section style={{
       backgroundColor: colors.featuresBg
-    }} className="py-24 transition-colors duration-300 bg-destructive">
+    }} className="py-24 transition-colors duration-300 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -166,7 +166,7 @@ const Landing = () => {
       {/* Map Preview Section */}
       <section style={{
       backgroundColor: colors.mapBg
-    }} className="py-24 transition-colors duration-300 bg-secondary-foreground">
+    }} className="py-24 transition-colors duration-300 bg-[#121212]">
         <div className="container mx-auto px-4">
           <Card className="text-center max-w-2xl mx-auto mb-12 backdrop-blur-sm bg-card/80 border-border/50">
             <CardHeader>
@@ -174,15 +174,15 @@ const Landing = () => {
                 Discover
               </Badge>
               <CardTitle style={{
-                color: colors.mapTitle
-              }} className="text-3xl md:text-4xl font-bold transition-colors duration-300 text-primary-glow">
+              color: colors.mapTitle
+            }} className="text-3xl md:text-4xl font-bold transition-colors duration-300 text-primary-glow">
                 Explore the Map
               </CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription style={{
-                color: colors.mapText
-              }} className="text-lg transition-colors duration-300 text-secondary">
+              color: colors.mapText
+            }} className="text-lg transition-colors duration-300 text-secondary">
                 Discover hundreds of creative spaces across the country. Pan, zoom, and find the vibrant creative scene near you.
               </CardDescription>
             </CardContent>
@@ -206,15 +206,15 @@ const Landing = () => {
                 Getting Started
               </Badge>
               <CardTitle className="text-3xl md:text-4xl font-bold transition-colors duration-300" style={{
-                color: colors.howItWorksTitle
-              }}>
+              color: colors.howItWorksTitle
+            }}>
                 How It Works
               </CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-lg transition-colors duration-300" style={{
-                color: colors.howItWorksText
-              }}>
+              color: colors.howItWorksText
+            }}>
                 Get started in three simple steps
               </CardDescription>
             </CardContent>
@@ -259,15 +259,15 @@ const Landing = () => {
                 Categories
               </Badge>
               <CardTitle className="text-3xl md:text-4xl font-bold transition-colors duration-300" style={{
-                color: colors.categoriesTitle
-              }}>
+              color: colors.categoriesTitle
+            }}>
                 Explore by Category
               </CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-lg transition-colors duration-300" style={{
-                color: colors.categoriesText
-              }}>
+              color: colors.categoriesText
+            }}>
                 From venues and studios to festivals and creative spaces
               </CardDescription>
             </CardContent>
@@ -277,7 +277,7 @@ const Landing = () => {
             backgroundColor: colors.categoryCardBg,
             borderColor: colors.categoryCardBorder
           }} onClick={() => navigate("/map")}>
-                <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+                <CardContent className="p-4 flex flex-col items-center text-center gap-2 bg-[#121212]">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
@@ -305,15 +305,15 @@ const Landing = () => {
                 Get Started
               </Badge>
               <CardTitle className="text-3xl md:text-5xl font-bold transition-colors duration-300" style={{
-                color: colors.ctaTitle
-              }}>
+              color: colors.ctaTitle
+            }}>
                 Ready to Explore Australia's Creative Scene?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               <CardDescription className="text-xl max-w-2xl mx-auto transition-colors duration-300" style={{
-                color: colors.ctaText
-              }}>
+              color: colors.ctaText
+            }}>
                 Join our community and discover the spaces that bring creativity to life
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -322,8 +322,8 @@ const Landing = () => {
                   <Map className="h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg h-12 px-8 gap-2 border-slate-700 hover:bg-slate-800" style={{
-                  color: colors.ctaTitle
-                }}>
+                color: colors.ctaTitle
+              }}>
                   Create Account
                   <ArrowRight className="h-5 w-5" />
                 </Button>
