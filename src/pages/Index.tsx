@@ -131,9 +131,11 @@ const Index = () => {
         {/* Map Panel */}
         <ResizablePanel defaultSize={80}>
           <div className="h-full relative">
-            {showDetail && selectedLocation ? <div className="absolute inset-0 z-10 bg-background/95 backdrop-blur-sm p-4">
+            {showDetail && selectedLocation && (
+              <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
                 <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
-              </div> : null}
+              </div>
+            )}
             <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />
           </div>
         </ResizablePanel>
