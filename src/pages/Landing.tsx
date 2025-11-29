@@ -168,19 +168,25 @@ const Landing = () => {
       backgroundColor: colors.mapBg
     }} className="py-24 transition-colors duration-300 bg-secondary-foreground">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            
-            <h2 style={{
-            color: colors.mapTitle
-          }} className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300 text-primary-glow">
-              Explore the Map
-            </h2>
-            <p style={{
-            color: colors.mapText
-          }} className="text-lg transition-colors duration-300 text-secondary">
-              Discover hundreds of creative spaces across the country. Pan, zoom, and find the vibrant creative scene near you.
-            </p>
-          </div>
+          <Card className="text-center max-w-2xl mx-auto mb-12 backdrop-blur-sm bg-card/80 border-border/50">
+            <CardHeader>
+              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
+                Discover
+              </Badge>
+              <CardTitle style={{
+                color: colors.mapTitle
+              }} className="text-3xl md:text-4xl font-bold transition-colors duration-300 text-primary-glow">
+                Explore the Map
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription style={{
+                color: colors.mapText
+              }} className="text-lg transition-colors duration-300 text-secondary">
+                Discover hundreds of creative spaces across the country. Pan, zoom, and find the vibrant creative scene near you.
+              </CardDescription>
+            </CardContent>
+          </Card>
           <div className="rounded-xl overflow-hidden border border-border shadow-lg">
             <MapPreview />
           </div>
@@ -194,19 +200,25 @@ const Landing = () => {
       backgroundColor: colors.howItWorksBg
     }} className="py-24 transition-colors duration-300 border-destructive bg-destructive">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300" style={{
-            color: colors.howItWorksTitle
-          }}>
-              How It Works
-            </h2>
-            <p className="text-lg transition-colors duration-300" style={{
-            color: colors.howItWorksText
-          }}>
-              Get started in three simple steps
-            </p>
-          </div>
+          <Card className="text-center max-w-2xl mx-auto mb-16 backdrop-blur-sm bg-card/80 border-border/50">
+            <CardHeader>
+              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
+                Getting Started
+              </Badge>
+              <CardTitle className="text-3xl md:text-4xl font-bold transition-colors duration-300" style={{
+                color: colors.howItWorksTitle
+              }}>
+                How It Works
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-lg transition-colors duration-300" style={{
+                color: colors.howItWorksText
+              }}>
+                Get started in three simple steps
+              </CardDescription>
+            </CardContent>
+          </Card>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {steps.map((step, index) => <div key={index} className="relative text-center group">
                 <div className="w-20 h-20 rounded-full text-2xl font-bold flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-105 transition-all duration-300" style={{
@@ -241,19 +253,25 @@ const Landing = () => {
       backgroundColor: colors.categoriesBg
     }} className="py-24 transition-colors duration-300 bg-secondary-foreground">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300" style={{
-            color: colors.categoriesTitle
-          }}>
-              Explore by Category
-            </h2>
-            <p className="text-lg transition-colors duration-300" style={{
-            color: colors.categoriesText
-          }}>
-              From venues and studios to festivals and creative spaces
-            </p>
-          </div>
+          <Card className="text-center max-w-2xl mx-auto mb-12 backdrop-blur-sm bg-card/80 border-border/50">
+            <CardHeader>
+              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
+                Categories
+              </Badge>
+              <CardTitle className="text-3xl md:text-4xl font-bold transition-colors duration-300" style={{
+                color: colors.categoriesTitle
+              }}>
+                Explore by Category
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-lg transition-colors duration-300" style={{
+                color: colors.categoriesText
+              }}>
+                From venues and studios to festivals and creative spaces
+              </CardDescription>
+            </CardContent>
+          </Card>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
             {categories.map((category, index) => <Card key={index} className="cursor-pointer transition-all duration-300 hover:shadow-md group" style={{
             backgroundColor: colors.categoryCardBg,
@@ -281,31 +299,37 @@ const Landing = () => {
       backgroundColor: colors.ctaBg
     }} className="py-24 transition-colors duration-300 bg-destructive">
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto space-y-8">
-            
-            <h2 className="text-3xl md:text-5xl font-bold transition-colors duration-300" style={{
-            color: colors.ctaTitle
-          }}>
-              Ready to Explore Australia's Creative Scene?
-            </h2>
-            <p className="text-xl max-w-2xl mx-auto transition-colors duration-300" style={{
-            color: colors.ctaText
-          }}>
-              Join our community and discover the spaces that bring creativity to life
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" onClick={() => navigate("/map")} className="text-lg h-12 px-8 gap-2">
-                View the Map
-                <Map className="h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg h-12 px-8 gap-2 border-slate-700 hover:bg-slate-800" style={{
-              color: colors.ctaTitle
-            }}>
-                Create Account
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
+          <Card className="max-w-3xl mx-auto backdrop-blur-sm bg-card/80 border-border/50">
+            <CardHeader>
+              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
+                Get Started
+              </Badge>
+              <CardTitle className="text-3xl md:text-5xl font-bold transition-colors duration-300" style={{
+                color: colors.ctaTitle
+              }}>
+                Ready to Explore Australia's Creative Scene?
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              <CardDescription className="text-xl max-w-2xl mx-auto transition-colors duration-300" style={{
+                color: colors.ctaText
+              }}>
+                Join our community and discover the spaces that bring creativity to life
+              </CardDescription>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                <Button size="lg" onClick={() => navigate("/map")} className="text-lg h-12 px-8 gap-2">
+                  View the Map
+                  <Map className="h-5 w-5" />
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-lg h-12 px-8 gap-2 border-slate-700 hover:bg-slate-800" style={{
+                  color: colors.ctaTitle
+                }}>
+                  Create Account
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
