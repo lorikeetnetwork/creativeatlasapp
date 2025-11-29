@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles, Building2, ArrowRight } from "lucide-react";
+import { Check, Building2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
 import logoImage from "@/assets/creative-atlas-logo.png";
@@ -30,7 +30,6 @@ const Pricing = () => {
   }, []);
 
   const handlePayment = async () => {
-    // Check if user is logged in
     if (!session) {
       toast({
         title: "Sign in required",
@@ -50,7 +49,6 @@ const Pricing = () => {
       if (error) throw error;
 
       if (data?.url) {
-        // Open Stripe checkout in new tab
         window.open(data.url, '_blank');
         
         toast({
@@ -81,9 +79,9 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#121212]">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b border-[#333] bg-[#121212]">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
             <img 
@@ -93,7 +91,7 @@ const Pricing = () => {
             />
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => navigate("/map")}>
+            <Button onClick={() => navigate("/map")}>
               Explore Map
             </Button>
             {!session ? (
@@ -101,7 +99,7 @@ const Pricing = () => {
                 Sign In
               </Button>
             ) : (
-              <Button variant="outline" onClick={() => navigate("/map")}>
+              <Button onClick={() => navigate("/map")}>
                 Dashboard
               </Button>
             )}
@@ -110,13 +108,13 @@ const Pricing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5">
+      <section className="py-20 bg-[#1a1a1a]">
         <div className="container mx-auto px-4 text-center">
-          <Badge className="mb-4" variant="secondary">One-Time Payment</Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+          <Badge className="mb-4 bg-[#333] text-white border-[#444]">One-Time Payment</Badge>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
             List Your Creative Business
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
             Free to browse. One-time payment to list your business on Australia's creative community map.
           </p>
         </div>
@@ -126,21 +124,21 @@ const Pricing = () => {
       <section className="py-20 container mx-auto px-4">
         <div className="max-w-2xl mx-auto mb-20">
           {/* Creative Listing Card */}
-          <Card className="hover-scale border-primary/50 relative">
+          <Card className="border-[#333] bg-[#1a1a1a]">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <Badge variant="outline" className="gap-2 border-primary text-primary">
+                <Badge variant="outline" className="gap-2 border-[#444] text-white">
                   <Building2 className="w-4 h-4" />
                   For Creative Businesses
                 </Badge>
               </div>
-              <CardTitle className="text-4xl">Creative Entity Listing</CardTitle>
-              <CardDescription className="text-lg mt-2">
+              <CardTitle className="text-4xl text-white">Creative Entity Listing</CardTitle>
+              <CardDescription className="text-lg mt-2 text-gray-400">
                 Full business profile with showcase features
               </CardDescription>
               <div className="mt-6">
-                <span className="text-6xl font-bold">$15</span>
-                <span className="text-muted-foreground ml-2">AUD one-time</span>
+                <span className="text-6xl font-bold text-white">$15</span>
+                <span className="text-gray-400 ml-2">AUD one-time</span>
               </div>
             </CardHeader>
             <CardContent>
@@ -148,7 +146,7 @@ const Pricing = () => {
                 {listingFeatures.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span>{feature}</span>
+                    <span className="text-white">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -169,50 +167,50 @@ const Pricing = () => {
 
         {/* FAQ Section */}
         <div className="max-w-3xl mx-auto mt-20">
-          <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">Frequently Asked Questions</h2>
           <div className="space-y-6">
-            <Card>
+            <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader>
-                <CardTitle>What happens after I pay?</CardTitle>
+                <CardTitle className="text-white">What happens after I pay?</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   After completing your payment, your account will be upgraded immediately. For Creative Entity Listings, 
                   you'll be guided through setting up your business profile with photos, videos, and contact information.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader>
-                <CardTitle>Is it really free to browse?</CardTitle>
+                <CardTitle className="text-white">Is it really free to browse?</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   Yes! You can create a free account and browse all locations on the map with no payment required. 
                   Only pay if you want to list your creative business.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader>
-                <CardTitle>How long does my listing stay active?</CardTitle>
+                <CardTitle className="text-white">How long does my listing stay active?</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   Your listing remains active permanently. This is a one-time payment with no recurring fees. 
                   You maintain full control over your profile and can update it anytime.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader>
-                <CardTitle>Do you offer refunds?</CardTitle>
+                <CardTitle className="text-white">Do you offer refunds?</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-gray-400">
                   We offer a 14-day money-back guarantee if you're not satisfied with your purchase. 
                   Contact our support team for assistance.
                 </p>
@@ -223,17 +221,17 @@ const Pricing = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-20 bg-[#1a1a1a]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Join Australia's Creative Community?</h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6 text-white">Ready to Join Australia's Creative Community?</h2>
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
             Start exploring creative spaces or showcase your own business today
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={() => navigate("/map")}>
               Explore the Map
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/auth")}>
+            <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="border-[#333] text-white hover:bg-[#1a1a1a]">
               Sign Up Free
             </Button>
           </div>
