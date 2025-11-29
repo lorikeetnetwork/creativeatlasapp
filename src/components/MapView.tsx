@@ -110,11 +110,11 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
       el.style.transition = "all 0.2s";
 
       el.addEventListener("mouseenter", () => {
-        el.style.transform = "scale(1.2)";
+        el.style.scale = "1.2";
       });
 
       el.addEventListener("mouseleave", () => {
-        el.style.transform = "scale(1)";
+        el.style.scale = "1";
       });
 
       const marker = new mapboxgl.Marker(el)
@@ -152,10 +152,10 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
     markers.current.forEach((marker, index) => {
       const el = marker.getElement();
       if (locations[index]?.id === selectedLocation.id) {
-        el.style.transform = "scale(1.3)";
+        el.style.scale = "1.3";
         el.style.zIndex = "1000";
       } else {
-        el.style.transform = "scale(1)";
+        el.style.scale = "1";
         el.style.zIndex = "1";
       }
     });
