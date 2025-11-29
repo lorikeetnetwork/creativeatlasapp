@@ -26,16 +26,6 @@ const LocationList = ({
     );
   }
 
-  const getLocationImage = (location: LocationWithPhotos): string | null => {
-    // Priority: og_image_url > logo_url > first photo
-    if (location.og_image_url) return location.og_image_url;
-    if (location.logo_url) return location.logo_url;
-    if (location.location_photos?.[0]?.photo_url) {
-      return location.location_photos[0].photo_url;
-    }
-    return null;
-  };
-
   return (
     <div className="space-y-3">
       {locations.map((location) => {
@@ -47,7 +37,6 @@ const LocationList = ({
             category={location.category}
             suburb={location.suburb}
             state={location.state}
-            imageUrl={getLocationImage(location)}
             isSelected={isSelected}
             onClick={() => onLocationSelect(location)}
           />

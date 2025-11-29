@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LocationReviewCard } from "./LocationReviewCard";
-import { Loader2, Eye, Check, X } from "lucide-react";
+import { LocationEditForm } from "./LocationEditForm";
+import { Loader2, Eye, Check, X, Pencil } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -30,6 +31,7 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [editLocation, setEditLocation] = useState<Location | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -142,6 +144,9 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
                 <Button size="sm" variant="outline" className="flex-1 h-9 text-xs border-[#333] text-white hover:bg-[#222]" onClick={() => setSelectedLocation(location)}>
                   <Eye className="w-3 h-3 mr-1" />Review
                 </Button>
+                <Button size="sm" variant="outline" className="h-9 px-3 border-[#333] text-white hover:bg-[#222]" onClick={() => setEditLocation(location)}>
+                  <Pencil className="w-3 h-3" />
+                </Button>
                 {location.status === 'Pending' && (
                   <>
                     <Button size="sm" variant="outline" className="h-9 px-3 border-green-600 text-green-500 hover:bg-green-500/10" onClick={() => handleQuickAction(location.id, 'Active')}><Check className="w-3 h-3" /></Button>
@@ -185,6 +190,7 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
                 <TableCell className="text-gray-400">{format(new Date(location.created_at), 'MMM d, yyyy')}</TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button size="sm" variant="ghost" onClick={() => setSelectedLocation(location)}><Eye className="h-4 w-4 mr-1" />Review</Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditLocation(location)}><Pencil className="h-4 w-4 mr-1" />Edit</Button>
                   {location.status === 'Pending' && (
                     <>
                       <Button size="sm" variant="default" onClick={() => handleQuickAction(location.id, 'Active')}>Approve</Button>
@@ -200,6 +206,10 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
 
       {selectedLocation && (
         <LocationReviewCard location={selectedLocation} onClose={() => setSelectedLocation(null)} onUpdate={fetchLocations} />
+      )}
+
+      {editLocation && (
+        <LocationEditForm location={editLocation} open={!!editLocation} onClose={() => setEditLocation(null)} onUpdate={fetchLocations} />
       )}
     </>
   );

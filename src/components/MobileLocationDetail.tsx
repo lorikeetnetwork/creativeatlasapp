@@ -55,6 +55,20 @@ const MobileLocationDetail = ({ location, open, onOpenChange }: MobileLocationDe
         </SheetHeader>
 
         <div className="overflow-y-auto h-[calc(100%-5rem)] py-4 space-y-4 scrollbar-hide">
+          {/* Header Image - OG Image or Logo or First Photo */}
+          {(location.og_image_url || location.logo_url || photos[0]?.photo_url) && (
+            <div className="w-full h-40 rounded-lg overflow-hidden">
+              <img
+                src={location.og_image_url || location.logo_url || photos[0]?.photo_url}
+                alt={location.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          )}
+
           {/* Photo Gallery */}
           {photos.length > 0 && <PhotoGallery photos={photos} />}
 
