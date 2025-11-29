@@ -1,50 +1,60 @@
-import { Card } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { LocationCard } from "@/components/ui/location-card";
 import type { Tables } from "@/integrations/supabase/types";
-import { Button } from "@/components/ui/button";
+
+interface LocationWithPhotos extends Tables<"locations"> {
+  location_photos?: { photo_url: string; display_order: number | null }[];
+}
+
 interface LocationListProps {
-  locations: Tables<"locations">[];
+  locations: LocationWithPhotos[];
   selectedLocation: Tables<"locations"> | null;
   onLocationSelect: (location: Tables<"locations">) => void;
 }
+
 const LocationList = ({
   locations,
   selectedLocation,
-  onLocationSelect
+  onLocationSelect,
 }: LocationListProps) => {
   if (locations.length === 0) {
-    return <div className="py-8">
+    return (
+      <div className="py-8">
         <p className="text-muted-foreground text-center text-sm">
           No locations found
         </p>
-      </div>;
+      </div>
+    );
   }
-  return <div className="space-y-2">
-      {locations.map(location => {
-      const isSelected = selectedLocation?.id === location.id;
-      return <Card key={location.id} className={`p-3 cursor-pointer transition-all hover:shadow-md bg-[#111111] border-[#111111] ${isSelected ? "ring-2 ring-primary shadow-sm" : ""}`} onClick={() => onLocationSelect(location)}>
-            <div className="flex gap-3">
-              {/* Thumbnail Placeholder */}
-              <div className="w-14 h-14 flex-shrink-0 rounded bg-gradient-sunset opacity-30" />
-              
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-white truncate mb-0.5">
-                  {location.name}
-                </h3>
-                <p className="text-xs text-gray-400 truncate">
-                  {location.category} • {location.suburb}, {location.state}
-                </p>
-              </div>
 
-              {/* Open Button */}
-              <Button variant="outline" size="sm" className="h-7 px-2 text-xs flex-shrink-0 bg-[#111111] text-white border-white/20 hover:bg-[#333333] hover:text-white">
-                OPEN
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Button>
-            </div>
-          </Card>;
-    })}
-    </div>;
+  const getLocationImage = (location: LocationWithPhotos): string | null => {
+    // Priority: og_image_url > logo_url > first photo
+    if (location.og_image_url) return location.og_image_url;
+    if (location.logo_url) return location.logo_url;
+    if (location.location_photos?.[0]?.photo_url) {
+      return location.location_photos[0].photo_url;
+    }
+    return null;
+  };
+
+  return (
+    <div className="space-y-3">
+      {locations.map((location) => {
+        const isSelected = selectedLocation?.id === location.id;
+        return (
+          <LocationCard
+            key={location.id}
+            name={location.name}
+            category={location.category}
+            suburb={location.suburb}
+            state={location.state}
+            imageUrl={getLocationImage(location)}
+            isSelected={isSelected}
+            onClick={() => onLocationSelect(location)}
+          />
+        );
+      })}
+    </div>
+  );
 };
+
 export default LocationList;
