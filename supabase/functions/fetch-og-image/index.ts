@@ -6,13 +6,34 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+function isValidImageUrl(url: string): boolean {
+  // Filter out tracking pixels, analytics, and invalid images
+  const invalidPatterns = [
+    /facebook\.com\/tr/i,
+    /google-analytics\.com/i,
+    /googletagmanager\.com/i,
+    /pixel\./i,
+    /tracking/i,
+    /beacon/i,
+    /analytics/i,
+    /\.gif\?/i, // Tracking pixels often use .gif with query params
+    /1x1/i,
+    /spacer/i,
+  ];
+  
+  return !invalidPatterns.some(pattern => pattern.test(url));
+}
+
 function extractOgImage(html: string, baseUrl: string): string | null {
   // Try og:image first
   const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)
     || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
   
   if (ogImageMatch?.[1]) {
-    return resolveUrl(ogImageMatch[1], baseUrl);
+    const resolved = resolveUrl(ogImageMatch[1], baseUrl);
+    if (isValidImageUrl(resolved)) {
+      return resolved;
+    }
   }
 
   // Try twitter:image
@@ -20,13 +41,21 @@ function extractOgImage(html: string, baseUrl: string): string | null {
     || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i);
   
   if (twitterImageMatch?.[1]) {
-    return resolveUrl(twitterImageMatch[1], baseUrl);
+    const resolved = resolveUrl(twitterImageMatch[1], baseUrl);
+    if (isValidImageUrl(resolved)) {
+      return resolved;
+    }
   }
 
-  // Try first img tag as last resort
-  const imgMatch = html.match(/<img[^>]*src=["']([^"']+)["']/i);
-  if (imgMatch?.[1]) {
-    return resolveUrl(imgMatch[1], baseUrl);
+  // Try first valid img tag as last resort (skip tiny images and tracking pixels)
+  const imgMatches = html.matchAll(/<img[^>]*src=["']([^"']+)["'][^>]*>/gi);
+  for (const match of imgMatches) {
+    if (match[1]) {
+      const resolved = resolveUrl(match[1], baseUrl);
+      if (isValidImageUrl(resolved)) {
+        return resolved;
+      }
+    }
   }
 
   return null;
@@ -70,17 +99,36 @@ serve(async (req) => {
       normalizedUrl = 'https://' + url;
     }
 
-    const response = await fetch(normalizedUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; OGImageBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-    });
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    let response;
+    try {
+      response = await fetch(normalizedUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+        },
+        signal: controller.signal,
+      });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      const errorMsg = fetchError instanceof Error ? fetchError.message : 'Unknown fetch error';
+      console.error('Fetch error for URL:', normalizedUrl, errorMsg);
+      // Return null gracefully instead of error - TLS issues are common
+      return new Response(
+        JSON.stringify({ ogImage: null, error: null }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error('Failed to fetch URL:', response.status, response.statusText);
       return new Response(
-        JSON.stringify({ ogImage: null, error: `Failed to fetch: ${response.status}` }),
+        JSON.stringify({ ogImage: null, error: null }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
