@@ -1,5 +1,4 @@
-import { MapPin, Plus, LogOut, User, Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin, LogOut, User, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CategoryPills from "./CategoryPills";
@@ -20,7 +19,6 @@ interface SidebarProps {
   locations: Tables<"locations">[];
   selectedLocation: Tables<"locations"> | null;
   onLocationSelect: (location: Tables<"locations">) => void;
-  onOpenForm: () => void;
   onSignOut: () => void;
   onSignIn: () => void;
 }
@@ -35,7 +33,6 @@ const Sidebar = ({
   locations,
   selectedLocation,
   onLocationSelect,
-  onOpenForm,
   onSignOut,
   onSignIn
 }: SidebarProps) => {
@@ -62,17 +59,6 @@ const Sidebar = ({
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          {/* SUBMIT Section */}
-          <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
-              Submit
-            </h2>
-            <Button onClick={onOpenForm} className="w-full justify-between shadow-warm bg-[#fcf701] text-destructive">
-              OPEN FORM
-              <Plus className="w-4 h-4" />
-            </Button>
           </div>
 
           {/* CREATIVE ENTITIES Section */}
