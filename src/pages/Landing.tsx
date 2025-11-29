@@ -108,6 +108,8 @@ const Landing = () => {
       {/* Hero Section - UNCHANGED */}
       <FuturisticAlienHero />
 
+      <Separator className="bg-border" />
+
       {/* Features Section */}
       <section style={{
       backgroundColor: colors.featuresBg
@@ -159,6 +161,8 @@ const Landing = () => {
         </div>
       </section>
 
+      <Separator className="bg-border" />
+
       {/* Map Preview Section */}
       <section style={{
       backgroundColor: colors.mapBg
@@ -182,6 +186,8 @@ const Landing = () => {
           </div>
         </div>
       </section>
+
+      <Separator className="bg-border" />
 
       {/* How It Works Section */}
       <section style={{
@@ -228,6 +234,8 @@ const Landing = () => {
         </div>
       </section>
 
+      <Separator className="bg-border" />
+
       {/* Categories Preview */}
       <section style={{
       backgroundColor: colors.categoriesBg
@@ -266,6 +274,8 @@ const Landing = () => {
         </div>
       </section>
 
+      <Separator className="bg-border" />
+
       {/* CTA Section */}
       <section style={{
       backgroundColor: colors.ctaBg
@@ -298,6 +308,8 @@ const Landing = () => {
           </div>
         </div>
       </section>
+
+      <Separator className="bg-border" />
 
       {/* Footer */}
       <footer style={{
