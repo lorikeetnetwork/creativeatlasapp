@@ -102,22 +102,22 @@ const Sidebar = ({
   onSignOut,
   onSignIn
 }: SidebarProps) => {
-  return <div className="h-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
+  return <div className="h-full w-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
       {/* Scrollable Content */}
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6 bg-card-foreground">
+      <ScrollArea className="flex-1 w-full">
+        <div className="p-4 space-y-6 bg-card-foreground w-full">
           {/* SEARCH Section */}
-          <div className="overflow-hidden">
+          <div className="w-full">
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Search
             </h2>
-            <div className="space-y-3">
-              <div className="overflow-hidden">
+            <div className="space-y-3 w-full">
+              <div className="w-full">
                 <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
               </div>
-              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
+              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="w-full text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
               <Select value={region} onValueChange={onRegionChange}>
-                <SelectTrigger className="text-sm bg-[#111111] text-white border-[#111111]">
+                <SelectTrigger className="w-full text-sm bg-[#111111] text-white border-[#111111]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#111111] text-white border-[#111111] max-h-[300px]">
@@ -130,7 +130,7 @@ const Sidebar = ({
           </div>
 
           {/* CREATIVE ENTITIES Section */}
-          <div>
+          <div className="w-full">
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Creative Entities
             </h2>

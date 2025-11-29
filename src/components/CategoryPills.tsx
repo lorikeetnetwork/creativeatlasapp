@@ -1,75 +1,37 @@
 import { CATEGORY_GROUPS } from "@/utils/categoryGroups";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface CategoryPillsProps {
   selectedCategories: string[];
   onCategoryToggle: (category: string) => void;
 }
 
-// Use category group names as pills for high-level filtering
+// Shorter names that fit better
 const PILL_GROUPS = [
-  "Music & Recording",
-  "Live Events & Festivals", 
-  "Visual Arts & Media",
-  "Technology & Digital",
-  "Cultural & Community Spaces",
-  "Performing Arts",
-  "Gaming & Immersive",
-  "Education & Development",
+  { short: "Music", full: "Music & Recording" },
+  { short: "Events", full: "Live Events & Festivals" },
+  { short: "Visual", full: "Visual Arts & Media" },
+  { short: "Tech", full: "Technology & Digital" },
+  { short: "Community", full: "Cultural & Community Spaces" },
+  { short: "Performing", full: "Performing Arts" },
+  { short: "Gaming", full: "Gaming & Immersive" },
+  { short: "Education", full: "Education & Development" },
 ];
 
 const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsProps) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const updateScrollButtons = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
-    }
-  };
-
-  useEffect(() => {
-    updateScrollButtons();
-    const ref = scrollRef.current;
-    if (ref) {
-      ref.addEventListener('scroll', updateScrollButtons);
-    }
-    window.addEventListener('resize', updateScrollButtons);
-    return () => {
-      if (ref) {
-        ref.removeEventListener('scroll', updateScrollButtons);
-      }
-      window.removeEventListener('resize', updateScrollButtons);
-    };
-  }, []);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = 150;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   // Check if any category from a group is selected
-  const isGroupSelected = (groupName: string) => {
-    const group = CATEGORY_GROUPS.find((g) => g.name === groupName);
+  const isGroupSelected = (fullName: string) => {
+    const group = CATEGORY_GROUPS.find((g) => g.name === fullName);
     if (!group) return false;
     return group.categories.some((cat) => selectedCategories.includes(cat));
   };
 
   // Toggle all categories in a group
-  const handleGroupToggle = (groupName: string) => {
-    const group = CATEGORY_GROUPS.find((g) => g.name === groupName);
+  const handleGroupToggle = (fullName: string) => {
+    const group = CATEGORY_GROUPS.find((g) => g.name === fullName);
     if (!group) return;
     
-    const isCurrentlySelected = isGroupSelected(groupName);
+    const isCurrentlySelected = isGroupSelected(fullName);
     
     group.categories.forEach((cat) => {
       const isCatSelected = selectedCategories.includes(cat);
@@ -82,59 +44,31 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
   };
 
   return (
-    <div className="relative flex items-center gap-1 w-full min-w-0">
-      {/* Left scroll button */}
-      {canScrollLeft && (
-        <button
-          onClick={() => scroll('left')}
-          className="absolute left-0 z-10 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] shadow-md"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-      )}
-      
-      {/* Scrollable container */}
-      <div 
-        ref={scrollRef}
-        className="w-full flex gap-2 overflow-x-auto px-1"
-        style={{ 
-          scrollbarWidth: 'none', 
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch'
-        }}
-      >
-        <style>{`
-          .category-scroll::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
-        {PILL_GROUPS.map((groupName) => {
-          const isSelected = isGroupSelected(groupName);
-          return (
-            <button
-              key={groupName}
-              onClick={() => handleGroupToggle(groupName)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 min-h-[32px] ${
-                isSelected
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-[#111111] text-white border border-[#111111] hover:bg-[#333333]"
-              }`}
-            >
-              {groupName.toUpperCase()}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Right scroll button */}
-      {canScrollRight && (
-        <button
-          onClick={() => scroll('right')}
-          className="absolute right-0 z-10 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] shadow-md"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      )}
+    <div className="relative">
+      <ScrollArea className="w-full whitespace-nowrap">
+        <div className="flex gap-2 pb-3">
+          {PILL_GROUPS.map(({ short, full }) => {
+            const isSelected = isGroupSelected(full);
+            return (
+              <button
+                key={full}
+                onClick={() => handleGroupToggle(full)}
+                title={full}
+                className={`px-3 py-1.5 rounded-full text-[10px] font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${
+                  isSelected
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-[#222] text-white border border-[#333] hover:bg-[#333]"
+                }`}
+              >
+                {short.toUpperCase()}
+              </button>
+            );
+          })}
+        </div>
+        <ScrollBar orientation="horizontal" className="h-1.5 bg-[#333]" />
+      </ScrollArea>
+      {/* Fade gradient to indicate more content */}
+      <div className="absolute right-0 top-0 bottom-3 w-6 bg-gradient-to-l from-card-foreground to-transparent pointer-events-none" />
     </div>
   );
 };
