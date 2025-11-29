@@ -1,7 +1,7 @@
 import { MapPin, LogOut, User, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CategoryPills from "./CategoryPills";
+import { CATEGORY_GROUPS } from "@/utils/categoryGroups";
 import LocationList from "./LocationList";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
@@ -111,9 +111,49 @@ const Sidebar = ({
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Search
             </h2>
-            <div className="space-y-3 w-full">
-              <div className="w-full">
-                <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-1.5 pb-2">
+                {[
+                  { short: "Music", full: "Music & Recording" },
+                  { short: "Events", full: "Live Events & Festivals" },
+                  { short: "Visual", full: "Visual Arts & Media" },
+                  { short: "Tech", full: "Technology & Digital" },
+                  { short: "Community", full: "Cultural & Community Spaces" },
+                  { short: "Performing", full: "Performing Arts" },
+                  { short: "Gaming", full: "Gaming & Immersive" },
+                  { short: "Education", full: "Education & Development" },
+                ].map(({ short, full }) => {
+                  const group = CATEGORY_GROUPS.find((g) => g.name === full);
+                  const isSelected = group ? group.categories.some((cat) => selectedCategories.includes(cat)) : false;
+                  
+                  const handleClick = () => {
+                    if (!group) return;
+                    const isCurrentlySelected = group.categories.some((cat) => selectedCategories.includes(cat));
+                    group.categories.forEach((cat) => {
+                      const isCatSelected = selectedCategories.includes(cat);
+                      if (isCurrentlySelected && isCatSelected) {
+                        onCategoryToggle(cat);
+                      } else if (!isCurrentlySelected && !isCatSelected) {
+                        onCategoryToggle(cat);
+                      }
+                    });
+                  };
+                  
+                  return (
+                    <button
+                      key={full}
+                      onClick={handleClick}
+                      title={full}
+                      className={`px-3 py-1.5 rounded-full text-[10px] font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${
+                        isSelected
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "bg-[#222] text-white border border-[#333] hover:bg-[#333]"
+                      }`}
+                    >
+                      {short.toUpperCase()}
+                    </button>
+                  );
+                })}
               </div>
               <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="w-full text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
               <Select value={region} onValueChange={onRegionChange}>
