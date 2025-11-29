@@ -6,11 +6,17 @@ import LocationDetail from "@/components/LocationDetail";
 import LocationSubmissionForm from "@/components/LocationSubmissionForm";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
+import MobileLocationSheet from "@/components/MobileLocationSheet";
+import MobileLocationDetail from "@/components/MobileLocationDetail";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Search, List } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [locations, setLocations] = useState<Tables<"locations">[]>([]);
@@ -23,42 +29,40 @@ const Index = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+  const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     console.log("Index component mounted");
-    supabase.auth.getSession().then(({
-      data: {
-        session
-      }
-    }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       console.log("Session loaded:", session ? "authenticated" : "not authenticated");
     });
-    const {
-      data: {
-        subscription
-      }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
     return () => subscription.unsubscribe();
   }, []);
+
   useEffect(() => {
     fetchLocations();
   }, []);
+
   useEffect(() => {
     filterLocations();
   }, [locations, searchQuery, selectedCategories, region]);
+
   const fetchLocations = async () => {
     try {
       console.log("Fetching locations...");
-      const {
-        data,
-        error
-      } = await supabase.from("locations").select("*").eq("status", "Active").order("name");
+      const { data, error } = await supabase
+        .from("locations")
+        .select("*")
+        .eq("status", "Active")
+        .order("name");
       if (error) {
         console.error("Error fetching locations:", error);
         toast({
@@ -76,17 +80,24 @@ const Index = () => {
       setIsLoading(false);
     }
   };
+
   const filterLocations = () => {
     let filtered = [...locations];
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(loc => loc.name.toLowerCase().includes(query) || loc.suburb.toLowerCase().includes(query) || loc.state.toLowerCase().includes(query) || loc.description?.toLowerCase().includes(query));
+      filtered = filtered.filter(
+        (loc) =>
+          loc.name.toLowerCase().includes(query) ||
+          loc.suburb.toLowerCase().includes(query) ||
+          loc.state.toLowerCase().includes(query) ||
+          loc.description?.toLowerCase().includes(query)
+      );
     }
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter(loc => selectedCategories.includes(loc.category));
+      filtered = filtered.filter((loc) => selectedCategories.includes(loc.category));
     }
     if (region !== "All Australia") {
-      filtered = filtered.filter(loc => {
+      filtered = filtered.filter((loc) => {
         if (region === "Gold Coast") return loc.suburb.toLowerCase().includes("gold coast");
         if (region === "Northern Rivers") return loc.state === "NSW" && loc.suburb.toLowerCase().includes("byron");
         if (region === "Brisbane") return loc.suburb.toLowerCase().includes("brisbane");
@@ -97,10 +108,16 @@ const Index = () => {
     }
     setFilteredLocations(filtered);
   };
+
   const handleLocationSelect = (location: Tables<"locations">) => {
     setSelectedLocation(location);
-    setShowDetail(true);
+    if (isMobile) {
+      setMobileDetailOpen(true);
+    } else {
+      setShowDetail(true);
+    }
   };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast({
@@ -108,21 +125,134 @@ const Index = () => {
       description: "You have been signed out successfully"
     });
   };
+
   const handleCategoryToggle = (category: string) => {
-    setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
   };
+
   const handleOpenForm = () => {
     setIsFormOpen(true);
   };
-  return <div className="h-screen flex flex-col bg-background">
+
+  // Mobile Layout
+  if (isMobile) {
+    return (
+      <div className="h-screen flex flex-col bg-background">
+        {/* Mobile Topbar */}
+        <Topbar
+          session={session}
+          onSignOut={handleSignOut}
+          onSignIn={() => navigate("/auth")}
+          onOpenForm={handleOpenForm}
+          isSidebarCollapsed={true}
+          onToggleSidebar={() => setMobileSheetOpen(true)}
+          className="bg-[#fff700]"
+        />
+
+        {/* Full Screen Map */}
+        <div className="flex-1 relative">
+          <MapView
+            locations={filteredLocations}
+            selectedLocation={selectedLocation}
+            onLocationSelect={handleLocationSelect}
+          />
+
+          {/* Floating Action Button for Search */}
+          <Button
+            onClick={() => setMobileSheetOpen(true)}
+            className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10"
+          >
+            <Search className="w-5 h-5 mr-2" />
+            Search
+            <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
+              {filteredLocations.length}
+            </span>
+          </Button>
+        </div>
+
+        {/* Mobile Search Sheet */}
+        <MobileLocationSheet
+          open={mobileSheetOpen}
+          onOpenChange={setMobileSheetOpen}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedCategories={selectedCategories}
+          onCategoryToggle={handleCategoryToggle}
+          region={region}
+          onRegionChange={setRegion}
+          locations={filteredLocations}
+          selectedLocation={selectedLocation}
+          onLocationSelect={handleLocationSelect}
+        />
+
+        {/* Mobile Location Detail */}
+        <MobileLocationDetail
+          location={selectedLocation}
+          open={mobileDetailOpen}
+          onOpenChange={setMobileDetailOpen}
+        />
+
+        {/* Location Submission Form Dialog */}
+        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+          <DialogContent className="max-w-[95vw] max-h-[90vh] overflow-y-auto">
+            <LocationSubmissionForm
+              session={session}
+              onSuccess={() => {
+                setIsFormOpen(false);
+                fetchLocations();
+              }}
+              onCancel={() => setIsFormOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
+
+  // Desktop Layout
+  return (
+    <div className="h-screen flex flex-col bg-background">
       {/* Topbar */}
-      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-[#fff700]" />
+      <Topbar
+        session={session}
+        onSignOut={handleSignOut}
+        onSignIn={() => navigate("/auth")}
+        onOpenForm={handleOpenForm}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        className="bg-[#fff700]"
+      />
 
       {/* Resizable Layout */}
       <ResizablePanelGroup direction="horizontal" className="flex-1 gap-0">
         {/* Sidebar Panel */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={40} collapsible={true} collapsedSize={0} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)}>
-          {!isSidebarCollapsed && <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />}
+        <ResizablePanel
+          defaultSize={20}
+          minSize={15}
+          maxSize={40}
+          collapsible={true}
+          collapsedSize={0}
+          onCollapse={() => setIsSidebarCollapsed(true)}
+          onExpand={() => setIsSidebarCollapsed(false)}
+        >
+          {!isSidebarCollapsed && (
+            <Sidebar
+              session={session}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+              region={region}
+              onRegionChange={setRegion}
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onSignOut={handleSignOut}
+              onSignIn={() => navigate("/auth")}
+            />
+          )}
         </ResizablePanel>
 
         {/* Resize Handle */}
@@ -136,7 +266,11 @@ const Index = () => {
                 <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
               </div>
             )}
-            <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />
+            <MapView
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+            />
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -144,12 +278,18 @@ const Index = () => {
       {/* Location Submission Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <LocationSubmissionForm session={session} onSuccess={() => {
-          setIsFormOpen(false);
-          fetchLocations();
-        }} onCancel={() => setIsFormOpen(false)} />
+          <LocationSubmissionForm
+            session={session}
+            onSuccess={() => {
+              setIsFormOpen(false);
+              fetchLocations();
+            }}
+            onCancel={() => setIsFormOpen(false)}
+          />
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;

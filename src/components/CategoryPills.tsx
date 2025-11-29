@@ -18,14 +18,14 @@ const MAIN_CATEGORIES = [
 
 const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsProps) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
       {MAIN_CATEGORIES.map((category) => {
         const isSelected = selectedCategories.includes(category);
         return (
           <button
             key={category}
             onClick={() => onCategoryToggle(category)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 min-h-[32px] ${
               isSelected
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-[#111111] text-white border border-[#111111] hover:bg-[#333333]"
