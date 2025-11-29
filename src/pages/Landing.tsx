@@ -85,10 +85,10 @@ const Landing = () => {
             <img src={logoImage} alt="Creative Atlas" className="h-14 w-auto object-contain" />
           </div>
           <nav className="flex items-center gap-2">
-            <Button variant="ghost" onClick={() => navigate("/pricing")} className="text-foreground hover:text-primary">
+            <Button onClick={() => navigate("/pricing")}>
               Pricing
             </Button>
-            <Button variant="ghost" onClick={() => navigate("/map")} className="text-foreground hover:text-primary">
+            <Button onClick={() => navigate("/map")}>
               Explore Map
             </Button>
             <Button onClick={() => navigate("/auth")}>
