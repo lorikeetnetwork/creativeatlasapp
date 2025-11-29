@@ -6,14 +6,20 @@ interface CategoryPillsProps {
   onCategoryToggle: (category: string) => void;
 }
 
-// Main categories to display as pills
+// Main categories to display as pills (from location_category enum)
 const MAIN_CATEGORIES = [
   "Venue",
   "Studio",
   "Festival",
   "Label",
+  "Management",
   "Services",
   "Education",
+  "Government/Peak Body",
+  "Community Organisation",
+  "Co-working/Creative Hub",
+  "Gallery/Arts Space",
+  "Other",
 ];
 
 const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsProps) => {
