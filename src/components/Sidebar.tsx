@@ -102,23 +102,25 @@ const Sidebar = ({
   onSignOut,
   onSignIn
 }: SidebarProps) => {
-  return <div className="h-full flex flex-col bg-background border-r shadow-sm">
+  return <div className="h-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
       {/* Scrollable Content */}
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-6 bg-card-foreground">
           {/* SEARCH Section */}
-          <div>
+          <div className="overflow-hidden">
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Search
             </h2>
             <div className="space-y-3">
-              <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
+              <div className="overflow-hidden">
+                <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
+              </div>
               <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
               <Select value={region} onValueChange={onRegionChange}>
                 <SelectTrigger className="text-sm bg-[#111111] text-white border-[#111111]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#111111] text-white border-[#111111]">
+                <SelectContent className="bg-[#111111] text-white border-[#111111] max-h-[300px]">
                   {REGIONS.map(r => <SelectItem key={r} value={r} className="text-white hover:bg-[#333333] focus:bg-[#333333] focus:text-white">
                       {r}
                     </SelectItem>)}
