@@ -11,7 +11,6 @@ import MobileLocationDetail from "@/components/MobileLocationDetail";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Search, List } from "lucide-react";
@@ -170,26 +169,23 @@ const Index = () => {
       {/* Topbar */}
       <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-card-foreground" />
 
-      {/* Resizable Layout */}
-      <ResizablePanelGroup direction="horizontal" className="flex-1 gap-0">
-        {/* Sidebar Panel */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={40} collapsible={true} collapsedSize={0} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)}>
-          {!isSidebarCollapsed && <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />}
-        </ResizablePanel>
-
-        {/* Resize Handle */}
-        {!isSidebarCollapsed && <ResizableHandle className="w-px bg-black" />}
+      {/* Fixed Layout without resize */}
+      <div className="flex-1 flex">
+        {/* Fixed Width Sidebar */}
+        {!isSidebarCollapsed && (
+          <div className="w-80 flex-shrink-0 border-r border-black">
+            <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />
+          </div>
+        )}
 
         {/* Map Panel */}
-        <ResizablePanel defaultSize={80}>
-          <div className="h-full relative">
-            {showDetail && selectedLocation && <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
-                <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
-              </div>}
-            <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        <div className="flex-1 relative">
+          {showDetail && selectedLocation && <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
+              <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
+            </div>}
+          <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />
+        </div>
+      </div>
 
       {/* Location Submission Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>

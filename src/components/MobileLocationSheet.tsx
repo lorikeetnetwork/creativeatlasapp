@@ -5,7 +5,72 @@ import CategoryPills from "./CategoryPills";
 import LocationList from "./LocationList";
 import type { Tables } from "@/integrations/supabase/types";
 
-const REGIONS = ["All Australia", "Gold Coast", "Northern Rivers", "Brisbane", "Sydney", "Melbourne"];
+// Comprehensive list of Australian cities and regions
+const REGIONS = [
+  "All Australia",
+  // Major Cities
+  "Sydney",
+  "Melbourne",
+  "Brisbane",
+  "Perth",
+  "Adelaide",
+  "Hobart",
+  "Darwin",
+  "Canberra",
+  // NSW Regions
+  "Gold Coast",
+  "Northern Rivers",
+  "Newcastle",
+  "Wollongong",
+  "Central Coast NSW",
+  "Blue Mountains",
+  "Hunter Valley",
+  "Illawarra",
+  // VIC Regions
+  "Geelong",
+  "Ballarat",
+  "Bendigo",
+  "Mornington Peninsula",
+  "Yarra Valley",
+  "Gippsland",
+  "Great Ocean Road",
+  // QLD Regions
+  "Sunshine Coast",
+  "Cairns",
+  "Townsville",
+  "Toowoomba",
+  "Noosa",
+  "Fraser Coast",
+  "Whitsundays",
+  // WA Regions
+  "Fremantle",
+  "Margaret River",
+  "Broome",
+  "Bunbury",
+  "Geraldton",
+  // SA Regions
+  "Barossa Valley",
+  "Adelaide Hills",
+  "Fleurieu Peninsula",
+  "McLaren Vale",
+  // TAS Regions
+  "Launceston",
+  "Devonport",
+  // NT Regions
+  "Alice Springs",
+  "Katherine",
+  // ACT
+  "Queanbeyan",
+  // Other
+  "Regional NSW",
+  "Regional VIC",
+  "Regional QLD",
+  "Regional WA",
+  "Regional SA",
+  "Regional TAS",
+  "Regional NT",
+  "Other",
+];
 
 interface MobileLocationSheetProps {
   open: boolean;
