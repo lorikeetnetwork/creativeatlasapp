@@ -39,7 +39,7 @@ const Sidebar = ({
   return <div className="h-full flex flex-col bg-background border-r shadow-sm">
       {/* Scrollable Content */}
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6 bg-secondary-foreground">
+        <div className="p-4 space-y-6 bg-card-foreground">
           {/* SEARCH Section */}
           <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
