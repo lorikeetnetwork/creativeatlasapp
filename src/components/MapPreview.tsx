@@ -29,7 +29,7 @@ const MapPreview = () => {
   }
 
   return (
-    <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] rounded-lg overflow-hidden border border-border shadow-lg">
+    <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] rounded-lg overflow-hidden border border-muted-foreground/30 shadow-lg">
       <MapView
         locations={locations}
         selectedLocation={null}
@@ -37,7 +37,7 @@ const MapPreview = () => {
       />
 
       {/* Overlay CTA */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/80 to-transparent p-6 md:p-8 z-10 pointer-events-none">
+      <div className="absolute bottom-0 left-0 right-0 bg-background/90 p-6 md:p-8 z-10 pointer-events-none">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-foreground text-2xl md:text-3xl font-bold mb-1">
