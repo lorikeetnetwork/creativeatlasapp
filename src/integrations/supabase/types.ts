@@ -517,6 +517,183 @@ export type Database = {
         | "Co-working/Creative Hub"
         | "Gallery/Arts Space"
         | "Other"
+        | "Record Labels"
+        | "Music Venues"
+        | "Festivals & Live Event Organisers"
+        | "Artist Management Agencies"
+        | "Booking Agencies"
+        | "Music Publishers"
+        | "Recording Studios"
+        | "Rehearsal Studios"
+        | "Post-Production Studios"
+        | "Production Companies"
+        | "Independent Artists & Bands"
+        | "DJs & Electronic Producers"
+        | "Audio Engineers & Mix/Mastering Services"
+        | "Music Technology Startups"
+        | "Creative Technology Labs"
+        | "Digital Media Agencies"
+        | "Web3 / Blockchain Creative Platforms"
+        | "Film & TV Production Companies"
+        | "Art Galleries"
+        | "Artist-Run Initiatives"
+        | "Cultural Centres"
+        | "Creative Hubs & Coworking Spaces"
+        | "Community Arts Organisations"
+        | "Theatre Companies"
+        | "Dance Companies"
+        | "Design Studios"
+        | "Animation & Motion Studios"
+        | "Game Development Studios"
+        | "XR/AR/VR Studios"
+        | "Immersive Media Creators"
+        | "Content Creators & Creative Influencers"
+        | "Photography Studios"
+        | "Videography Studios"
+        | "Event Production & Technical Services"
+        | "Lighting, Sound & Staging Companies"
+        | "Event Ticketing Platforms"
+        | "Publicists & PR Agencies"
+        | "Marketing & Creative Communications Agencies"
+        | "Cultural Festivals"
+        | "Education & Training Providers"
+        | "Talent Development Programs & Residencies"
+        | "Creative Marketplaces & Digital Platforms"
+        | "Creative Tools & Software Providers"
+        | "Podcast Studios & Networks"
+        | "Cultural Research & Policy Organisations"
+        | "Artist Services & Freelance Creative Providers"
+        | "Community Radio Stations"
+        | "Music Retailers & Instrument Stores"
+        | "Arts Foundations & Funders"
+        | "Music Distributors"
+        | "Sync Licensing Agencies"
+        | "Music Supervisors"
+        | "Composer Services"
+        | "Audio Sample Library Companies"
+        | "Music Data & Analytics Platforms"
+        | "Music Education Platforms & Tutors"
+        | "Instrument Makers & Luthiers"
+        | "Audio Hardware Manufacturers"
+        | "Micro-labels"
+        | "Artist Collectives & Creative Co-ops"
+        | "Streetwear & Creative Fashion Brands"
+        | "Creative Fabrication Workshops"
+        | "Makerspaces & Fab Labs"
+        | "Cultural Heritage Organisations"
+        | "Museums & Exhibition Spaces"
+        | "Public Art Producers"
+        | "Festival Infrastructure Suppliers"
+        | "Backline Hire Companies"
+        | "Touring & Logistics Companies"
+        | "Set Designers & Scenic Fabricators"
+        | "Prop & Costume Workshops"
+        | "Creative Industrial Designers"
+        | "Sound Art & Experimental Media Groups"
+        | "Lighting Designers & Visual Effects Artists"
+        | "Projection Mapping Studios"
+        | "Generative Art Studios"
+        | "AI Creative Production Studios"
+        | "AI Music Generation Platforms"
+        | "Live Streaming Production Studios"
+        | "Hybrid Events & Virtual Venue Platforms"
+        | "Content Syndication Networks"
+        | "Creative Print Shops"
+        | "Zine Publishers & Micro-presses"
+        | "Art Supply Retailers"
+        | "Craft & Artisan Studios"
+        | "Creative Retreats & Residency Spaces"
+        | "Interdisciplinary Art–Tech Labs"
+        | "Civic & Urban Creative Placemaking Organisations"
+        | "Regional Creative Networks"
+        | "Cultural Tourism Operators"
+        | "Indigenous Art Centres"
+        | "Dance Schools & Academies"
+        | "Storytelling & Narrative Design Studios"
+        | "Creative Workshops & Education Providers"
+        | "Professional Guilds & Industry Associations"
+        | "Creative Funding Consultants"
+        | "Cultural Strategy Consultancies"
+        | "Creative Incubators & Accelerators"
+        | "Creative Social Enterprises"
+        | "Independent Media Outlets"
+        | "Community Makers Markets"
+        | "Fashion & Textile Studios"
+        | "Illustrators & Concept Artists"
+        | "Model & Talent Casting Agencies"
+        | "Voiceover Studios"
+        | "Location Scouts & Production Support"
+        | "NFT Art Platforms"
+        | "Metaverse Experience Builders"
+        | "Digital Collectible Creators"
+        | "Online Creative Marketplaces"
+        | "Crowdfunding Platforms for Creators"
+        | "Creative Coworking/Hotdesk Spaces"
+        | "Wearable Tech Creators"
+        | "Immersive Theatre Companies"
+        | "Open Studios & Artist Exchanges"
+        | "Venue Discovery Platforms"
+        | "Artist Portfolio Platforms"
+        | "Music Monetisation Platforms"
+        | "Creative Data & Metadata Services"
+        | "Archival & Digitisation Services"
+        | "Cultural Mapping Organisations"
+        | "Public Music Programs & Youth Music Foundations"
+        | "Software Development Studios"
+        | "Full-Stack Development Agencies"
+        | "Frontend/Backend Developers"
+        | "App Development Studios"
+        | "Web Development Agencies"
+        | "Custom Platform Builders"
+        | "SaaS Creators"
+        | "Creative Technology Agencies"
+        | "AI Research & Development Labs"
+        | "AI-Driven Creative Studios"
+        | "AI Video/Audio Generation Platforms"
+        | "Machine Learning Engineers"
+        | "Data Science & Analytics Firms"
+        | "Data Engineering Services"
+        | "Digital Signal Processing Companies"
+        | "Audio AI Companies"
+        | "Music Recommendation Engines"
+        | "Audio Plugin Developers"
+        | "DAW Developers"
+        | "Creative Tools & Productivity Software Makers"
+        | "Immersive Technology Labs"
+        | "3D Modelling & Simulation Studios"
+        | "Virtual Production Studios"
+        | "Realtime Engine Specialists"
+        | "Game Audio & Interactive Sound Designers"
+        | "Interactive Media Designers"
+        | "Smart Contract Developers"
+        | "Motion Capture Studios"
+        | "Creative Robotics Labs"
+        | "IoT & Wearable Tech Designers"
+        | "Haptics & Sensory Experience Companies"
+        | "Streaming Technology Platforms"
+        | "Cloud Media Infrastructure Providers"
+        | "Cybersecurity for Creative Industries"
+        | "DevOps & Cloud Engineering Services"
+        | "API Providers & Developer Platforms"
+        | "Audio Infrastructure Platforms"
+        | "Video Encoding & Live-stream Tech"
+        | "Creative Automation Platforms"
+        | "DRM & Rights Management Services"
+        | "Asset Management & Metadata Software"
+        | "Digital Preservation Technology"
+        | "E-commerce Platforms for Creators"
+        | "Multi-vendor Marketplace Platforms"
+        | "White-label Ticketing Providers"
+        | "Event Technology & RFID/NFC Systems"
+        | "Spatial Audio Technology Companies"
+        | "Embedded Systems for Art & Music"
+        | "3D Printing & Fabrication Tech Studios"
+        | "Digital Fabrication Labs"
+        | "Creative Coding Studios"
+        | "Interactive Installation Technologists"
+        | "Projection Mapping Tech Providers"
+        | "Lighting Control System Developers"
+        | "Show Control & Live Event Software"
       location_source: "UserSubmitted" | "AdminImported" | "AdminCreated"
       location_status:
         | "Pending"
@@ -666,6 +843,183 @@ export const Constants = {
         "Co-working/Creative Hub",
         "Gallery/Arts Space",
         "Other",
+        "Record Labels",
+        "Music Venues",
+        "Festivals & Live Event Organisers",
+        "Artist Management Agencies",
+        "Booking Agencies",
+        "Music Publishers",
+        "Recording Studios",
+        "Rehearsal Studios",
+        "Post-Production Studios",
+        "Production Companies",
+        "Independent Artists & Bands",
+        "DJs & Electronic Producers",
+        "Audio Engineers & Mix/Mastering Services",
+        "Music Technology Startups",
+        "Creative Technology Labs",
+        "Digital Media Agencies",
+        "Web3 / Blockchain Creative Platforms",
+        "Film & TV Production Companies",
+        "Art Galleries",
+        "Artist-Run Initiatives",
+        "Cultural Centres",
+        "Creative Hubs & Coworking Spaces",
+        "Community Arts Organisations",
+        "Theatre Companies",
+        "Dance Companies",
+        "Design Studios",
+        "Animation & Motion Studios",
+        "Game Development Studios",
+        "XR/AR/VR Studios",
+        "Immersive Media Creators",
+        "Content Creators & Creative Influencers",
+        "Photography Studios",
+        "Videography Studios",
+        "Event Production & Technical Services",
+        "Lighting, Sound & Staging Companies",
+        "Event Ticketing Platforms",
+        "Publicists & PR Agencies",
+        "Marketing & Creative Communications Agencies",
+        "Cultural Festivals",
+        "Education & Training Providers",
+        "Talent Development Programs & Residencies",
+        "Creative Marketplaces & Digital Platforms",
+        "Creative Tools & Software Providers",
+        "Podcast Studios & Networks",
+        "Cultural Research & Policy Organisations",
+        "Artist Services & Freelance Creative Providers",
+        "Community Radio Stations",
+        "Music Retailers & Instrument Stores",
+        "Arts Foundations & Funders",
+        "Music Distributors",
+        "Sync Licensing Agencies",
+        "Music Supervisors",
+        "Composer Services",
+        "Audio Sample Library Companies",
+        "Music Data & Analytics Platforms",
+        "Music Education Platforms & Tutors",
+        "Instrument Makers & Luthiers",
+        "Audio Hardware Manufacturers",
+        "Micro-labels",
+        "Artist Collectives & Creative Co-ops",
+        "Streetwear & Creative Fashion Brands",
+        "Creative Fabrication Workshops",
+        "Makerspaces & Fab Labs",
+        "Cultural Heritage Organisations",
+        "Museums & Exhibition Spaces",
+        "Public Art Producers",
+        "Festival Infrastructure Suppliers",
+        "Backline Hire Companies",
+        "Touring & Logistics Companies",
+        "Set Designers & Scenic Fabricators",
+        "Prop & Costume Workshops",
+        "Creative Industrial Designers",
+        "Sound Art & Experimental Media Groups",
+        "Lighting Designers & Visual Effects Artists",
+        "Projection Mapping Studios",
+        "Generative Art Studios",
+        "AI Creative Production Studios",
+        "AI Music Generation Platforms",
+        "Live Streaming Production Studios",
+        "Hybrid Events & Virtual Venue Platforms",
+        "Content Syndication Networks",
+        "Creative Print Shops",
+        "Zine Publishers & Micro-presses",
+        "Art Supply Retailers",
+        "Craft & Artisan Studios",
+        "Creative Retreats & Residency Spaces",
+        "Interdisciplinary Art–Tech Labs",
+        "Civic & Urban Creative Placemaking Organisations",
+        "Regional Creative Networks",
+        "Cultural Tourism Operators",
+        "Indigenous Art Centres",
+        "Dance Schools & Academies",
+        "Storytelling & Narrative Design Studios",
+        "Creative Workshops & Education Providers",
+        "Professional Guilds & Industry Associations",
+        "Creative Funding Consultants",
+        "Cultural Strategy Consultancies",
+        "Creative Incubators & Accelerators",
+        "Creative Social Enterprises",
+        "Independent Media Outlets",
+        "Community Makers Markets",
+        "Fashion & Textile Studios",
+        "Illustrators & Concept Artists",
+        "Model & Talent Casting Agencies",
+        "Voiceover Studios",
+        "Location Scouts & Production Support",
+        "NFT Art Platforms",
+        "Metaverse Experience Builders",
+        "Digital Collectible Creators",
+        "Online Creative Marketplaces",
+        "Crowdfunding Platforms for Creators",
+        "Creative Coworking/Hotdesk Spaces",
+        "Wearable Tech Creators",
+        "Immersive Theatre Companies",
+        "Open Studios & Artist Exchanges",
+        "Venue Discovery Platforms",
+        "Artist Portfolio Platforms",
+        "Music Monetisation Platforms",
+        "Creative Data & Metadata Services",
+        "Archival & Digitisation Services",
+        "Cultural Mapping Organisations",
+        "Public Music Programs & Youth Music Foundations",
+        "Software Development Studios",
+        "Full-Stack Development Agencies",
+        "Frontend/Backend Developers",
+        "App Development Studios",
+        "Web Development Agencies",
+        "Custom Platform Builders",
+        "SaaS Creators",
+        "Creative Technology Agencies",
+        "AI Research & Development Labs",
+        "AI-Driven Creative Studios",
+        "AI Video/Audio Generation Platforms",
+        "Machine Learning Engineers",
+        "Data Science & Analytics Firms",
+        "Data Engineering Services",
+        "Digital Signal Processing Companies",
+        "Audio AI Companies",
+        "Music Recommendation Engines",
+        "Audio Plugin Developers",
+        "DAW Developers",
+        "Creative Tools & Productivity Software Makers",
+        "Immersive Technology Labs",
+        "3D Modelling & Simulation Studios",
+        "Virtual Production Studios",
+        "Realtime Engine Specialists",
+        "Game Audio & Interactive Sound Designers",
+        "Interactive Media Designers",
+        "Smart Contract Developers",
+        "Motion Capture Studios",
+        "Creative Robotics Labs",
+        "IoT & Wearable Tech Designers",
+        "Haptics & Sensory Experience Companies",
+        "Streaming Technology Platforms",
+        "Cloud Media Infrastructure Providers",
+        "Cybersecurity for Creative Industries",
+        "DevOps & Cloud Engineering Services",
+        "API Providers & Developer Platforms",
+        "Audio Infrastructure Platforms",
+        "Video Encoding & Live-stream Tech",
+        "Creative Automation Platforms",
+        "DRM & Rights Management Services",
+        "Asset Management & Metadata Software",
+        "Digital Preservation Technology",
+        "E-commerce Platforms for Creators",
+        "Multi-vendor Marketplace Platforms",
+        "White-label Ticketing Providers",
+        "Event Technology & RFID/NFC Systems",
+        "Spatial Audio Technology Companies",
+        "Embedded Systems for Art & Music",
+        "3D Printing & Fabrication Tech Studios",
+        "Digital Fabrication Labs",
+        "Creative Coding Studios",
+        "Interactive Installation Technologists",
+        "Projection Mapping Tech Providers",
+        "Lighting Control System Developers",
+        "Show Control & Live Event Software",
       ],
       location_source: ["UserSubmitted", "AdminImported", "AdminCreated"],
       location_status: [

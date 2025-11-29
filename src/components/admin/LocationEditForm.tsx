@@ -13,21 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload, X, RefreshCw, Trash2 } from "lucide-react";
 import AddressAutocomplete, { type ParsedAddress } from "@/components/AddressAutocomplete";
-
-const CATEGORIES = [
-  "Venue",
-  "Studio",
-  "Festival",
-  "Label",
-  "Management",
-  "Services",
-  "Education",
-  "Government/Peak Body",
-  "Community Organisation",
-  "Co-working/Creative Hub",
-  "Gallery/Arts Space",
-  "Other",
-] as const;
+import { CategorySelect } from "@/components/CategorySelect";
 
 const STATES = ["QLD", "NSW", "VIC", "SA", "WA", "TAS", "NT", "ACT"] as const;
 const STATUSES = ["Pending", "Active", "Rejected", "Inactive", "PendingPayment"] as const;
@@ -311,16 +297,11 @@ export function LocationEditForm({ location, open, onClose, onUpdate }: Location
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="category">Category *</Label>
-                    <Select onValueChange={(value) => setValue("category", value)} defaultValue={location.category}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CATEGORIES.map((cat) => (
-                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <CategorySelect
+                      value={watch("category") || ""}
+                      onValueChange={(value) => setValue("category", value)}
+                      placeholder="Select a category..."
+                    />
                   </div>
                   <div>
                     <Label htmlFor="subcategory">Subcategory</Label>
