@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
+import { LandingColorEditor, defaultLandingColors, ColorConfig } from "@/components/LandingColorEditor";
 import { 
   Map, Search, MapPin, Users, Sparkles, ArrowRight, 
   Building2, Music, Palette, Camera, Radio, Megaphone, 
@@ -13,8 +15,19 @@ import {
 import logoImage from "@/assets/creative-atlas-logo.png";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 
+const STORAGE_KEY = "landing-page-colors";
+
 const Landing = () => {
   const navigate = useNavigate();
+  
+  const [colors, setColors] = useState<ColorConfig>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : defaultLandingColors;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(colors));
+  }, [colors]);
   
   const features = [
     {
@@ -72,6 +85,9 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Color Editor */}
+      <LandingColorEditor colors={colors} onColorsChange={setColors} />
+
       {/* Header */}
       <header className="border-b border-border bg-background sticky top-0 z-50">
         <div className="h-16 flex items-center justify-between w-full px-5">
@@ -108,16 +124,25 @@ const Landing = () => {
       <FuturisticAlienHero />
 
       {/* Features Section */}
-      <section className="py-24 bg-slate-950">
+      <section 
+        className="py-24 transition-colors duration-300"
+        style={{ backgroundColor: colors.featuresBg }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Features
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+            <h2 
+              className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300"
+              style={{ color: colors.featuresTitle }}
+            >
               Everything You Need to Connect
             </h2>
-            <p className="text-lg text-slate-400">
+            <p 
+              className="text-lg transition-colors duration-300"
+              style={{ color: colors.featuresText }}
+            >
               Discover, explore, and contribute to Australia's vibrant creative ecosystem
             </p>
           </div>
@@ -125,16 +150,34 @@ const Landing = () => {
             {features.map((feature, index) => (
               <Card 
                 key={index} 
-                className="bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 group"
+                className="transition-all duration-300 hover:shadow-lg group"
+                style={{ 
+                  backgroundColor: colors.featuresCardBg,
+                  borderColor: colors.featuresCardBorder
+                }}
               >
                 <CardHeader className="pb-3">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="w-6 h-6 text-primary" />
+                  <div 
+                    className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-colors"
+                    style={{ backgroundColor: colors.featuresIconBg }}
+                  >
+                    <feature.icon 
+                      className="w-6 h-6 transition-colors" 
+                      style={{ color: colors.featuresIcon }}
+                    />
                   </div>
-                  <CardTitle className="text-xl text-white">{feature.title}</CardTitle>
+                  <CardTitle 
+                    className="text-xl transition-colors duration-300"
+                    style={{ color: colors.featuresTitle }}
+                  >
+                    {feature.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base text-slate-400">
+                  <CardDescription 
+                    className="text-base transition-colors duration-300"
+                    style={{ color: colors.featuresText }}
+                  >
                     {feature.description}
                   </CardDescription>
                 </CardContent>
@@ -145,16 +188,25 @@ const Landing = () => {
       </section>
 
       {/* Map Preview Section */}
-      <section className="py-24 bg-background">
+      <section 
+        className="py-24 transition-colors duration-300"
+        style={{ backgroundColor: colors.mapBg }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <Badge variant="outline" className="mb-4 px-4 py-1.5">
               Live Preview
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 
+              className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300"
+              style={{ color: colors.mapTitle }}
+            >
               Explore the Map
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p 
+              className="text-lg transition-colors duration-300"
+              style={{ color: colors.mapText }}
+            >
               Discover hundreds of creative spaces across the country. Pan, zoom, and find the vibrant creative scene near you.
             </p>
           </div>
@@ -165,29 +217,58 @@ const Landing = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24 bg-slate-950">
+      <section 
+        className="py-24 transition-colors duration-300"
+        style={{ backgroundColor: colors.howItWorksBg }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Getting Started
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+            <h2 
+              className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300"
+              style={{ color: colors.howItWorksTitle }}
+            >
               How It Works
             </h2>
-            <p className="text-lg text-slate-400">
+            <p 
+              className="text-lg transition-colors duration-300"
+              style={{ color: colors.howItWorksText }}
+            >
               Get started in three simple steps
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {steps.map((step, index) => (
               <div key={index} className="relative text-center group">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-2xl font-bold flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
+                <div 
+                  className="w-20 h-20 rounded-full text-2xl font-bold flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-105 transition-all duration-300"
+                  style={{ 
+                    backgroundColor: colors.stepCircleBg,
+                    color: colors.stepCircleText,
+                    boxShadow: `0 10px 25px -5px ${colors.stepCircleBg}40`
+                  }}
+                >
                   {step.number}
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">{step.title}</h3>
-                <p className="text-slate-400">{step.description}</p>
+                <h3 
+                  className="text-xl font-semibold mb-3 transition-colors duration-300"
+                  style={{ color: colors.howItWorksTitle }}
+                >
+                  {step.title}
+                </h3>
+                <p 
+                  className="transition-colors duration-300"
+                  style={{ color: colors.howItWorksText }}
+                >
+                  {step.description}
+                </p>
                 {index < steps.length - 1 && (
-                  <ChevronRight className="hidden md:block absolute top-10 -right-4 w-8 h-8 text-slate-700" />
+                  <ChevronRight 
+                    className="hidden md:block absolute top-10 -right-4 w-8 h-8"
+                    style={{ color: `${colors.howItWorksText}50` }}
+                  />
                 )}
               </div>
             ))}
@@ -196,16 +277,25 @@ const Landing = () => {
       </section>
 
       {/* Categories Preview */}
-      <section className="py-24 bg-background">
+      <section 
+        className="py-24 transition-colors duration-300"
+        style={{ backgroundColor: colors.categoriesBg }}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <Badge variant="outline" className="mb-4 px-4 py-1.5">
               Categories
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 
+              className="text-3xl md:text-4xl font-bold mb-4 transition-colors duration-300"
+              style={{ color: colors.categoriesTitle }}
+            >
               Explore by Category
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p 
+              className="text-lg transition-colors duration-300"
+              style={{ color: colors.categoriesText }}
+            >
               From venues and studios to festivals and creative spaces
             </p>
           </div>
@@ -213,14 +303,23 @@ const Landing = () => {
             {categories.map((category, index) => (
               <Card 
                 key={index} 
-                className="cursor-pointer hover:border-primary/50 transition-all duration-300 hover:shadow-md group bg-card"
+                className="cursor-pointer transition-all duration-300 hover:shadow-md group"
+                style={{ 
+                  backgroundColor: colors.categoryCardBg,
+                  borderColor: colors.categoryCardBorder
+                }}
                 onClick={() => navigate("/map")}
               >
                 <CardContent className="p-4 flex flex-col items-center text-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
-                  <span className="text-sm font-medium text-foreground">{category.name}</span>
+                  <span 
+                    className="text-sm font-medium transition-colors duration-300"
+                    style={{ color: colors.categoriesTitle }}
+                  >
+                    {category.name}
+                  </span>
                 </CardContent>
               </Card>
             ))}
@@ -229,16 +328,25 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
+      <section 
+        className="py-24 transition-colors duration-300"
+        style={{ backgroundColor: colors.ctaBg }}
+      >
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <Badge variant="secondary" className="px-4 py-1.5">
               Join the Community
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-bold text-white">
+            <h2 
+              className="text-3xl md:text-5xl font-bold transition-colors duration-300"
+              style={{ color: colors.ctaTitle }}
+            >
               Ready to Explore Australia's Creative Scene?
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p 
+              className="text-xl max-w-2xl mx-auto transition-colors duration-300"
+              style={{ color: colors.ctaText }}
+            >
               Join our community and discover the spaces that bring creativity to life
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -254,7 +362,8 @@ const Landing = () => {
                 size="lg" 
                 variant="outline" 
                 onClick={() => navigate("/auth")} 
-                className="text-lg h-12 px-8 gap-2 border-slate-700 text-white hover:bg-slate-800"
+                className="text-lg h-12 px-8 gap-2 border-slate-700 hover:bg-slate-800"
+                style={{ color: colors.ctaTitle }}
               >
                 Create Account
                 <ArrowRight className="h-5 w-5" />
@@ -265,7 +374,10 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12 bg-slate-950">
+      <footer 
+        className="border-t border-border py-12 transition-colors duration-300"
+        style={{ backgroundColor: colors.footerBg }}
+      >
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
@@ -274,23 +386,23 @@ const Landing = () => {
                 alt="Creative Atlas" 
                 className="h-8 w-auto object-contain" 
               />
-              <span className="text-sm text-slate-500">
+              <span 
+                className="text-sm transition-colors duration-300"
+                style={{ color: colors.footerText }}
+              >
                 © 2025 Creative Atlas. Mapping Australia's music, creative & arts sectors.
               </span>
             </div>
             <div className="flex gap-6 text-sm">
-              <button className="text-slate-500 hover:text-white transition-colors">
-                About
-              </button>
-              <button className="text-slate-500 hover:text-white transition-colors">
-                Contact
-              </button>
-              <button className="text-slate-500 hover:text-white transition-colors">
-                Terms
-              </button>
-              <button className="text-slate-500 hover:text-white transition-colors">
-                Privacy
-              </button>
+              {["About", "Contact", "Terms", "Privacy"].map((link) => (
+                <button 
+                  key={link}
+                  className="hover:text-white transition-colors"
+                  style={{ color: colors.footerText }}
+                >
+                  {link}
+                </button>
+              ))}
             </div>
           </div>
           
@@ -310,7 +422,10 @@ const Landing = () => {
                 className="h-12 w-auto object-contain" 
               />
             </a>
-            <p className="text-sm text-slate-500">
+            <p 
+              className="text-sm transition-colors duration-300"
+              style={{ color: colors.footerText }}
+            >
               This app/site is a project of the{" "}
               <a 
                 href="https://www.lorikeet.network" 
