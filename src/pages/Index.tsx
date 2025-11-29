@@ -126,7 +126,7 @@ const Index = () => {
         </ResizablePanel>
 
         {/* Resize Handle */}
-        {!isSidebarCollapsed && <ResizableHandle className="w-0 bg-transparent" />}
+        {!isSidebarCollapsed && <ResizableHandle className="w-px bg-black" />}
 
         {/* Map Panel */}
         <ResizablePanel defaultSize={80}>
