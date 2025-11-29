@@ -64,7 +64,7 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-[#121212]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -75,19 +75,19 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#121212]">
       <div className="container mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage locations and review submissions</p>
+          <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
+          <p className="text-gray-400">Manage locations and review submissions</p>
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="pending">Pending Reviews</TabsTrigger>
-            <TabsTrigger value="all">All Locations</TabsTrigger>
-            <TabsTrigger value="bulk-import">Bulk Import</TabsTrigger>
+          <TabsList className="bg-[#1a1a1a] border border-[#333]">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Overview</TabsTrigger>
+            <TabsTrigger value="pending" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Pending Reviews</TabsTrigger>
+            <TabsTrigger value="all" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">All Locations</TabsTrigger>
+            <TabsTrigger value="bulk-import" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Bulk Import</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
