@@ -14,18 +14,7 @@ import type { Session } from "@supabase/supabase-js";
 import AddressAutocomplete, { type ParsedAddress } from "./AddressAutocomplete";
 import { PhotoUploader } from "./PhotoUploader";
 import { FieldWrapper } from "./FieldWrapper";
-
-const CATEGORIES = [
-  "Venue",
-  "Gallery",
-  "Studio",
-  "Workshop",
-  "Performance Space",
-  "Co-working",
-  "Maker Space",
-  "Retail",
-  "Other"
-] as const;
+import { CategorySelect } from "./CategorySelect";
 
 const STATES = ["QLD", "NSW", "VIC", "SA", "WA", "TAS", "NT", "ACT"] as const;
 
@@ -363,16 +352,11 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
 
         <div>
           <Label htmlFor="category">Category *</Label>
-          <Select onValueChange={(value) => setValue("category", value)} defaultValue="Venue">
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORIES.map((cat) => (
-                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CategorySelect
+            value={watch("category") || ""}
+            onValueChange={(value) => setValue("category", value)}
+            placeholder="Select a category..."
+          />
           {errors.category && <p className="text-sm text-destructive mt-1">{errors.category.message}</p>}
         </div>
 

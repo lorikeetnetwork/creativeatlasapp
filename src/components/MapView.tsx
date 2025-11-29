@@ -4,27 +4,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { getCategoryColor } from "@/utils/categoryColors";
 
 interface MapViewProps {
   locations: Tables<"locations">[];
   selectedLocation: Tables<"locations"> | null;
   onLocationSelect: (location: Tables<"locations">) => void;
 }
-
-const CATEGORY_COLORS: Record<string, string> = {
-  Venue: "#E91E63",
-  Studio: "#9C27B0",
-  Festival: "#FFC107",
-  Label: "#2196F3",
-  Management: "#009688",
-  Services: "#9C27B0",
-  Education: "#FF5722",
-  "Government/Peak Body": "#3F51B5",
-  "Community Organisation": "#4CAF50",
-  "Co-working/Creative Hub": "#00BCD4",
-  "Gallery/Arts Space": "#E91E63",
-  Other: "#9E9E9E",
-};
 
 const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -103,7 +89,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
       el.style.width = "24px";
       el.style.height = "24px";
       el.style.borderRadius = "50%";
-      el.style.backgroundColor = CATEGORY_COLORS[location.category] || CATEGORY_COLORS.Other;
+      el.style.backgroundColor = getCategoryColor(location.category);
       el.style.border = "2px solid white";
       el.style.cursor = "pointer";
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";

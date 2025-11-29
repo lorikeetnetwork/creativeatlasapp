@@ -18,7 +18,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Constants } from "@/integrations/supabase/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CATEGORY_GROUPS } from "@/utils/categoryGroups";
 
 interface SearchFiltersProps {
   searchQuery: string;
@@ -47,8 +48,6 @@ const SearchFilters = ({
   region,
   onRegionChange,
 }: SearchFiltersProps) => {
-  const categories = Constants.public.Enums.location_category;
-
   return (
     <div className="flex gap-3 items-center bg-card p-4 rounded-lg shadow-md border">
       <div className="flex-1 relative">
@@ -80,30 +79,39 @@ const SearchFilters = ({
             <SlidersHorizontal className="w-4 h-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="w-[400px] sm:w-[540px]">
           <SheetHeader>
             <SheetTitle>Filter Categories</SheetTitle>
             <SheetDescription>
               Select the types of locations you want to see
             </SheetDescription>
           </SheetHeader>
-          <div className="mt-6 space-y-4">
-            {categories.map((category) => (
-              <div key={category} className="flex items-center space-x-2">
-                <Checkbox
-                  id={category}
-                  checked={selectedCategories.includes(category)}
-                  onCheckedChange={() => onCategoryToggle(category)}
-                />
-                <Label
-                  htmlFor={category}
-                  className="text-sm font-normal cursor-pointer"
-                >
-                  {category}
-                </Label>
-              </div>
-            ))}
-          </div>
+          <ScrollArea className="h-[calc(100vh-120px)] mt-6">
+            <div className="space-y-6 pr-4">
+              {CATEGORY_GROUPS.map((group) => (
+                <div key={group.name} className="space-y-3">
+                  <h4 className="font-semibold text-sm text-foreground">{group.name}</h4>
+                  <div className="grid grid-cols-1 gap-2 pl-2">
+                    {group.categories.map((category) => (
+                      <div key={category} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={category}
+                          checked={selectedCategories.includes(category)}
+                          onCheckedChange={() => onCategoryToggle(category)}
+                        />
+                        <Label
+                          htmlFor={category}
+                          className="text-sm font-normal cursor-pointer"
+                        >
+                          {category}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </div>
