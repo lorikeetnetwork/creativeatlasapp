@@ -5,8 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable";
 import { BulkImport } from "@/components/admin/BulkImport";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -76,19 +78,33 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-[#121212]">
-      <div className="container mx-auto py-8 px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Manage locations and review submissions</p>
+      <div className="container mx-auto py-4 md:py-8 px-4">
+        {/* Header */}
+        <div className="mb-6 md:mb-8">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/map")}
+            className="mb-4 text-gray-400 hover:text-white"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Map
+          </Button>
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
+          <p className="text-sm md:text-base text-gray-400">Manage locations and review submissions</p>
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="bg-[#1a1a1a] border border-[#333]">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Overview</TabsTrigger>
-            <TabsTrigger value="pending" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Pending Reviews</TabsTrigger>
-            <TabsTrigger value="all" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">All Locations</TabsTrigger>
-            <TabsTrigger value="bulk-import" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Bulk Import</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="overview" className="space-y-4 md:space-y-6">
+          {/* Scrollable Tabs for Mobile */}
+          <ScrollArea className="w-full">
+            <TabsList className="inline-flex w-auto min-w-full bg-[#1a1a1a] border border-[#333] p-1">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="pending" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Pending</TabsTrigger>
+              <TabsTrigger value="all" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">All Locations</TabsTrigger>
+              <TabsTrigger value="bulk-import" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Bulk Import</TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" className="invisible" />
+          </ScrollArea>
 
           <TabsContent value="overview" className="space-y-6">
             <AdminStats />

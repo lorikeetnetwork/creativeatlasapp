@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { LocationReviewCard } from "./LocationReviewCard";
-import { Loader2, Eye } from "lucide-react";
+import { Loader2, Eye, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -85,12 +86,16 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, "default" | "destructive" | "secondary"> = {
-      Pending: "secondary",
-      Active: "default",
-      Rejected: "destructive",
-    };
-    return <Badge variant={variants[status] || "default"}>{status}</Badge>;
+    switch (status) {
+      case "Active":
+        return <Badge className="bg-green-500 text-white text-xs">Active</Badge>;
+      case "Pending":
+        return <Badge variant="secondary" className="bg-yellow-500 text-black text-xs">Pending</Badge>;
+      case "Rejected":
+        return <Badge variant="destructive" className="text-xs">Rejected</Badge>;
+      default:
+        return <Badge variant="outline" className="text-xs">{status}</Badge>;
+    }
   };
 
   if (loading) {
@@ -103,80 +108,87 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
 
   if (locations.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">No locations found.</p>
-      </div>
+      <Card className="border-[#333] bg-[#1a1a1a]">
+        <CardContent className="py-12 text-center">
+          <p className="text-gray-400">No locations found.</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <>
-      <div className="rounded-md border">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {locations.map((location) => (
+          <Card key={location.id} className="border-[#333] bg-[#1a1a1a]">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                {location.logo_url ? (
+                  <img src={location.logo_url} alt={location.name} className="w-12 h-12 object-cover rounded-lg border border-[#333] flex-shrink-0" />
+                ) : (
+                  <div className="w-12 h-12 rounded-lg bg-[#333] flex items-center justify-center text-gray-500 text-xs flex-shrink-0">No img</div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-white truncate">{location.name}</h3>
+                  <p className="text-xs text-gray-400 mb-2">{location.suburb}, {location.state} • {location.category}</p>
+                  <div className="flex items-center gap-2">
+                    {getStatusBadge(location.status)}
+                    <span className="text-xs text-gray-500">{format(new Date(location.created_at), 'MMM d, yyyy')}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                <Button size="sm" variant="outline" className="flex-1 h-9 text-xs border-[#333] text-white hover:bg-[#222]" onClick={() => setSelectedLocation(location)}>
+                  <Eye className="w-3 h-3 mr-1" />Review
+                </Button>
+                {location.status === 'Pending' && (
+                  <>
+                    <Button size="sm" variant="outline" className="h-9 px-3 border-green-600 text-green-500 hover:bg-green-500/10" onClick={() => handleQuickAction(location.id, 'Active')}><Check className="w-3 h-3" /></Button>
+                    <Button size="sm" variant="outline" className="h-9 px-3 border-red-600 text-red-500 hover:bg-red-500/10" onClick={() => handleQuickAction(location.id, 'Rejected')}><X className="w-3 h-3" /></Button>
+                  </>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block rounded-md border border-[#333] overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Logo</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Submitted</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+            <TableRow className="border-[#333]">
+              <TableHead className="text-gray-400">Logo</TableHead>
+              <TableHead className="text-gray-400">Name</TableHead>
+              <TableHead className="text-gray-400">Category</TableHead>
+              <TableHead className="text-gray-400">Location</TableHead>
+              <TableHead className="text-gray-400">Status</TableHead>
+              <TableHead className="text-gray-400">Submitted</TableHead>
+              <TableHead className="text-right text-gray-400">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {locations.map((location) => (
-              <TableRow key={location.id}>
+              <TableRow key={location.id} className="border-[#333]">
                 <TableCell>
                   {location.logo_url ? (
-                    <img
-                      src={location.logo_url}
-                      alt={location.name}
-                      className="w-10 h-10 object-cover rounded"
-                    />
+                    <img src={location.logo_url} alt={location.name} className="w-10 h-10 object-cover rounded" />
                   ) : (
-                    <div className="w-10 h-10 bg-muted rounded flex items-center justify-center text-xs">
-                      No Logo
-                    </div>
+                    <div className="w-10 h-10 bg-[#333] rounded flex items-center justify-center text-xs text-gray-500">No Logo</div>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{location.name}</TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    <div>{location.category}</div>
-                    {location.subcategory && (
-                      <div className="text-xs text-muted-foreground">{location.subcategory}</div>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>{location.suburb}, {location.state}</TableCell>
+                <TableCell className="font-medium text-white">{location.name}</TableCell>
+                <TableCell className="text-gray-400">{location.category}</TableCell>
+                <TableCell className="text-gray-400">{location.suburb}, {location.state}</TableCell>
                 <TableCell>{getStatusBadge(location.status)}</TableCell>
-                <TableCell>{format(new Date(location.created_at), 'MMM d, yyyy')}</TableCell>
+                <TableCell className="text-gray-400">{format(new Date(location.created_at), 'MMM d, yyyy')}</TableCell>
                 <TableCell className="text-right space-x-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setSelectedLocation(location)}
-                  >
-                    <Eye className="h-4 w-4 mr-1" />
-                    Review
-                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setSelectedLocation(location)}><Eye className="h-4 w-4 mr-1" />Review</Button>
                   {location.status === 'Pending' && (
                     <>
-                      <Button
-                        size="sm"
-                        variant="default"
-                        onClick={() => handleQuickAction(location.id, 'Active')}
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => handleQuickAction(location.id, 'Rejected')}
-                      >
-                        Reject
-                      </Button>
+                      <Button size="sm" variant="default" onClick={() => handleQuickAction(location.id, 'Active')}>Approve</Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleQuickAction(location.id, 'Rejected')}>Reject</Button>
                     </>
                   )}
                 </TableCell>
@@ -187,11 +199,7 @@ export function PendingLocationsTable({ status }: PendingLocationsTableProps) {
       </div>
 
       {selectedLocation && (
-        <LocationReviewCard
-          location={selectedLocation}
-          onClose={() => setSelectedLocation(null)}
-          onUpdate={fetchLocations}
-        />
+        <LocationReviewCard location={selectedLocation} onClose={() => setSelectedLocation(null)} onUpdate={fetchLocations} />
       )}
     </>
   );
