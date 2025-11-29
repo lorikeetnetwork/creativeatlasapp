@@ -116,13 +116,13 @@ const Index = () => {
   };
   return <div className="h-screen flex flex-col bg-background">
       {/* Topbar */}
-      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-[#fff700]" />
+      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-[#fff700]" />
 
       {/* Resizable Layout */}
       <ResizablePanelGroup direction="horizontal" className="flex-1 gap-0">
         {/* Sidebar Panel */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={40} collapsible={true} collapsedSize={0} onCollapse={() => setIsSidebarCollapsed(true)} onExpand={() => setIsSidebarCollapsed(false)}>
-          {!isSidebarCollapsed && <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onOpenForm={handleOpenForm} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />}
+          {!isSidebarCollapsed && <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />}
         </ResizablePanel>
 
         {/* Resize Handle */}

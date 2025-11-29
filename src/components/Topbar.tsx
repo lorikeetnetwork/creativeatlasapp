@@ -1,4 +1,4 @@
-import { LogOut, User, Menu, ChevronRight, ChevronLeft, Shield } from "lucide-react";
+import { LogOut, User, Menu, ChevronRight, ChevronLeft, Shield, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ interface TopbarProps {
   session: Session | null;
   onSignOut: () => void;
   onSignIn: () => void;
+  onOpenForm: () => void;
   isSidebarCollapsed: boolean;
   onToggleSidebar: () => void;
   className?: string;
@@ -26,6 +27,7 @@ const Topbar = ({
   session,
   onSignOut,
   onSignIn,
+  onOpenForm,
   isSidebarCollapsed,
   onToggleSidebar,
   className,
@@ -87,6 +89,11 @@ const Topbar = ({
             </Button>
           </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={onOpenForm}>
+            <Plus className="w-4 h-4 mr-2" />
+            Submit Entity
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           {session ? (
             <>
               {isAdmin && (
