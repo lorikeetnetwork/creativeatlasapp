@@ -100,21 +100,20 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
     locations.forEach((location) => {
       const el = document.createElement("div");
       el.className = "custom-marker";
-      el.style.width = "30px";
-      el.style.height = "30px";
+      el.style.width = "24px";
+      el.style.height = "24px";
       el.style.borderRadius = "50%";
       el.style.backgroundColor = CATEGORY_COLORS[location.category] || CATEGORY_COLORS.Other;
-      el.style.border = "3px solid white";
+      el.style.border = "2px solid white";
       el.style.cursor = "pointer";
-      el.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
-      el.style.transition = "all 0.2s";
+      el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
 
       el.addEventListener("mouseenter", () => {
-        el.style.scale = "1.2";
+        el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.4)";
       });
 
       el.addEventListener("mouseleave", () => {
-        el.style.scale = "1";
+        el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
       });
 
       const marker = new mapboxgl.Marker(el)
@@ -152,10 +151,10 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
     markers.current.forEach((marker, index) => {
       const el = marker.getElement();
       if (locations[index]?.id === selectedLocation.id) {
-        el.style.scale = "1.3";
+        el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
         el.style.zIndex = "1000";
       } else {
-        el.style.scale = "1";
+        el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
         el.style.zIndex = "1";
       }
     });
