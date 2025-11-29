@@ -34,13 +34,22 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
 
   useEffect(() => {
     updateScrollButtons();
+    const ref = scrollRef.current;
+    if (ref) {
+      ref.addEventListener('scroll', updateScrollButtons);
+    }
     window.addEventListener('resize', updateScrollButtons);
-    return () => window.removeEventListener('resize', updateScrollButtons);
+    return () => {
+      if (ref) {
+        ref.removeEventListener('scroll', updateScrollButtons);
+      }
+      window.removeEventListener('resize', updateScrollButtons);
+    };
   }, []);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 200;
+      const scrollAmount = 150;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -62,8 +71,6 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
     
     const isCurrentlySelected = isGroupSelected(groupName);
     
-    // If group is selected, deselect all its categories
-    // If not selected, select all its categories
     group.categories.forEach((cat) => {
       const isCatSelected = selectedCategories.includes(cat);
       if (isCurrentlySelected && isCatSelected) {
@@ -75,12 +82,12 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
   };
 
   return (
-    <div className="relative flex items-center gap-1">
+    <div className="relative flex items-center gap-1 w-full min-w-0">
       {/* Left scroll button */}
       {canScrollLeft && (
         <button
           onClick={() => scroll('left')}
-          className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] z-10"
+          className="absolute left-0 z-10 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] shadow-md"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -89,10 +96,18 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
       {/* Scrollable container */}
       <div 
         ref={scrollRef}
-        onScroll={updateScrollButtons}
-        className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide scroll-smooth"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="w-full flex gap-2 overflow-x-auto px-1"
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch'
+        }}
       >
+        <style>{`
+          .category-scroll::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
         {PILL_GROUPS.map((groupName) => {
           const isSelected = isGroupSelected(groupName);
           return (
@@ -115,7 +130,7 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
       {canScrollRight && (
         <button
           onClick={() => scroll('right')}
-          className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] z-10"
+          className="absolute right-0 z-10 w-6 h-6 flex items-center justify-center bg-[#111111] rounded-full text-white hover:bg-[#333333] shadow-md"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
