@@ -69,7 +69,7 @@ const Sidebar = ({
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Submit
             </h2>
-            <Button onClick={onOpenForm} className="w-full justify-between shadow-warm">
+            <Button onClick={onOpenForm} className="w-full justify-between shadow-warm bg-[#fcf701] text-destructive">
               OPEN FORM
               <Plus className="w-4 h-4" />
             </Button>
