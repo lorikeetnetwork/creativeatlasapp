@@ -57,9 +57,9 @@ const PaymentSuccess = () => {
   const Icon = isBasicAccount ? Sparkles : Building2;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#121212]">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b border-[#333] bg-[#121212]">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
             <img 
@@ -75,10 +75,10 @@ const PaymentSuccess = () => {
       <section className="py-20 container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           {isVerifying ? (
-            <Card>
+            <Card className="border-[#333] bg-[#1a1a1a]">
               <CardContent className="pt-12 pb-12 text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-lg text-muted-foreground">Verifying your payment...</p>
+                <p className="text-lg text-gray-400">Verifying your payment...</p>
               </CardContent>
             </Card>
           ) : (
@@ -87,21 +87,21 @@ const PaymentSuccess = () => {
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
                   <CheckCircle className="w-10 h-10 text-primary" />
                 </div>
-                <h1 className="text-4xl font-bold mb-4">Payment Successful! 🎉</h1>
-                <p className="text-xl text-muted-foreground">
+                <h1 className="text-4xl font-bold mb-4 text-white">Payment Successful! 🎉</h1>
+                <p className="text-xl text-gray-400">
                   Welcome to Creative Atlas
                 </p>
               </div>
 
-              <Card>
+              <Card className="border-[#333] bg-[#1a1a1a]">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <Icon className="w-6 h-6 text-primary" />
-                    <CardTitle>
+                    <CardTitle className="text-white">
                       {isBasicAccount ? "Basic User Account" : "Creative Entity Listing"}
                     </CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="text-gray-400">
                     Your account has been upgraded successfully
                   </CardDescription>
                 </CardHeader>
@@ -109,17 +109,17 @@ const PaymentSuccess = () => {
                   {isBasicAccount ? (
                     <>
                       <div>
-                        <h3 className="font-semibold mb-3">You now have access to:</h3>
-                        <ul className="space-y-2 text-muted-foreground">
+                        <h3 className="font-semibold mb-3 text-white">You now have access to:</h3>
+                        <ul className="space-y-2 text-gray-400">
                           <li>✓ Full map browsing with search and filters</li>
                           <li>✓ Save and organize your favorite locations</li>
                           <li>✓ Access detailed contact information</li>
                           <li>✓ Community member status</li>
                         </ul>
                       </div>
-                      <div className="bg-muted/50 p-4 rounded-lg">
-                        <p className="text-sm">
-                          <strong>Want to list your own creative space?</strong><br />
+                      <div className="bg-[#222] p-4 rounded-lg border border-[#333]">
+                        <p className="text-sm text-gray-400">
+                          <strong className="text-white">Want to list your own creative space?</strong><br />
                           Upgrade to a Creative Entity Listing for just $10 more to get your business on the map 
                           with a full profile page, galleries, and contact forms.
                         </p>
@@ -134,7 +134,7 @@ const PaymentSuccess = () => {
                           <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                         <Button 
-                          className="flex-1" 
+                          className="flex-1 border-[#333] text-white hover:bg-[#1a1a1a]" 
                           variant="outline"
                           size="lg"
                           onClick={() => navigate("/pricing")}
@@ -146,8 +146,8 @@ const PaymentSuccess = () => {
                   ) : (
                     <>
                       <div>
-                        <h3 className="font-semibold mb-3">Your business profile includes:</h3>
-                        <ul className="space-y-2 text-muted-foreground">
+                        <h3 className="font-semibold mb-3 text-white">Your business profile includes:</h3>
+                        <ul className="space-y-2 text-gray-400">
                           <li>✓ Your location pinned on the map</li>
                           <li>✓ Dedicated business profile page</li>
                           <li>✓ Photo and offerings galleries</li>
@@ -157,8 +157,8 @@ const PaymentSuccess = () => {
                         </ul>
                       </div>
                       <div className="bg-primary/10 p-4 rounded-lg border border-primary/20">
-                        <p className="text-sm font-medium mb-2">🚀 Next Steps:</p>
-                        <ol className="text-sm space-y-1 list-decimal list-inside text-muted-foreground">
+                        <p className="text-sm font-medium mb-2 text-white">🚀 Next Steps:</p>
+                        <ol className="text-sm space-y-1 list-decimal list-inside text-gray-400">
                           <li>Submit your location details</li>
                           <li>Upload photos and videos</li>
                           <li>Add your offerings and services</li>
@@ -175,7 +175,7 @@ const PaymentSuccess = () => {
                           <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                         <Button 
-                          className="flex-1" 
+                          className="flex-1 border-[#333] text-white hover:bg-[#1a1a1a]" 
                           variant="outline"
                           size="lg"
                           onClick={() => navigate("/dashboard")}
@@ -189,7 +189,7 @@ const PaymentSuccess = () => {
               </Card>
 
               <div className="text-center mt-8">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-400">
                   Questions? Email us at support@creativeatlas.com.au
                 </p>
               </div>

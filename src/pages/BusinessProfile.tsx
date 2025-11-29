@@ -26,7 +26,7 @@ import CurrentProjectCard from "@/components/business/CurrentProjectCard";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Location = Tables<"locations">;
-type BusinessProfile = Tables<"business_profiles">;
+type BusinessProfileType = Tables<"business_profiles">;
 type LocationPhoto = Tables<"location_photos">;
 
 const BusinessProfile = () => {
@@ -34,7 +34,7 @@ const BusinessProfile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [location, setLocation] = useState<Location | null>(null);
-  const [profile, setProfile] = useState<BusinessProfile | null>(null);
+  const [profile, setProfile] = useState<BusinessProfileType | null>(null);
   const [photos, setPhotos] = useState<LocationPhoto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -117,7 +117,7 @@ const BusinessProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -125,10 +125,10 @@ const BusinessProfile = () => {
 
   if (!location) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card>
+      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
+        <Card className="border-[#333] bg-[#1a1a1a]">
           <CardContent className="pt-6">
-            <p className="text-muted-foreground">Business not found</p>
+            <p className="text-gray-400">Business not found</p>
             <Button onClick={() => navigate("/map")} className="mt-4">
               Back to Map
             </Button>
@@ -141,7 +141,7 @@ const BusinessProfile = () => {
   const coverPhoto = photos[0]?.photo_url || "/placeholder.svg";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#121212]">
       {/* Hero Section */}
       <div className="relative h-64 md:h-96 overflow-hidden">
         <img
@@ -149,13 +149,13 @@ const BusinessProfile = () => {
           alt={location.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/50 to-transparent" />
         <div className="absolute top-4 left-4">
           <Button
             variant="secondary"
             size="icon"
             onClick={() => navigate("/map")}
-            className="backdrop-blur-sm"
+            className="backdrop-blur-sm bg-[#1a1a1a]/80 border-[#333] hover:bg-[#222]"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -165,7 +165,7 @@ const BusinessProfile = () => {
             variant="secondary"
             size="icon"
             onClick={handleShare}
-            className="backdrop-blur-sm"
+            className="backdrop-blur-sm bg-[#1a1a1a]/80 border-[#333] hover:bg-[#222]"
           >
             <Share2 className="w-4 h-4" />
           </Button>
@@ -174,7 +174,7 @@ const BusinessProfile = () => {
 
       {/* Header Info */}
       <div className="container mx-auto px-4 -mt-12 relative z-10">
-        <div className="bg-card rounded-lg p-6 shadow-lg mb-8">
+        <div className="bg-[#1a1a1a] border border-[#333] rounded-lg p-6 shadow-lg mb-8">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-start gap-4 mb-4">
@@ -182,27 +182,27 @@ const BusinessProfile = () => {
                   <img
                     src={location.logo_url}
                     alt={`${location.name} logo`}
-                    className="w-16 h-16 object-contain rounded-lg border"
+                    className="w-16 h-16 object-contain rounded-lg border border-[#333]"
                   />
                 )}
                 <div className="flex-1">
-                  <h1 className="text-3xl md:text-4xl font-bold mb-2">{location.name}</h1>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">{location.name}</h1>
                   {profile?.tagline && (
-                    <p className="text-lg text-muted-foreground">{profile.tagline}</p>
+                    <p className="text-lg text-gray-400">{profile.tagline}</p>
                   )}
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="secondary">{location.category}</Badge>
-                {location.subcategory && <Badge variant="outline">{location.subcategory}</Badge>}
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Badge variant="secondary" className="bg-[#333] text-white">{location.category}</Badge>
+                {location.subcategory && <Badge variant="outline" className="border-[#444] text-gray-300">{location.subcategory}</Badge>}
+                <div className="flex items-center gap-1 text-sm text-gray-400">
                   <MapPin className="w-4 h-4" />
                   <span>
                     {location.suburb}, {location.state}
                   </span>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-wrap gap-4 text-sm text-gray-400">
                 {profile?.founded_year && (
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
@@ -227,35 +227,35 @@ const BusinessProfile = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="about" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-                <TabsTrigger value="about">About</TabsTrigger>
-                <TabsTrigger value="gallery">Gallery</TabsTrigger>
-                <TabsTrigger value="offerings">Offerings</TabsTrigger>
-                <TabsTrigger value="videos">Videos</TabsTrigger>
-                <TabsTrigger value="project">Project</TabsTrigger>
-                <TabsTrigger value="contact">Contact</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 bg-[#1a1a1a] border border-[#333]">
+                <TabsTrigger value="about" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">About</TabsTrigger>
+                <TabsTrigger value="gallery" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Gallery</TabsTrigger>
+                <TabsTrigger value="offerings" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Offerings</TabsTrigger>
+                <TabsTrigger value="videos" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Videos</TabsTrigger>
+                <TabsTrigger value="project" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Project</TabsTrigger>
+                <TabsTrigger value="contact" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400">Contact</TabsTrigger>
               </TabsList>
 
               <TabsContent value="about" className="space-y-6 mt-6">
-                <Card>
+                <Card className="border-[#333] bg-[#1a1a1a]">
                   <CardContent className="pt-6">
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                    <p className="text-gray-400 leading-relaxed whitespace-pre-wrap">
                       {profile?.about || location.description || "No description available."}
                     </p>
                   </CardContent>
                 </Card>
 
                 {profile?.specialties && profile.specialties.length > 0 && (
-                  <Card>
+                  <Card className="border-[#333] bg-[#1a1a1a]">
                     <CardContent className="pt-6">
-                      <h3 className="font-semibold mb-3">Specialties</h3>
+                      <h3 className="font-semibold mb-3 text-white">Specialties</h3>
                       <div className="flex flex-wrap gap-2">
                         {profile.specialties.map((specialty, idx) => (
-                          <Badge key={idx} variant="secondary">
+                          <Badge key={idx} variant="secondary" className="bg-[#333] text-white">
                             {specialty}
                           </Badge>
                         ))}
@@ -265,12 +265,12 @@ const BusinessProfile = () => {
                 )}
 
                 {profile?.awards_recognition && profile.awards_recognition.length > 0 && (
-                  <Card>
+                  <Card className="border-[#333] bg-[#1a1a1a]">
                     <CardContent className="pt-6">
-                      <h3 className="font-semibold mb-3">Awards & Recognition</h3>
+                      <h3 className="font-semibold mb-3 text-white">Awards & Recognition</h3>
                       <ul className="space-y-2">
                         {profile.awards_recognition.map((award, idx) => (
-                          <li key={idx} className="text-muted-foreground flex items-start gap-2">
+                          <li key={idx} className="text-gray-400 flex items-start gap-2">
                             <span className="text-primary">•</span>
                             <span>{award}</span>
                           </li>
@@ -285,8 +285,8 @@ const BusinessProfile = () => {
                 {photos.length > 0 ? (
                   <PhotoGallery photos={photos} />
                 ) : (
-                  <Card>
-                    <CardContent className="pt-6 text-center text-muted-foreground">
+                  <Card className="border-[#333] bg-[#1a1a1a]">
+                    <CardContent className="pt-6 text-center text-gray-400">
                       No photos available yet.
                     </CardContent>
                   </Card>
@@ -313,13 +313,13 @@ const BusinessProfile = () => {
 
           {/* Right Column - Sidebar */}
           <div className="space-y-6">
-            <Card className="sticky top-4">
+            <Card className="sticky top-4 border-[#333] bg-[#1a1a1a]">
               <CardContent className="pt-6 space-y-4">
-                <h3 className="font-semibold">Contact Information</h3>
+                <h3 className="font-semibold text-white">Contact Information</h3>
                 {location.email && (
                   <a
                     href={`mailto:${location.email}`}
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
                   >
                     <Mail className="w-4 h-4" />
                     <span>{location.email}</span>
@@ -328,7 +328,7 @@ const BusinessProfile = () => {
                 {location.phone && (
                   <a
                     href={`tel:${location.phone}`}
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
                   >
                     <Phone className="w-4 h-4" />
                     <span>{location.phone}</span>
@@ -339,7 +339,7 @@ const BusinessProfile = () => {
                     href={location.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
                   >
                     <Globe className="w-4 h-4" />
                     <span>Visit Website</span>
@@ -350,7 +350,7 @@ const BusinessProfile = () => {
                     href={`https://instagram.com/${location.instagram.replace("@", "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
                   >
                     <Instagram className="w-4 h-4" />
                     <span>{location.instagram}</span>
