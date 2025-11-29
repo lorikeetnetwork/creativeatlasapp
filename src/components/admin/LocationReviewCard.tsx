@@ -12,7 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import StaticMapPreview from "@/components/StaticMapPreview";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle, XCircle, Trash2, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, ExternalLink, Pencil } from "lucide-react";
+import { LocationEditForm } from "./LocationEditForm";
 
 interface LocationReviewCardProps {
   location: any;
@@ -22,6 +23,7 @@ interface LocationReviewCardProps {
 
 export function LocationReviewCard({ location, onClose, onUpdate }: LocationReviewCardProps) {
   const [photos, setPhotos] = useState<any[]>([]);
+  const [showEditForm, setShowEditForm] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -282,6 +284,13 @@ export function LocationReviewCard({ location, onClose, onUpdate }: LocationRevi
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
+          <Button
+            variant="secondary"
+            onClick={() => setShowEditForm(true)}
+          >
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
           {location.status !== 'Rejected' && (
             <Button
               variant="destructive"
@@ -302,6 +311,18 @@ export function LocationReviewCard({ location, onClose, onUpdate }: LocationRevi
           )}
         </DialogFooter>
       </DialogContent>
+
+      {showEditForm && (
+        <LocationEditForm
+          location={location}
+          open={showEditForm}
+          onClose={() => setShowEditForm(false)}
+          onUpdate={() => {
+            onUpdate();
+            setShowEditForm(false);
+          }}
+        />
+      )}
     </Dialog>
   );
 }

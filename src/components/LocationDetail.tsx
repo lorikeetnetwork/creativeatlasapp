@@ -53,6 +53,20 @@ const LocationDetail = ({
 
       <ScrollArea className="flex-1">
         <CardContent className="p-3 space-y-3 bg-[#e3e3e3]">
+          {/* Header Image - OG Image or Logo or First Photo */}
+          {(location.og_image_url || location.logo_url || photos[0]?.photo_url) && (
+            <div className="w-full h-32 rounded-lg overflow-hidden">
+              <img
+                src={location.og_image_url || location.logo_url || photos[0]?.photo_url}
+                alt={location.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          )}
+
           {/* Photo Gallery */}
           {photos.length > 0 && <PhotoGallery photos={photos} />}
 

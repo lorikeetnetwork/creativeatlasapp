@@ -6,7 +6,6 @@ interface LocationCardProps {
   category: string;
   suburb: string;
   state: string;
-  imageUrl?: string | null;
   isSelected?: boolean;
   onClick?: () => void;
   className?: string;
@@ -17,7 +16,6 @@ const LocationCard = ({
   category,
   suburb,
   state,
-  imageUrl,
   isSelected = false,
   onClick,
   className,
@@ -46,37 +44,11 @@ const LocationCard = ({
 
       {/* Card content */}
       <div className="relative rounded-[20px] p-3 z-10">
-        <div className="flex gap-3 items-center">
-          {/* Image */}
-          <div className="w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden">
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = "none";
-                  const fallback = target.nextElementSibling as HTMLElement;
-                  if (fallback) fallback.classList.remove("hidden");
-                }}
-              />
-            ) : null}
-            <div
-              className={cn(
-                "w-full h-full bg-gradient-to-br from-[#afa220]/30 to-[#080509]",
-                imageUrl ? "hidden" : ""
-              )}
-            />
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
-            <p className="text-xs text-white/50 truncate">
-              {category} • {suburb}, {state}
-            </p>
-          </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
+          <p className="text-xs text-white/50 truncate">
+            {category} • {suburb}, {state}
+          </p>
         </div>
       </div>
     </div>
