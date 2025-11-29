@@ -39,24 +39,24 @@ const Sidebar = ({
   onSignOut,
   onSignIn
 }: SidebarProps) => {
-  return <div className="h-full flex flex-col bg-card border-r shadow-sm">
+  return <div className="h-full flex flex-col bg-background border-r shadow-sm">
       {/* Scrollable Content */}
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6 bg-secondary-foreground">
+        <div className="p-4 space-y-6 bg-background">
           {/* SEARCH Section */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Search
             </h2>
             <div className="space-y-3">
               <CategoryPills selectedCategories={selectedCategories} onCategoryToggle={onCategoryToggle} />
-              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="text-sm" />
+              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
               <Select value={region} onValueChange={onRegionChange}>
-                <SelectTrigger className="text-sm">
+                <SelectTrigger className="text-sm bg-[#111111] text-white border-[#111111]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  {REGIONS.map(r => <SelectItem key={r} value={r}>
+                <SelectContent className="bg-[#111111] text-white border-[#111111]">
+                  {REGIONS.map(r => <SelectItem key={r} value={r} className="text-white hover:bg-[#333333] focus:bg-[#333333] focus:text-white">
                       {r}
                     </SelectItem>)}
                 </SelectContent>
@@ -66,7 +66,7 @@ const Sidebar = ({
 
           {/* SUBMIT Section */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Submit
             </h2>
             <Button onClick={onOpenForm} className="w-full justify-between shadow-warm">
@@ -77,7 +77,7 @@ const Sidebar = ({
 
           {/* CREATIVE ENTITIES Section */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Creative Entities
             </h2>
             <LocationList locations={locations} selectedLocation={selectedLocation} onLocationSelect={onLocationSelect} />

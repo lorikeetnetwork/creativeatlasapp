@@ -28,7 +28,7 @@ const CategoryPills = ({ selectedCategories, onCategoryToggle }: CategoryPillsPr
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               isSelected
                 ? "bg-primary text-primary-foreground shadow-sm"
-                : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                : "bg-[#111111] text-white border border-[#111111] hover:bg-[#333333]"
             }`}
           >
             {category.toUpperCase()}

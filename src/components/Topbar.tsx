@@ -19,6 +19,7 @@ interface TopbarProps {
   onSignIn: () => void;
   isSidebarCollapsed: boolean;
   onToggleSidebar: () => void;
+  className?: string;
 }
 
 const Topbar = ({
@@ -27,6 +28,7 @@ const Topbar = ({
   onSignIn,
   isSidebarCollapsed,
   onToggleSidebar,
+  className,
 }: TopbarProps) => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -54,7 +56,7 @@ const Topbar = ({
   };
 
   return (
-    <header className="h-14 flex-shrink-0 border-b-2 border-black bg-white flex items-center justify-between w-full p-0 m-0">
+    <header className={`h-14 flex-shrink-0 border-b-2 border-black bg-background flex items-center justify-between w-full p-0 m-0 ${className || ''}`}>
       <div className="flex items-center h-full pl-5">
         <Button
           variant="ghost"
