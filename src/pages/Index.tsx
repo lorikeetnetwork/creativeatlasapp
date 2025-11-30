@@ -13,7 +13,7 @@ import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import type { Session } from "@supabase/supabase-js";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
 import { Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 const Index = () => {
@@ -149,13 +149,13 @@ const Index = () => {
 
           {/* Floating Action Button for Search */}
           {session && (
-            <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
+            <GradientButton onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
               <Search className="w-5 h-5 mr-2" />
               Search
               <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
                 {filteredLocations.length}
               </span>
-            </Button>
+            </GradientButton>
           )}
         </div>
 

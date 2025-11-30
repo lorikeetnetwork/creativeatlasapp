@@ -7,7 +7,7 @@ import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable"
 import { BulkImport } from "@/components/admin/BulkImport";
 import { Loader2, ArrowLeft, ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 
@@ -146,7 +146,7 @@ export default function Admin() {
       <div className="container mx-auto py-4 md:py-8 px-4">
         {/* Header */}
         <div className="mb-6 md:mb-8">
-          <Button
+          <GradientButton
             variant="ghost"
             size="sm"
             onClick={() => navigate("/map")}
@@ -154,7 +154,7 @@ export default function Admin() {
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Map
-          </Button>
+          </GradientButton>
           <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
           <p className="text-sm md:text-base text-gray-400">Manage locations and review submissions</p>
         </div>
@@ -191,7 +191,7 @@ export default function Admin() {
                   </p>
                 </div>
               )}
-              <Button
+              <GradientButton
                 onClick={handleFetchOgImages}
                 disabled={fetchingImages}
                 variant="outline"
@@ -208,7 +208,7 @@ export default function Admin() {
                     Fetch OG Images
                   </>
                 )}
-              </Button>
+              </GradientButton>
             </div>
           </TabsContent>
 

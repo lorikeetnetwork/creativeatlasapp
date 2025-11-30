@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -101,23 +101,23 @@ const Pricing = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
             {navItems.map((item) => (
-              <Button key={item.label} onClick={item.onClick}>
+              <GradientButton key={item.label} onClick={item.onClick}>
                 {item.label}
-              </Button>
+              </GradientButton>
             ))}
           </div>
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="h-10 w-10">
+              <GradientButton variant="ghost" size="icon" className="h-10 w-10">
                 <Menu className="h-5 w-5 text-white" />
-              </Button>
+              </GradientButton>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] bg-[#121212] border-[#333]">
               <div className="flex flex-col gap-4 mt-8">
                 {navItems.map((item) => (
-                  <Button
+                  <GradientButton
                     key={item.label}
                     variant="ghost"
                     className="justify-start text-lg h-12 text-white hover:bg-[#222]"
@@ -127,7 +127,7 @@ const Pricing = () => {
                     }}
                   >
                     {item.label}
-                  </Button>
+                  </GradientButton>
                 ))}
               </div>
             </SheetContent>
@@ -180,7 +180,7 @@ const Pricing = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button 
+              <GradientButton 
                 className="w-full text-sm md:text-base" 
                 size="lg"
                 onClick={handlePayment}
@@ -188,7 +188,7 @@ const Pricing = () => {
               >
                 {isLoadingListing ? "Processing..." : "List Your Business - $15"}
                 <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+              </GradientButton>
             </CardFooter>
           </Card>
         </div>
@@ -256,12 +256,12 @@ const Pricing = () => {
             Start exploring creative spaces or showcase your own business today
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate("/map")}>
+            <GradientButton size="lg" onClick={() => navigate("/map")}>
               Explore the Map
-            </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="border-[#333] text-white hover:bg-[#1a1a1a]">
+            </GradientButton>
+            <GradientButton size="lg" variant="outline" onClick={() => navigate("/auth")} className="border-[#333] text-white hover:bg-[#1a1a1a]">
               Sign Up Free
-            </Button>
+            </GradientButton>
           </div>
         </div>
       </section>
