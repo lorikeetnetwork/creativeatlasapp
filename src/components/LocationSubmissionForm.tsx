@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { Upload, Loader2, X, MapPin, CheckCircle2 } from "lucide-react";
+import { Upload, Loader2, X, MapPin, CheckCircle2, Globe } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import AddressAutocomplete, { type ParsedAddress } from "./AddressAutocomplete";
 import { PhotoUploader } from "./PhotoUploader";
@@ -22,6 +22,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   category: z.string().min(1, "Category is required"),
   subcategory: z.string().max(100).optional(),
+  website: z.string().url("Invalid URL").max(255).optional().or(z.literal("")),
   description: z.string().max(1000).optional(),
   address: z.string().min(1, "Address is required").max(200),
   suburb: z.string().min(1, "Suburb is required").max(100),
@@ -30,7 +31,6 @@ const formSchema = z.object({
   country: z.string().min(1).max(100).default("Australia"),
   email: z.string().email("Invalid email").max(255).optional().or(z.literal("")),
   phone: z.string().max(50).optional(),
-  website: z.string().url("Invalid URL").max(255).optional().or(z.literal("")),
   instagram: z.string().max(100).optional(),
   other_social: z.string().max(255).optional(),
   capacity: z.preprocess(
@@ -55,6 +55,11 @@ interface PhotoFile {
   caption: string;
 }
 
+interface OgData {
+  ogImage: string | null;
+  ogDescription: string | null;
+}
+
 export default function LocationSubmissionForm({ session, onSuccess, onCancel }: LocationSubmissionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -62,6 +67,8 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
   const [showManualAddress, setShowManualAddress] = useState(false);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
   const [photoFiles, setPhotoFiles] = useState<PhotoFile[]>([]);
+  const [ogData, setOgData] = useState<OgData>({ ogImage: null, ogDescription: null });
+  const [isFetchingOg, setIsFetchingOg] = useState(false);
 
   const { register, handleSubmit, formState: { errors, touchedFields }, setValue, watch } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -83,6 +90,55 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
       latitude: parsedAddress.latitude,
       longitude: parsedAddress.longitude,
     });
+  };
+
+  const fetchOgData = async (url: string) => {
+    if (!url || !url.startsWith('http')) return;
+    
+    setIsFetchingOg(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-og-image', {
+        body: { url }
+      });
+
+      if (error) {
+        console.error('Error fetching OG data:', error);
+        return;
+      }
+
+      if (data) {
+        setOgData({
+          ogImage: data.ogImage || null,
+          ogDescription: data.ogDescription || null,
+        });
+
+        // Auto-fill description if empty and we got an OG description
+        const currentDescription = watch("description");
+        if (!currentDescription && data.ogDescription) {
+          setValue("description", data.ogDescription);
+          toast({
+            title: "Website data fetched",
+            description: "Description auto-filled from website",
+          });
+        } else if (data.ogImage) {
+          toast({
+            title: "Website data fetched",
+            description: "Social image found",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching OG data:', error);
+    } finally {
+      setIsFetchingOg(false);
+    }
+  };
+
+  const handleWebsiteBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const url = e.target.value;
+    if (url && !errors.website) {
+      fetchOgData(url);
+    }
   };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,7 +304,7 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
         return;
       }
 
-      // Insert location first without logo
+      // Insert location with OG data
       const { data: insertedData, error: insertError } = await supabase
         .from('locations')
         .insert({
@@ -271,6 +327,8 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
           capacity: data.capacity || null,
           best_for: data.best_for || null,
           accessibility_notes: data.accessibility_notes || null,
+          og_image_url: ogData.ogImage || null,
+          og_description: ogData.ogDescription || null,
           source: "UserSubmitted" as any,
           status: "Pending" as any,
           owner_user_id: session.user.id,
@@ -368,9 +426,57 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
           <Input id="subcategory" {...register("subcategory")} />
         </div>
 
+        {/* Website - Moved here under subcategory */}
+        <div>
+          <Label htmlFor="website">Website</Label>
+          <div className="relative">
+            <FieldWrapper
+              error={errors.website?.message}
+              touched={touchedFields.website}
+              isValid={!errors.website && watch("website")?.startsWith('http')}
+            >
+              <Input 
+                id="website" 
+                type="url" 
+                {...register("website")} 
+                placeholder="https://yourwebsite.com" 
+                className="pr-10"
+                onBlur={handleWebsiteBlur}
+              />
+            </FieldWrapper>
+            {isFetchingOg && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            We'll auto-fetch your site's description and social image
+          </p>
+          {/* OG Image Preview */}
+          {ogData.ogImage && (
+            <div className="mt-2 p-2 bg-muted/50 rounded-lg border border-border">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                <Globe className="w-3 h-3" />
+                <span>Social image found</span>
+              </div>
+              <img 
+                src={ogData.ogImage} 
+                alt="Website preview" 
+                className="w-full h-24 object-cover rounded"
+              />
+            </div>
+          )}
+        </div>
+
         <div>
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" {...register("description")} rows={3} />
+          {ogData.ogDescription && !watch("description") && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Tip: Enter your website URL above to auto-fill from your site
+            </p>
+          )}
         </div>
 
         {/* Logo Upload */}
@@ -505,17 +611,6 @@ export default function LocationSubmissionForm({ session, onSuccess, onCancel }:
         <div>
           <Label htmlFor="phone">Phone</Label>
           <Input id="phone" {...register("phone")} />
-        </div>
-
-        <div>
-          <Label htmlFor="website">Website</Label>
-          <FieldWrapper
-            error={errors.website?.message}
-            touched={touchedFields.website}
-            isValid={!errors.website && watch("website")?.startsWith('http')}
-          >
-            <Input id="website" type="url" {...register("website")} placeholder="https://yourwebsite.com" className="pr-10" />
-          </FieldWrapper>
         </div>
 
         <div>
