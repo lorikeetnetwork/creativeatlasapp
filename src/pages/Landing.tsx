@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
-import { Map, Search, MapPin, Sparkles, ArrowRight, Building2, Music, Palette, Camera, Radio, Megaphone, GraduationCap, Building, Heart, Briefcase, ChevronRight, Menu, X } from "lucide-react";
+import { Map, Search, MapPin, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Building, Heart, Briefcase, ChevronRight, Menu, Sparkles, Lightbulb, Users2, Mic2, FlaskConical } from "lucide-react";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 
@@ -17,20 +17,20 @@ const Landing = () => {
   
   const features = [{
     icon: Map,
-    title: "Interactive Mapping",
-    description: "Explore creative spaces across Australia with our intuitive map interface"
+    title: "Collaborative Mapping",
+    description: "Navigate Australia's creative ecosystem in real time—venues, studios, festivals, innovators, cultural spaces, and positive-tech projects, all mapped for easy discovery."
   }, {
     icon: Search,
-    title: "Advanced Search",
-    description: "Filter by category, location, and keywords to find exactly what you need"
+    title: "Connection-Focused Search",
+    description: "Filter by category, location, practice, project type, or intention. Whether you're seeking collaborators, partners, spaces, or ideas, the Atlas helps you find the right people."
   }, {
     icon: MapPin,
-    title: "Detailed Information",
-    description: "Complete contact details, descriptions, capacity, and accessibility info"
+    title: "In-Depth Profiles",
+    description: "Every listing includes clear descriptions, contact information, capabilities, accessibility details, and context—so you understand how each entity works and how to engage them."
   }, {
-    icon: Sparkles,
-    title: "Submit Your Space",
-    description: "Share your creative venue with the community (requires sign-in)"
+    icon: Users,
+    title: "Community-Driven Contributions",
+    description: "Submit your own space, initiative, collective, or project to strengthen the network and increase visibility for authentic creative collaboration."
   }];
   
   const categories = [{
@@ -62,22 +62,44 @@ const Landing = () => {
     icon: Heart
   }, {
     name: "Creative Hub",
-    icon: Megaphone
+    icon: Sparkles
+  }, {
+    name: "Technology for Good",
+    icon: Lightbulb
+  }, {
+    name: "Collective",
+    icon: Users2
+  }, {
+    name: "Production",
+    icon: Mic2
+  }, {
+    name: "Innovation Lab",
+    icon: FlaskConical
   }];
   
   const steps = [{
     number: "01",
-    title: "Browse the Map",
-    description: "Explore creative spaces across Australia with interactive filters"
+    title: "Browse the Network",
+    description: "Use the interactive map and filters to explore Australia's creative and innovation landscape."
   }, {
     number: "02",
-    title: "View Details",
-    description: "Click any location to see comprehensive information and contact details"
+    title: "Learn & Connect",
+    description: "Open any listing for detailed information, context, and contact details to support real collaboration."
   }, {
     number: "03",
-    title: "Submit Your Space",
-    description: "Sign up to add your venue and connect with the creative community"
+    title: "Contribute Your Space or Project",
+    description: "Sign in to add your venue, initiative, or creative hub and join a growing network committed to collaboration and societal good."
   }];
+
+  const highlights = [
+    "Venues, studios, stages, and live music infrastructure",
+    "Festivals, producers, and cultural organisers",
+    "Creative hubs, coworking spaces, and community centres",
+    "Arts organisations, collectives, and peak bodies",
+    "Digital and emerging technology projects that are \"good for society\"",
+    "Education, training, and professional pathways",
+    "Management, labels, platforms, and production partners"
+  ];
 
   const navItems = [
     { label: "Pricing", onClick: () => navigate("/pricing") },
@@ -134,6 +156,20 @@ const Landing = () => {
       {/* Hero Section */}
       <FuturisticAlienHero />
 
+      {/* Intro Text Section */}
+      <section className="py-16 md:py-20 bg-[#121212]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-4xl font-bold mb-6 text-white">
+              Find the collaborators, spaces, and creative opportunities shaping Australia's future.
+            </h2>
+            <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+              A living map of music, arts, creative industries, and socially positive technology—built to spark genuine connection, partnership, and shared innovation.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <Separator className="bg-border" />
 
       {/* Features Section */}
@@ -144,11 +180,8 @@ const Landing = () => {
               Features
             </Badge>
             <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
-              Everything You Need to Connect
+              Designed for Collaboration and Creative Connection
             </h2>
-            <p className="text-base md:text-lg text-gray-400">
-              Discover, explore, and contribute to Australia's vibrant creative ecosystem
-            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {features.map((feature, index) => (
@@ -177,7 +210,7 @@ const Landing = () => {
       {/* Map Preview Section */}
       <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
-          <Card className="text-center max-w-2xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
+          <Card className="text-center max-w-3xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
             <CardHeader>
               <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
                 Discover
@@ -186,14 +219,31 @@ const Landing = () => {
                 Explore the Map
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <CardDescription className="text-base md:text-lg text-gray-400">
-                Discover hundreds of creative spaces across the country. Pan, zoom, and find the vibrant creative scene near you.
+                Trace the connections that power Australia's creative life. Pan, zoom, and explore the people, places, and projects driving music, arts, culture, and ethical innovation in your region.
               </CardDescription>
+              <div className="text-left max-w-xl mx-auto">
+                <p className="text-sm font-medium text-white mb-3">The Creative Atlas highlights:</p>
+                <ul className="space-y-2">
+                  {highlights.map((item, index) => (
+                    <li key={index} className="text-sm text-gray-400 flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
           <div className="rounded-xl overflow-hidden border border-border shadow-lg">
             <MapPreview />
+          </div>
+          <div className="text-center mt-8">
+            <GradientButton size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
+              Explore Full Map
+              <Map className="h-5 w-5" />
+            </GradientButton>
           </div>
         </div>
       </section>
@@ -206,17 +256,12 @@ const Landing = () => {
           <Card className="text-center max-w-2xl mx-auto mb-12 md:mb-16 backdrop-blur-sm bg-card/80 border-border/50">
             <CardHeader>
               <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                Getting Started
+                How It Works
               </Badge>
               <CardTitle className="text-2xl md:text-4xl font-bold text-white">
-                How It Works
+                A simple way to find collaborators and opportunities
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <CardDescription className="text-base md:text-lg text-gray-400">
-                Get started in three simple steps
-              </CardDescription>
-            </CardContent>
           </Card>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {steps.map((step, index) => (
@@ -244,7 +289,7 @@ const Landing = () => {
       {/* Categories Preview */}
       <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
-          <Card className="text-center max-w-2xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
+          <Card className="text-center max-w-3xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
             <CardHeader>
               <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
                 Categories
@@ -255,11 +300,11 @@ const Landing = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base md:text-lg text-gray-400">
-                From venues and studios to festivals and creative spaces
+                Creative Atlas spans the full breadth of Australia's music, arts, cultural, and creative-tech ecosystem
               </CardDescription>
             </CardContent>
           </Card>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4 max-w-6xl mx-auto">
             {categories.map((category, index) => (
               <Card 
                 key={index} 
@@ -288,15 +333,15 @@ const Landing = () => {
           <Card className="max-w-3xl mx-auto backdrop-blur-sm bg-card/80 border-border/50">
             <CardHeader>
               <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                Get Started
+                Join the Network
               </Badge>
               <CardTitle className="text-2xl md:text-5xl font-bold text-white">
-                Ready to Explore Australia's Creative Scene?
+                Ready to Connect with Australia's Creative Community?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 md:space-y-8">
               <CardDescription className="text-lg md:text-xl max-w-2xl mx-auto text-gray-400">
-                Join our community and discover the spaces that bring creativity to life. It's free!
+                Discover collaborators, find the right spaces, and build meaningful relationships that support creativity and positive innovation nationwide.
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4">
                 <GradientButton size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
@@ -304,7 +349,7 @@ const Landing = () => {
                   <Map className="h-5 w-5" />
                 </GradientButton>
                 <GradientButton size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2 border-[#333] hover:bg-[#1a1a1a] text-white">
-                  Create Free Account
+                  Create Account
                   <ArrowRight className="h-5 w-5" />
                 </GradientButton>
               </div>
@@ -322,7 +367,7 @@ const Landing = () => {
             <div className="flex flex-col md:flex-row items-center gap-3 text-center md:text-left">
               <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto object-contain" />
               <span className="text-xs md:text-sm text-gray-400">
-                © 2025 Creative Atlas. Mapping Australia's music, creative & arts sectors.
+                © 2025 Creative Atlas. Mapping collaboration and creative innovation across Australia.
               </span>
             </div>
             <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm">
@@ -341,11 +386,12 @@ const Landing = () => {
             <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
               <img src={lorikeetLogo} alt="Lorikeet Network" className="h-10 md:h-12 w-auto object-contain" />
             </a>
-            <p className="text-xs md:text-sm text-gray-400 text-center">
-              This app/site is a project of the{" "}
+            <p className="text-xs md:text-sm text-gray-400 text-center max-w-md">
+              A project of the{" "}
               <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">
                 Lorikeet Network
               </a>
+              {" "}— supporting Australia's creative and socially positive future.
             </p>
           </div>
         </div>
