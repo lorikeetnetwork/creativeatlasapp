@@ -23,33 +23,21 @@ const LocationCard = ({
   return (
     <div
       className={cn(
-        "relative cursor-pointer transition-all duration-300 hover:scale-[1.02] w-full",
-        isSelected && "scale-[1.02]",
+        "relative cursor-pointer transition-all duration-300 hover:scale-[1.02] w-full rounded-[20px] p-[2px]",
+        isSelected ? "scale-[1.02]" : "opacity-80 hover:opacity-100",
         className
       )}
+      style={{
+        background: "linear-gradient(71deg, #110e0e, #afa220, #110e0e)",
+      }}
       onClick={onClick}
     >
-      {/* Gradient border wrapper */}
-      <div
-        className={cn(
-          "absolute inset-0 rounded-[20px] p-[1px] transition-opacity",
-          isSelected ? "opacity-100" : "opacity-60 hover:opacity-100"
-        )}
-        style={{
-          background: "linear-gradient(71deg, #110e0e, #afa220, #110e0e)",
-        }}
-      >
-        <div className="w-full h-full rounded-[19px] bg-gradient-to-br from-[#080509] via-[#1a171c] to-[#080509]" />
-      </div>
-
-      {/* Card content */}
-      <div className="relative rounded-[20px] p-3 z-10">
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
-          <p className="text-xs text-white/50 truncate">
-            {category} • {suburb}, {state}
-          </p>
-        </div>
+      {/* Inner card with dark background */}
+      <div className="w-full rounded-[18px] bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] p-3">
+        <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
+        <p className="text-xs text-white/60 truncate mt-0.5">
+          {category} • {suburb}, {state}
+        </p>
       </div>
     </div>
   );
