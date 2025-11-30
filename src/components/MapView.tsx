@@ -23,7 +23,7 @@ interface MapViewProps {
 const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange }: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const markers = useRef<mapboxgl.Marker[]>([]);
+  const markersMap = useRef<Map<string, { marker: mapboxgl.Marker; element: HTMLDivElement }>>(new Map());
   const hasInitiallyFitBounds = useRef(false);
   const initialLocationsRef = useRef<Tables<"locations">[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -107,26 +107,35 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     }
 
     return () => {
-      markers.current.forEach((marker) => marker.remove());
+      markersMap.current.forEach(({ marker }) => marker.remove());
+      markersMap.current.clear();
       map.current?.remove();
     };
   }, [savedToken]);
 
-  // Update markers when locations change
+  // Update markers when locations change - smart updates to prevent flickering
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
 
-    // Clear existing markers
-    markers.current.forEach((marker) => marker.remove());
-    markers.current = [];
-
-    // Store ref to current map to avoid closure issues
     const currentMap = map.current;
+    const currentLocationIds = new Set(locations.map(l => l.id));
+    const existingIds = new Set(markersMap.current.keys());
 
-    // Add new markers
+    // Remove markers that are no longer in locations
+    existingIds.forEach(id => {
+      if (!currentLocationIds.has(id)) {
+        const entry = markersMap.current.get(id);
+        if (entry) {
+          entry.marker.remove();
+          markersMap.current.delete(id);
+        }
+      }
+    });
+
+    // Add markers for new locations only
     locations.forEach((location) => {
-      if (!currentMap) return;
-      
+      if (markersMap.current.has(location.id)) return; // Already exists
+
       const el = document.createElement("div");
       el.className = "custom-marker";
       el.style.width = "24px";
@@ -138,11 +147,15 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
 
       el.addEventListener("mouseenter", () => {
-        el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.4)";
+        if (selectedLocation?.id !== location.id) {
+          el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.4)";
+        }
       });
 
       el.addEventListener("mouseleave", () => {
-        el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+        if (selectedLocation?.id !== location.id) {
+          el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+        }
       });
 
       const marker = new mapboxgl.Marker(el)
@@ -153,9 +166,9 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
         onLocationSelect(location);
       });
 
-      markers.current.push(marker);
+      markersMap.current.set(location.id, { marker, element: el });
     });
-  }, [locations, mapLoaded, onLocationSelect]);
+  }, [locations, mapLoaded, onLocationSelect, selectedLocation]);
 
   // Fit bounds ONLY ONCE on initial load - separate effect to prevent re-triggering
   useEffect(() => {
@@ -170,28 +183,21 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     hasInitiallyFitBounds.current = true;
   }, [mapLoaded]); // Only depend on mapLoaded, NOT locations
 
-  // Fly to selected location
+  // Highlight selected marker (no flyTo - user controls the map)
   useEffect(() => {
-    if (!map.current || !selectedLocation) return;
+    if (!map.current) return;
 
-    map.current.flyTo({
-      center: [selectedLocation.longitude, selectedLocation.latitude],
-      zoom: 14,
-      duration: 1000,
-    });
-
-    // Highlight selected marker
-    markers.current.forEach((marker, index) => {
-      const el = marker.getElement();
-      if (locations[index]?.id === selectedLocation.id) {
-        el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
-        el.style.zIndex = "1000";
+    // Update all marker styles based on selection
+    markersMap.current.forEach(({ element }, id) => {
+      if (selectedLocation?.id === id) {
+        element.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
+        element.style.zIndex = "1000";
       } else {
-        el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-        el.style.zIndex = "1";
+        element.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+        element.style.zIndex = "1";
       }
     });
-  }, [selectedLocation, locations]);
+  }, [selectedLocation]);
 
   if (error) {
     return (
