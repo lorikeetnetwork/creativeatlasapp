@@ -23,7 +23,7 @@ const LocationCard = ({
   return (
     <div
       className={cn(
-        "cursor-pointer transition-all duration-200 rounded-[16px] p-[2px] box-border",
+        "cursor-pointer transition-all duration-200 rounded-[16px] p-[2px]",
         isSelected ? "opacity-100" : "opacity-80 hover:opacity-100",
         className
       )}
@@ -32,8 +32,7 @@ const LocationCard = ({
       }}
       onClick={onClick}
     >
-      {/* Inner card with dark background */}
-      <div className="rounded-[14px] bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] p-3">
+      <div className="rounded-[14px] bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] px-3 py-2.5">
         <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
         <p className="text-xs text-white/60 truncate mt-0.5">
           {category} • {suburb}, {state}

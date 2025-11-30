@@ -4,7 +4,6 @@ import { CATEGORIES, CATEGORY_SHORT_NAMES } from "@/utils/categoryGroups";
 import LocationList from "./LocationList";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Comprehensive list of Australian cities and regions
 const REGIONS = [
@@ -103,9 +102,8 @@ const Sidebar = ({
   onSignIn
 }: SidebarProps) => {
   return (
-    <div className="h-full w-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
-      {/* Scrollable Content */}
-      <ScrollArea className="flex-1">
+    <div className="h-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="p-4 space-y-4 bg-card-foreground">
           {/* SEARCH Section */}
           <div>
@@ -171,7 +169,7 @@ const Sidebar = ({
             />
           </div>
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };
