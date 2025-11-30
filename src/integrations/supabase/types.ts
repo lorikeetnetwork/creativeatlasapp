@@ -294,6 +294,7 @@ export type Database = {
           logo_url: string | null
           longitude: number
           name: string
+          og_description: string | null
           og_image_url: string | null
           other_social: string | null
           owner_user_id: string | null
@@ -324,6 +325,7 @@ export type Database = {
           logo_url?: string | null
           longitude: number
           name: string
+          og_description?: string | null
           og_image_url?: string | null
           other_social?: string | null
           owner_user_id?: string | null
@@ -354,6 +356,7 @@ export type Database = {
           logo_url?: string | null
           longitude?: number
           name?: string
+          og_description?: string | null
           og_image_url?: string | null
           other_social?: string | null
           owner_user_id?: string | null

@@ -61,6 +61,44 @@ function extractOgImage(html: string, baseUrl: string): string | null {
   return null;
 }
 
+function extractOgDescription(html: string): string | null {
+  // Try og:description first
+  const ogDescMatch = html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']+)["']/i)
+    || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:description["']/i);
+  
+  if (ogDescMatch?.[1]) {
+    return decodeHtmlEntities(ogDescMatch[1].trim());
+  }
+
+  // Try twitter:description
+  const twitterDescMatch = html.match(/<meta[^>]*name=["']twitter:description["'][^>]*content=["']([^"']+)["']/i)
+    || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:description["']/i);
+  
+  if (twitterDescMatch?.[1]) {
+    return decodeHtmlEntities(twitterDescMatch[1].trim());
+  }
+
+  // Try standard meta description
+  const metaDescMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)
+    || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i);
+  
+  if (metaDescMatch?.[1]) {
+    return decodeHtmlEntities(metaDescMatch[1].trim());
+  }
+
+  return null;
+}
+
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ');
+}
+
 function resolveUrl(url: string, baseUrl: string): string {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
@@ -91,7 +129,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('Fetching OG image for URL:', url);
+    console.log('Fetching OG data for URL:', url);
 
     // Normalize URL
     let normalizedUrl = url;
@@ -119,7 +157,7 @@ serve(async (req) => {
       console.error('Fetch error for URL:', normalizedUrl, errorMsg);
       // Return null gracefully instead of error - TLS issues are common
       return new Response(
-        JSON.stringify({ ogImage: null, error: null }),
+        JSON.stringify({ ogImage: null, ogDescription: null, error: null }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -128,25 +166,27 @@ serve(async (req) => {
     if (!response.ok) {
       console.error('Failed to fetch URL:', response.status, response.statusText);
       return new Response(
-        JSON.stringify({ ogImage: null, error: null }),
+        JSON.stringify({ ogImage: null, ogDescription: null, error: null }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     const html = await response.text();
     const ogImage = extractOgImage(html, normalizedUrl);
+    const ogDescription = extractOgDescription(html);
 
     console.log('Extracted OG image:', ogImage);
+    console.log('Extracted OG description:', ogDescription?.substring(0, 100));
 
     return new Response(
-      JSON.stringify({ ogImage }),
+      JSON.stringify({ ogImage, ogDescription }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Error fetching OG image:', error);
+    console.error('Error fetching OG data:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
-      JSON.stringify({ ogImage: null, error: errorMessage }),
+      JSON.stringify({ ogImage: null, ogDescription: null, error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
