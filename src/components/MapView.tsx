@@ -24,6 +24,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const hasInitiallyFitBounds = useRef(false);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
@@ -144,13 +145,14 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
       markers.current.push(marker);
     });
 
-    // Fit bounds to show all markers
-    if (locations.length > 0) {
+    // Fit bounds only on initial load
+    if (locations.length > 0 && !hasInitiallyFitBounds.current) {
       const bounds = new mapboxgl.LngLatBounds();
       locations.forEach((loc) => {
         bounds.extend([loc.longitude, loc.latitude]);
       });
       map.current.fitBounds(bounds, { padding: 50, maxZoom: 12 });
+      hasInitiallyFitBounds.current = true;
     }
   }, [locations, mapLoaded, onLocationSelect]);
 
