@@ -694,6 +694,18 @@ export type Database = {
         | "Projection Mapping Tech Providers"
         | "Lighting Control System Developers"
         | "Show Control & Live Event Software"
+        | "Music Industry"
+        | "Audio, Production & Post-Production"
+        | "Visual Arts, Design & Craft"
+        | "Culture, Heritage & Community"
+        | "Events, Festivals & Live Performance"
+        | "Media, Content & Communications"
+        | "Education, Training & Professional Development"
+        | "Workspaces, Fabrication & Creative Infrastructure"
+        | "Creative Technology & Emerging Media"
+        | "Software, Development & Digital Platforms"
+        | "Media Infrastructure & Cloud Technology"
+        | "Business, Logistics & Support Services"
       location_source: "UserSubmitted" | "AdminImported" | "AdminCreated"
       location_status:
         | "Pending"
@@ -1020,6 +1032,18 @@ export const Constants = {
         "Projection Mapping Tech Providers",
         "Lighting Control System Developers",
         "Show Control & Live Event Software",
+        "Music Industry",
+        "Audio, Production & Post-Production",
+        "Visual Arts, Design & Craft",
+        "Culture, Heritage & Community",
+        "Events, Festivals & Live Performance",
+        "Media, Content & Communications",
+        "Education, Training & Professional Development",
+        "Workspaces, Fabrication & Creative Infrastructure",
+        "Creative Technology & Emerging Media",
+        "Software, Development & Digital Platforms",
+        "Media Infrastructure & Cloud Technology",
+        "Business, Logistics & Support Services",
       ],
       location_source: ["UserSubmitted", "AdminImported", "AdminCreated"],
       location_status: [
