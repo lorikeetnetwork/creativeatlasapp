@@ -1,12 +1,10 @@
-import { MapPin, LogOut, User, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CATEGORY_GROUPS } from "@/utils/categoryGroups";
+import { CATEGORIES, CATEGORY_SHORT_NAMES } from "@/utils/categoryGroups";
 import LocationList from "./LocationList";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // Comprehensive list of Australian cities and regions
 const REGIONS = [
@@ -74,6 +72,7 @@ const REGIONS = [
   "Regional NT",
   "Other",
 ];
+
 interface SidebarProps {
   session: Session | null;
   searchQuery: string;
@@ -88,6 +87,7 @@ interface SidebarProps {
   onSignOut: () => void;
   onSignIn: () => void;
 }
+
 const Sidebar = ({
   session,
   searchQuery,
@@ -102,7 +102,8 @@ const Sidebar = ({
   onSignOut,
   onSignIn
 }: SidebarProps) => {
-  return <div className="h-full w-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
+  return (
+    <div className="h-full w-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
       {/* Scrollable Content */}
       <ScrollArea className="flex-1 w-full">
         <div className="p-4 space-y-6 bg-card-foreground w-full">
@@ -113,57 +114,46 @@ const Sidebar = ({
             </h2>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-1.5 pb-2">
-                {[
-                  { short: "Music", full: "Music & Recording" },
-                  { short: "Events", full: "Live Events & Festivals" },
-                  { short: "Visual", full: "Visual Arts & Media" },
-                  { short: "Tech", full: "Technology & Digital" },
-                  { short: "Community", full: "Cultural & Community Spaces" },
-                  { short: "Performing", full: "Performing Arts" },
-                  { short: "Gaming", full: "Gaming & Immersive" },
-                  { short: "Education", full: "Education & Development" },
-                ].map(({ short, full }) => {
-                  const group = CATEGORY_GROUPS.find((g) => g.name === full);
-                  const isSelected = group ? group.categories.some((cat) => selectedCategories.includes(cat)) : false;
-                  
-                  const handleClick = () => {
-                    if (!group) return;
-                    const isCurrentlySelected = group.categories.some((cat) => selectedCategories.includes(cat));
-                    group.categories.forEach((cat) => {
-                      const isCatSelected = selectedCategories.includes(cat);
-                      if (isCurrentlySelected && isCatSelected) {
-                        onCategoryToggle(cat);
-                      } else if (!isCurrentlySelected && !isCatSelected) {
-                        onCategoryToggle(cat);
-                      }
-                    });
-                  };
+                {CATEGORIES.map((category) => {
+                  const isSelected = selectedCategories.includes(category);
+                  const shortName = CATEGORY_SHORT_NAMES[category] || category;
                   
                   return (
                     <button
-                      key={full}
-                      onClick={handleClick}
-                      title={full}
+                      key={category}
+                      onClick={() => onCategoryToggle(category)}
+                      title={category}
                       className={`px-3 py-1.5 rounded-full text-[10px] font-semibold transition-colors whitespace-nowrap flex-shrink-0 ${
                         isSelected
                           ? "bg-primary text-primary-foreground shadow-sm"
                           : "bg-[#222] text-white border border-[#333] hover:bg-[#333]"
                       }`}
                     >
-                      {short.toUpperCase()}
+                      {shortName.toUpperCase()}
                     </button>
                   );
                 })}
               </div>
-              <Input placeholder="Search by keyword" value={searchQuery} onChange={e => onSearchChange(e.target.value)} className="w-full text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" />
+              <Input 
+                placeholder="Search by keyword" 
+                value={searchQuery} 
+                onChange={e => onSearchChange(e.target.value)} 
+                className="w-full text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" 
+              />
               <Select value={region} onValueChange={onRegionChange}>
                 <SelectTrigger className="w-full text-sm bg-[#111111] text-white border-[#111111]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#111111] text-white border-[#111111] max-h-[300px]">
-                  {REGIONS.map(r => <SelectItem key={r} value={r} className="text-white hover:bg-[#333333] focus:bg-[#333333] focus:text-white">
+                  {REGIONS.map(r => (
+                    <SelectItem 
+                      key={r} 
+                      value={r} 
+                      className="text-white hover:bg-[#333333] focus:bg-[#333333] focus:text-white"
+                    >
                       {r}
-                    </SelectItem>)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -174,10 +164,16 @@ const Sidebar = ({
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Creative Entities
             </h2>
-            <LocationList locations={locations} selectedLocation={selectedLocation} onLocationSelect={onLocationSelect} />
+            <LocationList 
+              locations={locations} 
+              selectedLocation={selectedLocation} 
+              onLocationSelect={onLocationSelect} 
+            />
           </div>
         </div>
       </ScrollArea>
-    </div>;
+    </div>
+  );
 };
+
 export default Sidebar;

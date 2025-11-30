@@ -1,231 +1,49 @@
-// Comprehensive color mapping for all location categories
-// Colors are grouped by industry/type for visual cohesion on the map
-
+// 12 distinct colors for the simplified category system
 export const CATEGORY_COLORS: Record<string, string> = {
-  // Legacy categories (keeping for backwards compatibility)
-  "Venue": "#E91E63",
-  "Studio": "#9C27B0",
-  "Festival": "#FF9800",
-  "Label": "#2196F3",
-  "Management": "#009688",
-  "Services": "#607D8B",
-  "Education": "#FF5722",
-  "Government/Peak Body": "#3F51B5",
-  "Community Organisation": "#4CAF50",
-  "Co-working/Creative Hub": "#00BCD4",
-  "Gallery/Arts Space": "#E91E63",
+  // Music Industry - Purple
+  "Music Industry": "#9C27B0",
+  
+  // Audio, Production & Post-Production - Deep Purple
+  "Audio, Production & Post-Production": "#673AB7",
+  
+  // Visual Arts, Design & Craft - Pink
+  "Visual Arts, Design & Craft": "#E91E63",
+  
+  // Culture, Heritage & Community - Green
+  "Culture, Heritage & Community": "#4CAF50",
+  
+  // Events, Festivals & Live Performance - Orange
+  "Events, Festivals & Live Performance": "#FF9800",
+  
+  // Media, Content & Communications - Yellow
+  "Media, Content & Communications": "#FFC107",
+  
+  // Education, Training & Professional Development - Lime
+  "Education, Training & Professional Development": "#CDDC39",
+  
+  // Workspaces, Fabrication & Creative Infrastructure - Brown
+  "Workspaces, Fabrication & Creative Infrastructure": "#795548",
+  
+  // Creative Technology & Emerging Media - Indigo
+  "Creative Technology & Emerging Media": "#3F51B5",
+  
+  // Software, Development & Digital Platforms - Blue
+  "Software, Development & Digital Platforms": "#2196F3",
+  
+  // Media Infrastructure & Cloud Technology - Cyan
+  "Media Infrastructure & Cloud Technology": "#00BCD4",
+  
+  // Business, Logistics & Support Services - Blue Grey
+  "Business, Logistics & Support Services": "#607D8B",
+  
+  // Fallback for legacy/unmapped categories
   "Other": "#9E9E9E",
-
-  // Music & Recording (Purple/Magenta family)
-  "Record Labels": "#9C27B0",
-  "Music Venues": "#E91E63",
-  "Recording Studios": "#AB47BC",
-  "Rehearsal Studios": "#BA68C8",
-  "Post-Production Studios": "#CE93D8",
-  "Music Publishers": "#8E24AA",
-  "Music Distributors": "#7B1FA2",
-  "Micro-labels": "#D81B60",
-  "Sync Licensing Agencies": "#C2185B",
-  "Music Supervisors": "#AD1457",
-  "Composer Services": "#880E4F",
-  "Audio Sample Library Companies": "#6A1B9A",
-  "Music Data & Analytics Platforms": "#4A148C",
-  "Music Education Platforms & Tutors": "#7C4DFF",
-  "Instrument Makers & Luthiers": "#651FFF",
-  "Audio Hardware Manufacturers": "#536DFE",
-  "Music Monetisation Platforms": "#7E57C2",
-  "Music Recommendation Engines": "#673AB7",
-  "Community Radio Stations": "#5E35B1",
-  "Music Retailers & Instrument Stores": "#512DA8",
-
-  // Live Events & Festivals (Amber/Orange family)
-  "Festivals & Live Event Organisers": "#FF9800",
-  "Cultural Festivals": "#FFA726",
-  "Event Production & Technical Services": "#FFB74D",
-  "Lighting, Sound & Staging Companies": "#FFCC80",
-  "Event Ticketing Platforms": "#FF8F00",
-  "Festival Infrastructure Suppliers": "#FF6F00",
-  "Backline Hire Companies": "#E65100",
-  "Event Technology & RFID/NFC Systems": "#EF6C00",
-  "Show Control & Live Event Software": "#F57C00",
-  "Hybrid Events & Virtual Venue Platforms": "#FB8C00",
-
-  // Artist Services & Management (Teal/Cyan family)
-  "Artist Management Agencies": "#009688",
-  "Booking Agencies": "#00897B",
-  "Publicists & PR Agencies": "#00796B",
-  "Marketing & Creative Communications Agencies": "#00695C",
-  "Artist Services & Freelance Creative Providers": "#26A69A",
-  "Model & Talent Casting Agencies": "#4DB6AC",
-  "Location Scouts & Production Support": "#80CBC4",
-  "Touring & Logistics Companies": "#00BCD4",
-  "Creative Funding Consultants": "#00ACC1",
-  "Cultural Strategy Consultancies": "#0097A7",
-  "Professional Guilds & Industry Associations": "#00838F",
-
-  // Visual Arts & Media (Pink/Red family)
-  "Film & TV Production Companies": "#F44336",
-  "Art Galleries": "#E91E63",
-  "Photography Studios": "#EC407A",
-  "Videography Studios": "#F06292",
-  "Animation & Motion Studios": "#F48FB1",
-  "Design Studios": "#EF5350",
-  "Illustrators & Concept Artists": "#E57373",
-  "Fashion & Textile Studios": "#EF9A9A",
-  "Creative Print Shops": "#D32F2F",
-  "Zine Publishers & Micro-presses": "#C62828",
-  "Art Supply Retailers": "#B71C1C",
-  "Craft & Artisan Studios": "#FF5252",
-  "Streetwear & Creative Fashion Brands": "#FF1744",
-
-  // Technology & Digital (Blue family)
-  "Music Technology Startups": "#2196F3",
-  "Creative Technology Labs": "#1E88E5",
-  "Digital Media Agencies": "#1976D2",
-  "Web3 / Blockchain Creative Platforms": "#1565C0",
-  "Software Development Studios": "#0D47A1",
-  "Full-Stack Development Agencies": "#2962FF",
-  "Frontend/Backend Developers": "#448AFF",
-  "App Development Studios": "#82B1FF",
-  "Web Development Agencies": "#42A5F5",
-  "Custom Platform Builders": "#64B5F6",
-  "SaaS Creators": "#90CAF9",
-  "Creative Technology Agencies": "#1E88E5",
-  "AI Research & Development Labs": "#0288D1",
-  "AI-Driven Creative Studios": "#0277BD",
-  "AI Video/Audio Generation Platforms": "#01579B",
-  "AI Creative Production Studios": "#039BE5",
-  "AI Music Generation Platforms": "#03A9F4",
-  "Machine Learning Engineers": "#29B6F6",
-  "Data Science & Analytics Firms": "#4FC3F7",
-  "Data Engineering Services": "#81D4FA",
-  "Digital Signal Processing Companies": "#B3E5FC",
-  "Audio AI Companies": "#00B0FF",
-  "Audio Plugin Developers": "#40C4FF",
-  "DAW Developers": "#80D8FF",
-  "Creative Tools & Productivity Software Makers": "#E1F5FE",
-  "Creative Tools & Software Providers": "#0091EA",
-  "Streaming Technology Platforms": "#00B8D4",
-  "Cloud Media Infrastructure Providers": "#00E5FF",
-  "Cybersecurity for Creative Industries": "#18FFFF",
-  "DevOps & Cloud Engineering Services": "#84FFFF",
-  "API Providers & Developer Platforms": "#A7FFEB",
-  "Audio Infrastructure Platforms": "#64FFDA",
-  "Video Encoding & Live-stream Tech": "#1DE9B6",
-  "Creative Automation Platforms": "#00BFA5",
-  "DRM & Rights Management Services": "#69F0AE",
-  "Asset Management & Metadata Software": "#B9F6CA",
-  "Digital Preservation Technology": "#00E676",
-
-  // Gaming & Immersive (Indigo/Deep Purple family)
-  "Game Development Studios": "#3F51B5",
-  "XR/AR/VR Studios": "#3949AB",
-  "Immersive Media Creators": "#303F9F",
-  "Immersive Technology Labs": "#283593",
-  "3D Modelling & Simulation Studios": "#1A237E",
-  "Virtual Production Studios": "#304FFE",
-  "Realtime Engine Specialists": "#536DFE",
-  "Game Audio & Interactive Sound Designers": "#8C9EFF",
-  "Interactive Media Designers": "#C5CAE9",
-  "Motion Capture Studios": "#5C6BC0",
-  "Projection Mapping Studios": "#7986CB",
-  "Projection Mapping Tech Providers": "#9FA8DA",
-  "Generative Art Studios": "#E8EAF6",
-  "Creative Coding Studios": "#6200EA",
-  "Interactive Installation Technologists": "#7C4DFF",
-  "Metaverse Experience Builders": "#B388FF",
-  "NFT Art Platforms": "#EA80FC",
-  "Digital Collectible Creators": "#E040FB",
-  "Smart Contract Developers": "#D500F9",
-
-  // Cultural & Community Spaces (Green family)
-  "Cultural Centres": "#4CAF50",
-  "Community Arts Organisations": "#43A047",
-  "Artist-Run Initiatives": "#388E3C",
-  "Creative Hubs & Coworking Spaces": "#2E7D32",
-  "Creative Coworking/Hotdesk Spaces": "#1B5E20",
-  "Cultural Heritage Organisations": "#66BB6A",
-  "Museums & Exhibition Spaces": "#81C784",
-  "Public Art Producers": "#A5D6A7",
-  "Indigenous Art Centres": "#C8E6C9",
-  "Regional Creative Networks": "#00C853",
-  "Cultural Tourism Operators": "#00E676",
-  "Civic & Urban Creative Placemaking Organisations": "#69F0AE",
-  "Cultural Research & Policy Organisations": "#B9F6CA",
-  "Cultural Mapping Organisations": "#2E7D32",
-  "Arts Foundations & Funders": "#558B2F",
-  "Creative Social Enterprises": "#689F38",
-  "Community Makers Markets": "#7CB342",
-  "Open Studios & Artist Exchanges": "#8BC34A",
-
-  // Performing Arts (Deep Orange family)
-  "Theatre Companies": "#FF5722",
-  "Dance Companies": "#F4511E",
-  "Immersive Theatre Companies": "#E64A19",
-  "Dance Schools & Academies": "#D84315",
-  "Voiceover Studios": "#BF360C",
-  "Sound Art & Experimental Media Groups": "#FF6E40",
-  "Lighting Designers & Visual Effects Artists": "#FF3D00",
-  "Lighting Control System Developers": "#DD2C00",
-
-  // Education & Development (Lime/Yellow-Green family)
-  "Education & Training Providers": "#CDDC39",
-  "Talent Development Programs & Residencies": "#C0CA33",
-  "Creative Workshops & Education Providers": "#AFB42B",
-  "Creative Retreats & Residency Spaces": "#9E9D24",
-  "Creative Incubators & Accelerators": "#827717",
-  "Public Music Programs & Youth Music Foundations": "#D4E157",
-  "Interdisciplinary Art–Tech Labs": "#DCE775",
-  "Makerspaces & Fab Labs": "#E6EE9C",
-  "Creative Fabrication Workshops": "#F0F4C3",
-  "3D Printing & Fabrication Tech Studios": "#F9FBE7",
-  "Digital Fabrication Labs": "#AEEA00",
-
-  // Content & Media (Yellow family)
-  "Content Creators & Creative Influencers": "#FFEB3B",
-  "Podcast Studios & Networks": "#FDD835",
-  "Live Streaming Production Studios": "#FBC02D",
-  "Content Syndication Networks": "#F9A825",
-  "Independent Media Outlets": "#F57F17",
-  "Storytelling & Narrative Design Studios": "#FFEE58",
-  "Production Companies": "#FFF176",
-  "Independent Artists & Bands": "#FFF59D",
-  "DJs & Electronic Producers": "#FFF9C4",
-  "Audio Engineers & Mix/Mastering Services": "#FFFDE7",
-  "Artist Collectives & Creative Co-ops": "#FFD600",
-
-  // Tech Infrastructure & Platforms (Blue-Grey family)
-  "Creative Marketplaces & Digital Platforms": "#607D8B",
-  "Online Creative Marketplaces": "#546E7A",
-  "E-commerce Platforms for Creators": "#455A64",
-  "Multi-vendor Marketplace Platforms": "#37474F",
-  "White-label Ticketing Providers": "#263238",
-  "Venue Discovery Platforms": "#78909C",
-  "Artist Portfolio Platforms": "#90A4AE",
-  "Creative Data & Metadata Services": "#B0BEC5",
-  "Archival & Digitisation Services": "#CFD8DC",
-  "Crowdfunding Platforms for Creators": "#ECEFF1",
-  
-  // Specialty Tech (Cyan/Turquoise family)
-  "Spatial Audio Technology Companies": "#00BCD4",
-  "Embedded Systems for Art & Music": "#00ACC1",
-  "Creative Robotics Labs": "#0097A7",
-  "IoT & Wearable Tech Designers": "#00838F",
-  "Wearable Tech Creators": "#006064",
-  "Haptics & Sensory Experience Companies": "#26C6DA",
-  
-  // Production & Fabrication (Brown family)
-  "Set Designers & Scenic Fabricators": "#795548",
-  "Prop & Costume Workshops": "#6D4C41",
-  "Creative Industrial Designers": "#5D4037",
 };
 
-// Get color for a category with fallback
 export function getCategoryColor(category: string): string {
   return CATEGORY_COLORS[category] || CATEGORY_COLORS["Other"];
 }
 
-// Get all unique colors (for legend)
 export function getUniqueColors(): string[] {
   return [...new Set(Object.values(CATEGORY_COLORS))];
 }
