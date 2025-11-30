@@ -62,8 +62,8 @@ const Topbar = ({
       <div className="pr-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-md bg-muted hover:bg-muted/80">
-              <Menu className="h-5 w-5 text-white" />
+            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-md bg-[#333333] hover:bg-[#444444]">
+              <Menu className="h-5 w-5" color="white" />
             </Button>
           </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
