@@ -105,10 +105,10 @@ const Sidebar = ({
   return (
     <div className="h-full w-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
       {/* Scrollable Content */}
-      <ScrollArea className="flex-1 w-full">
-        <div className="p-4 space-y-6 bg-card-foreground w-full">
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-4 bg-card-foreground">
           {/* SEARCH Section */}
-          <div className="w-full">
+          <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Search
             </h2>
@@ -138,10 +138,10 @@ const Sidebar = ({
                 placeholder="Search by keyword" 
                 value={searchQuery} 
                 onChange={e => onSearchChange(e.target.value)} 
-                className="w-full text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" 
+                className="text-sm bg-[#111111] text-white placeholder:text-gray-400 border-[#111111]" 
               />
               <Select value={region} onValueChange={onRegionChange}>
-                <SelectTrigger className="w-full text-sm bg-[#111111] text-white border-[#111111]">
+                <SelectTrigger className="text-sm bg-[#111111] text-white border-[#111111]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#111111] text-white border-[#111111] max-h-[300px]">
@@ -160,7 +160,7 @@ const Sidebar = ({
           </div>
 
           {/* CREATIVE ENTITIES Section */}
-          <div className="w-full">
+          <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
               Creative Entities
             </h2>

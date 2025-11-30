@@ -173,7 +173,7 @@ const Index = () => {
       <div className="flex-1 flex">
         {/* Fixed Width Sidebar */}
         {!isSidebarCollapsed && (
-          <div className="w-[340px] flex-shrink-0 border-r border-black">
+          <div className="w-[400px] flex-shrink-0 border-r border-black overflow-hidden">
             <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />
           </div>
         )}
