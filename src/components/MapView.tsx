@@ -25,7 +25,13 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
   const hasInitiallyFitBounds = useRef(false);
+  const initialLocationsRef = useRef<Tables<"locations">[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
+
+  // Store first non-empty locations for initial bounds fit
+  if (locations.length > 0 && initialLocationsRef.current.length === 0) {
+    initialLocationsRef.current = locations;
+  }
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
   const [savedToken, setSavedToken] = useState<string | null>(
@@ -114,8 +120,13 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     markers.current.forEach((marker) => marker.remove());
     markers.current = [];
 
+    // Store ref to current map to avoid closure issues
+    const currentMap = map.current;
+
     // Add new markers
     locations.forEach((location) => {
+      if (!currentMap) return;
+      
       const el = document.createElement("div");
       el.className = "custom-marker";
       el.style.width = "24px";
@@ -136,7 +147,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([location.longitude, location.latitude])
-        .addTo(map.current!);
+        .addTo(currentMap);
 
       el.addEventListener("click", () => {
         onLocationSelect(location);
@@ -144,17 +155,20 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
 
       markers.current.push(marker);
     });
-
-    // Fit bounds only on initial load
-    if (locations.length > 0 && !hasInitiallyFitBounds.current) {
-      const bounds = new mapboxgl.LngLatBounds();
-      locations.forEach((loc) => {
-        bounds.extend([loc.longitude, loc.latitude]);
-      });
-      map.current.fitBounds(bounds, { padding: 50, maxZoom: 12 });
-      hasInitiallyFitBounds.current = true;
-    }
   }, [locations, mapLoaded, onLocationSelect]);
+
+  // Fit bounds ONLY ONCE on initial load - separate effect to prevent re-triggering
+  useEffect(() => {
+    if (!map.current || !mapLoaded || hasInitiallyFitBounds.current) return;
+    if (initialLocationsRef.current.length === 0) return;
+
+    const bounds = new mapboxgl.LngLatBounds();
+    initialLocationsRef.current.forEach((loc) => {
+      bounds.extend([loc.longitude, loc.latitude]);
+    });
+    map.current.fitBounds(bounds, { padding: 50, maxZoom: 12 });
+    hasInitiallyFitBounds.current = true;
+  }, [mapLoaded]); // Only depend on mapLoaded, NOT locations
 
   // Fly to selected location
   useEffect(() => {
