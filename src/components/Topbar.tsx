@@ -51,11 +51,9 @@ const Topbar = ({
   };
   return <header className={`h-14 flex-shrink-0 border-b-2 border-black bg-background flex items-center justify-between w-full p-0 m-0 ${className || ''}`}>
       <div className="flex items-center h-full pl-5">
-        <Button variant="ghost" size="icon" onClick={onToggleSidebar} className="h-full w-14 rounded-none p-0 m-0 bg-primary-glow">
-          {isSidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </Button>
         
-        <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto object-contain ml-3" />
+        
+        <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto ml-3 object-fill" />
       </div>
 
       {/* User Menu */}
