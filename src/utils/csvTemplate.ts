@@ -44,8 +44,8 @@ const TEMPLATE_HEADERS = [
 
 const EXAMPLE_ROW = [
   'Example Venue',
-  'Venue',
-  'Music Venue',
+  'Events, Festivals & Live Performance',
+  'Live Music Venue',
   '123 Main Street',
   'Melbourne',
   'VIC',
@@ -65,7 +65,7 @@ const EXAMPLE_ROW = [
 
 const VALIDATION_NOTES = [
   'Required field',
-  'Must be: Venue, Studio, Festival, Label, Management, Services, Education, Government/Peak Body, Community Organisation, Co-working/Creative Hub, Gallery/Arts Space, or Other',
+  'Must be one of: Music Industry, Audio Production & Post-Production, Visual Arts Design & Craft, Culture Heritage & Community, Events Festivals & Live Performance, Media Content & Communications, Education Training & Professional Development, Workspaces Fabrication & Creative Infrastructure, Creative Technology & Emerging Media, Software Development & Digital Platforms, Media Infrastructure & Cloud Technology, Business Logistics & Support Services',
   'Optional additional category detail',
   'Full street address',
   'Suburb/City name',

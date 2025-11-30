@@ -1,11 +1,10 @@
 import { useState, useMemo } from "react";
-import { Check, ChevronsUpDown, Search } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -15,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CATEGORY_GROUPS, getAllCategories } from "@/utils/categoryGroups";
+import { CATEGORIES } from "@/utils/categoryGroups";
 
 interface CategorySelectProps {
   value: string;
@@ -33,16 +32,13 @@ export function CategorySelect({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredGroups = useMemo(() => {
-    if (!searchQuery) return CATEGORY_GROUPS;
+  const filteredCategories = useMemo(() => {
+    if (!searchQuery) return CATEGORIES;
 
     const query = searchQuery.toLowerCase();
-    return CATEGORY_GROUPS.map((group) => ({
-      ...group,
-      categories: group.categories.filter((cat) =>
-        cat.toLowerCase().includes(query)
-      ),
-    })).filter((group) => group.categories.length > 0);
+    return CATEGORIES.filter((cat) =>
+      cat.toLowerCase().includes(query)
+    );
   }, [searchQuery]);
 
   return (
@@ -69,28 +65,24 @@ export function CategorySelect({
           />
           <CommandList className="max-h-[300px]">
             <CommandEmpty>No category found.</CommandEmpty>
-            {filteredGroups.map((group) => (
-              <CommandGroup key={group.name} heading={group.name}>
-                {group.categories.map((category) => (
-                  <CommandItem
-                    key={category}
-                    value={category}
-                    onSelect={() => {
-                      onValueChange(category);
-                      setOpen(false);
-                      setSearchQuery("");
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        value === category ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                    {category}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+            {filteredCategories.map((category) => (
+              <CommandItem
+                key={category}
+                value={category}
+                onSelect={() => {
+                  onValueChange(category);
+                  setOpen(false);
+                  setSearchQuery("");
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === category ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {category}
+              </CommandItem>
             ))}
           </CommandList>
         </Command>
