@@ -53,7 +53,7 @@ const Topbar = ({
       <div className="flex items-center h-full pl-5">
         
         
-        <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto ml-3 object-fill" />
+        <img src={logoImage} alt="Creative Atlas" className="h-10 w-auto ml-3 object-fill" />
       </div>
 
       {/* User Menu */}
