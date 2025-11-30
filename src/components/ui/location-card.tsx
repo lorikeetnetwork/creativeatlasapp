@@ -23,7 +23,7 @@ const LocationCard = ({
   return (
     <div
       className={cn(
-        "relative cursor-pointer transition-all duration-300 hover:scale-[1.02]",
+        "relative cursor-pointer transition-all duration-300 hover:scale-[1.02] w-full",
         isSelected && "scale-[1.02]",
         className
       )}
