@@ -102,9 +102,9 @@ const Sidebar = ({
   onSignIn
 }: SidebarProps) => {
   return (
-    <div className="h-full flex flex-col bg-background border-r shadow-sm overflow-hidden">
-      <div className="flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="p-4 space-y-4 bg-card-foreground">
+    <div className="h-full flex flex-col bg-card-foreground border-r shadow-sm overflow-hidden">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-card-foreground">
+        <div className="p-4 space-y-4">
           {/* SEARCH Section */}
           <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
