@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { GradientButton } from "@/components/ui/gradient-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -97,23 +97,23 @@ const Landing = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
-              <Button key={item.label} onClick={item.onClick}>
+              <GradientButton key={item.label} onClick={item.onClick}>
                 {item.label}
-              </Button>
+              </GradientButton>
             ))}
           </nav>
 
           {/* Mobile Menu Button */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="h-10 w-10">
+              <GradientButton variant="ghost" size="icon" className="h-10 w-10">
                 <Menu className="h-5 w-5 text-white" />
-              </Button>
+              </GradientButton>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] bg-[#121212] border-[#333]">
               <div className="flex flex-col gap-4 mt-8">
                 {navItems.map((item) => (
-                  <Button
+                  <GradientButton
                     key={item.label}
                     variant="ghost"
                     className="justify-start text-lg h-12 text-white hover:bg-[#222]"
@@ -123,7 +123,7 @@ const Landing = () => {
                     }}
                   >
                     {item.label}
-                  </Button>
+                  </GradientButton>
                 ))}
               </div>
             </SheetContent>
@@ -299,14 +299,14 @@ const Landing = () => {
                 Join our community and discover the spaces that bring creativity to life. It's free!
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4">
-                <Button size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
+                <GradientButton size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
                   View the Map
                   <Map className="h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2 border-[#333] hover:bg-[#1a1a1a] text-white">
+                </GradientButton>
+                <GradientButton size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2 border-[#333] hover:bg-[#1a1a1a] text-white">
                   Create Free Account
                   <ArrowRight className="h-5 w-5" />
-                </Button>
+                </GradientButton>
               </div>
             </CardContent>
           </Card>
