@@ -160,7 +160,7 @@ const Sidebar = ({
           {/* CREATIVE ENTITIES Section */}
           <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
-              Creative Entities
+              Creative Entities <span className="font-normal text-gray-600">({locations.length} in view)</span>
             </h2>
             <LocationList 
               locations={locations} 

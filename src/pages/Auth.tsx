@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 import { MapPin, Loader2 } from "lucide-react";
 
 const Auth = () => {
@@ -48,11 +49,11 @@ const Auth = () => {
       });
     } else {
       toast({
-        title: "Success!",
-        description: "Redirecting you to choose your plan...",
+        title: "Account created!",
+        description: "Welcome! Redirecting you to the map...",
       });
-      // Redirect to pricing page after successful signup
-      setTimeout(() => navigate("/pricing"), 1500);
+      // Redirect to map page after successful signup (free account)
+      setTimeout(() => navigate("/map"), 1500);
     }
   };
 
@@ -84,12 +85,15 @@ const Auth = () => {
         <CardHeader className="space-y-3 text-center">
           <div className="flex items-center justify-center gap-2 text-primary">
             <MapPin className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Creative Map</h1>
+            <h1 className="text-3xl font-bold">Creative Atlas</h1>
           </div>
           <CardTitle>Australia's Creative Directory</CardTitle>
           <CardDescription>
             Connect with venues, studios, and creative spaces across Australia
           </CardDescription>
+          <Badge variant="secondary" className="mx-auto px-3 py-1">
+            100% FREE to browse
+          </Badge>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
@@ -165,8 +169,11 @@ const Auth = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Account"}
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Free Account"}
                 </Button>
+                <p className="text-xs text-center text-muted-foreground">
+                  No credit card required. Free forever.
+                </p>
               </form>
             </TabsContent>
           </Tabs>
