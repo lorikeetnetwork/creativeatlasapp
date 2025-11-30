@@ -23,8 +23,8 @@ const LocationCard = ({
   return (
     <div
       className={cn(
-        "relative cursor-pointer transition-all duration-300 hover:scale-[1.02] w-full rounded-[20px] p-[2px]",
-        isSelected ? "scale-[1.02]" : "opacity-80 hover:opacity-100",
+        "cursor-pointer transition-all duration-200 rounded-[16px] p-[2px] box-border",
+        isSelected ? "opacity-100" : "opacity-80 hover:opacity-100",
         className
       )}
       style={{
@@ -33,7 +33,7 @@ const LocationCard = ({
       onClick={onClick}
     >
       {/* Inner card with dark background */}
-      <div className="w-full rounded-[18px] bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] p-3">
+      <div className="rounded-[14px] bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] p-3">
         <h3 className="font-semibold text-sm text-white truncate">{name}</h3>
         <p className="text-xs text-white/60 truncate mt-0.5">
           {category} • {suburb}, {state}

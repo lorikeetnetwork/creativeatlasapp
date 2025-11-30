@@ -27,7 +27,7 @@ const LocationList = ({
   }
 
   return (
-    <div className="space-y-3 w-full">
+    <div className="space-y-2 w-full">
       {locations.map((location) => {
         const isSelected = selectedLocation?.id === location.id;
         return (
