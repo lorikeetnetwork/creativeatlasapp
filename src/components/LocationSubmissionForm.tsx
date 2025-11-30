@@ -33,7 +33,10 @@ const formSchema = z.object({
   website: z.string().url("Invalid URL").max(255).optional().or(z.literal("")),
   instagram: z.string().max(100).optional(),
   other_social: z.string().max(255).optional(),
-  capacity: z.number().int().positive().optional().or(z.literal(undefined)),
+  capacity: z.preprocess(
+    (val) => (val === "" || val === undefined || val === null || Number.isNaN(val) ? undefined : Number(val)),
+    z.number().int().positive().optional()
+  ),
   best_for: z.string().max(500).optional(),
   accessibility_notes: z.string().max(500).optional(),
 });
