@@ -6,13 +6,21 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getCategoryColor } from "@/utils/categoryColors";
 
+export interface MapBounds {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+}
+
 interface MapViewProps {
   locations: Tables<"locations">[];
   selectedLocation: Tables<"locations"> | null;
   onLocationSelect: (location: Tables<"locations">) => void;
+  onBoundsChange?: (bounds: MapBounds) => void;
 }
 
-const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps) => {
+const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange }: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
@@ -57,6 +65,29 @@ const MapView = ({ locations, selectedLocation, onLocationSelect }: MapViewProps
 
       map.current.on("load", () => {
         setMapLoaded(true);
+        // Emit initial bounds
+        if (map.current && onBoundsChange) {
+          const bounds = map.current.getBounds();
+          onBoundsChange({
+            north: bounds.getNorth(),
+            south: bounds.getSouth(),
+            east: bounds.getEast(),
+            west: bounds.getWest(),
+          });
+        }
+      });
+
+      // Listen for map movement to update bounds
+      map.current.on("moveend", () => {
+        if (map.current && onBoundsChange) {
+          const bounds = map.current.getBounds();
+          onBoundsChange({
+            north: bounds.getNorth(),
+            south: bounds.getSouth(),
+            east: bounds.getEast(),
+            west: bounds.getWest(),
+          });
+        }
       });
 
       map.current.on("error", (e) => {

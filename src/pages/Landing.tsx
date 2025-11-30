@@ -296,7 +296,7 @@ const Landing = () => {
             </CardHeader>
             <CardContent className="space-y-6 md:space-y-8">
               <CardDescription className="text-lg md:text-xl max-w-2xl mx-auto text-gray-400">
-                Join our community and discover the spaces that bring creativity to life
+                Join our community and discover the spaces that bring creativity to life. It's free!
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4">
                 <Button size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
@@ -304,7 +304,7 @@ const Landing = () => {
                   <Map className="h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2 border-[#333] hover:bg-[#1a1a1a] text-white">
-                  Create Account
+                  Create Free Account
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </div>
