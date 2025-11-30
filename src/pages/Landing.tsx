@@ -156,6 +156,8 @@ const Landing = () => {
       {/* Hero Section */}
       <FuturisticAlienHero />
 
+      <Separator className="bg-border" />
+
       {/* Intro Text Section */}
       <section className="py-16 md:py-20 bg-[#121212]">
         <div className="container mx-auto px-4">
