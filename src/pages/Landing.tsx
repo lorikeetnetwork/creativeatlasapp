@@ -107,7 +107,7 @@ const Landing = () => {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="text-foreground hover:bg-transparent hover:border hover:border-orange-500 transition-colors">
+            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors">
                 {item.label}
               </Button>)}
           </nav>
@@ -119,14 +119,14 @@ const Landing = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] bg-background border-border">
+            <SheetContent side="right" className="w-[280px] bg-[#121212] border-border">
               <div className="flex flex-col gap-4 mt-8">
-              {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12 text-foreground hover:bg-transparent hover:border hover:border-orange-500 transition-colors" onClick={() => {
-                item.onClick();
-                setMobileMenuOpen(false);
-              }}>
-                    {item.label}
-                  </Button>)}
+                {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors" onClick={() => {
+                  item.onClick();
+                  setMobileMenuOpen(false);
+                }}>
+                  {item.label}
+                </Button>)}
               </div>
             </SheetContent>
           </Sheet>
