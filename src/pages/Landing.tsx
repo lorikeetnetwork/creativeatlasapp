@@ -107,7 +107,7 @@ const Landing = () => {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="bg-secondary-foreground text-destructive">
+            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="text-foreground hover:bg-transparent hover:border hover:border-orange-500 transition-colors">
                 {item.label}
               </Button>)}
           </nav>
@@ -121,7 +121,7 @@ const Landing = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] bg-background border-border">
               <div className="flex flex-col gap-4 mt-8">
-                {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12" onClick={() => {
+              {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12 text-foreground hover:bg-transparent hover:border hover:border-orange-500 transition-colors" onClick={() => {
                 item.onClick();
                 setMobileMenuOpen(false);
               }}>
