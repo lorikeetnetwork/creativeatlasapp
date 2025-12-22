@@ -107,7 +107,7 @@ const Landing = () => {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="bg-destructive text-[#c4c4c4]">
+            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="bg-secondary-foreground text-destructive">
                 {item.label}
               </Button>)}
           </nav>
