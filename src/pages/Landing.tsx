@@ -10,11 +10,9 @@ import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
 import { Map, Search, MapPin, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Building, Heart, Briefcase, ChevronRight, Menu, Sparkles, Lightbulb, Users2, Mic2, FlaskConical } from "lucide-react";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
-
 const Landing = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   const features = [{
     icon: Map,
     title: "Collaborative Mapping",
@@ -32,7 +30,6 @@ const Landing = () => {
     title: "Community-Driven Contributions",
     description: "Submit your own space, initiative, collective, or project to strengthen the network and increase visibility for authentic creative collaboration."
   }];
-  
   const categories = [{
     name: "Venue",
     icon: Building2
@@ -76,7 +73,6 @@ const Landing = () => {
     name: "Innovation Lab",
     icon: FlaskConical
   }];
-  
   const steps = [{
     number: "01",
     title: "Browse the Network",
@@ -90,25 +86,18 @@ const Landing = () => {
     title: "Contribute Your Space or Project",
     description: "Sign in to add your venue, initiative, or creative hub and join a growing network committed to collaboration and societal good."
   }];
-
-  const highlights = [
-    "Venues, studios, stages, and live music infrastructure",
-    "Festivals, producers, and cultural organisers",
-    "Creative hubs, coworking spaces, and community centres",
-    "Arts organisations, collectives, and peak bodies",
-    "Digital and emerging technology projects that are \"good for society\"",
-    "Education, training, and professional pathways",
-    "Management, labels, platforms, and production partners"
-  ];
-
-  const navItems = [
-    { label: "Pricing", onClick: () => navigate("/pricing") },
-    { label: "Explore Map", onClick: () => navigate("/map") },
-    { label: "Sign In", onClick: () => navigate("/auth") },
-  ];
-  
-  return (
-    <div className="min-h-screen bg-background">
+  const highlights = ["Venues, studios, stages, and live music infrastructure", "Festivals, producers, and cultural organisers", "Creative hubs, coworking spaces, and community centres", "Arts organisations, collectives, and peak bodies", "Digital and emerging technology projects that are \"good for society\"", "Education, training, and professional pathways", "Management, labels, platforms, and production partners"];
+  const navItems = [{
+    label: "Pricing",
+    onClick: () => navigate("/pricing")
+  }, {
+    label: "Explore Map",
+    onClick: () => navigate("/map")
+  }, {
+    label: "Sign In",
+    onClick: () => navigate("/auth")
+  }];
+  return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-background sticky top-0 z-50">
         <div className="h-16 flex items-center justify-between w-full px-4 md:px-5 bg-[#121212]">
@@ -118,11 +107,9 @@ const Landing = () => {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            {navItems.map((item) => (
-              <Button key={item.label} variant="ghost" onClick={item.onClick} className="text-foreground hover:bg-muted">
+            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="bg-destructive text-[#c4c4c4]">
                 {item.label}
-              </Button>
-            ))}
+              </Button>)}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -134,19 +121,12 @@ const Landing = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] bg-background border-border">
               <div className="flex flex-col gap-4 mt-8">
-                {navItems.map((item) => (
-                  <Button
-                    key={item.label}
-                    variant="ghost"
-                    className="justify-start text-lg h-12"
-                    onClick={() => {
-                      item.onClick();
-                      setMobileMenuOpen(false);
-                    }}
-                  >
+                {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12" onClick={() => {
+                item.onClick();
+                setMobileMenuOpen(false);
+              }}>
                     {item.label}
-                  </Button>
-                ))}
+                  </Button>)}
               </div>
             </SheetContent>
           </Sheet>
@@ -186,8 +166,7 @@ const Landing = () => {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {features.map((feature, index) => (
-              <Card key={index} className="transition-all duration-300 hover:shadow-lg group bg-[#1a1a1a] border-[#333]">
+            {features.map((feature, index) => <Card key={index} className="transition-all duration-300 hover:shadow-lg group bg-[#1a1a1a] border-[#333]">
                 <CardHeader className="pb-3">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-[#333]">
                     <feature.icon className="w-6 h-6 text-white" />
@@ -201,8 +180,7 @@ const Landing = () => {
                     {feature.description}
                   </CardDescription>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -228,12 +206,10 @@ const Landing = () => {
               <div className="text-left max-w-xl mx-auto">
                 <p className="text-sm font-medium text-white mb-3">The Creative Atlas highlights:</p>
                 <ul className="space-y-2">
-                  {highlights.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-400 flex items-start gap-2">
+                  {highlights.map((item, index) => <li key={index} className="text-sm text-gray-400 flex items-start gap-2">
                       <span className="text-primary mt-1">•</span>
                       {item}
-                    </li>
-                  ))}
+                    </li>)}
                 </ul>
               </div>
             </CardContent>
@@ -266,8 +242,7 @@ const Landing = () => {
             </CardHeader>
           </Card>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {steps.map((step, index) => (
-              <div key={index} className="relative text-center group">
+            {steps.map((step, index) => <div key={index} className="relative text-center group">
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full text-xl md:text-2xl font-bold flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg group-hover:scale-105 transition-all duration-300 bg-white text-[#121212]">
                   {step.number}
                 </div>
@@ -277,11 +252,8 @@ const Landing = () => {
                 <p className="text-sm md:text-base text-gray-400">
                   {step.description}
                 </p>
-                {index < steps.length - 1 && (
-                  <ChevronRight className="hidden md:block absolute top-10 -right-4 w-8 h-8 text-gray-600" />
-                )}
-              </div>
-            ))}
+                {index < steps.length - 1 && <ChevronRight className="hidden md:block absolute top-10 -right-4 w-8 h-8 text-gray-600" />}
+              </div>)}
           </div>
         </div>
       </section>
@@ -307,12 +279,7 @@ const Landing = () => {
             </CardContent>
           </Card>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4 max-w-6xl mx-auto">
-            {categories.map((category, index) => (
-              <Card 
-                key={index} 
-                className="cursor-pointer transition-all duration-300 hover:shadow-md group bg-[#1a1a1a] border-[#333]" 
-                onClick={() => navigate("/map")}
-              >
+            {categories.map((category, index) => <Card key={index} className="cursor-pointer transition-all duration-300 hover:shadow-md group bg-[#1a1a1a] border-[#333]" onClick={() => navigate("/map")}>
                 <CardContent className="p-3 md:p-4 flex flex-col items-center text-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-[#333] flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
@@ -321,8 +288,7 @@ const Landing = () => {
                     {category.name}
                   </span>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -373,11 +339,9 @@ const Landing = () => {
               </span>
             </div>
             <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm">
-              {["About", "Contact", "Terms", "Privacy"].map(link => (
-                <button key={link} className="text-gray-400 hover:text-white transition-colors py-2">
+              {["About", "Contact", "Terms", "Privacy"].map(link => <button key={link} className="text-gray-400 hover:text-white transition-colors py-2">
                   {link}
-                </button>
-              ))}
+                </button>)}
             </div>
           </div>
           
@@ -398,8 +362,6 @@ const Landing = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Landing;
