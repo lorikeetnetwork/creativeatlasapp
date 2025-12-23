@@ -12,6 +12,22 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-ACCOUNT-PAYMENT] ${step}${detailsStr}`);
 };
 
+// Price IDs for yearly subscriptions
+const PRICE_IDS = {
+  basic_account: 'price_1Sh37nCxyWFCnV0cO69jutux', // $15 AUD/year
+  creative_listing: 'price_1ShPnwCxyWFCnV0c8O6fxc3O', // $20 AUD/year
+};
+
+const ACCOUNT_TYPES = {
+  basic_account: 'basic_paid',
+  creative_listing: 'creative_entity',
+};
+
+const AMOUNTS = {
+  basic_account: 1500,
+  creative_listing: 2000,
+};
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -37,11 +53,15 @@ serve(async (req) => {
     }
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    // Only support creative_listing payment type
-    const payment_type = 'creative_listing';
+    // Get payment type from request body
+    const { payment_type } = await req.json();
+    
+    if (!payment_type || !['basic_account', 'creative_listing'].includes(payment_type)) {
+      throw new Error("Invalid payment type. Must be 'basic_account' or 'creative_listing'");
+    }
     logStep("Payment type requested", { payment_type });
 
-    // Check if user already has a creative entity listing
+    // Check if user already has the requested account type
     const { data: profile } = await supabaseClient
       .from('profiles')
       .select('account_type')
@@ -53,6 +73,10 @@ serve(async (req) => {
 
     if (currentAccountType === 'creative_entity') {
       throw new Error("User already has a creative entity listing");
+    }
+    
+    if (payment_type === 'basic_account' && currentAccountType === 'basic_paid') {
+      throw new Error("User already has a basic paid account");
     }
 
     // Initialize Stripe
@@ -72,12 +96,13 @@ serve(async (req) => {
       logStep("No existing Stripe customer");
     }
 
-    // Creative listing price ID
-    const priceId = 'price_1SXIy4CxyWFCnV0cPNh5pgh9'; // $15 AUD
+    const priceId = PRICE_IDS[payment_type as keyof typeof PRICE_IDS];
+    const accountTypeGranted = ACCOUNT_TYPES[payment_type as keyof typeof ACCOUNT_TYPES];
+    const amount = AMOUNTS[payment_type as keyof typeof AMOUNTS];
     
-    logStep("Price ID selected", { priceId });
+    logStep("Price ID selected", { priceId, accountTypeGranted });
 
-    // Create a one-time payment session
+    // Create a subscription session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -87,7 +112,7 @@ serve(async (req) => {
           quantity: 1,
         },
       ],
-      mode: "payment",
+      mode: "subscription",
       success_url: `${req.headers.get("origin")}/payment-success?type=${payment_type}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/pricing`,
       metadata: {
@@ -101,12 +126,12 @@ serve(async (req) => {
     // Store payment record
     await supabaseClient.from('payments').insert({
       user_id: user.id,
-      amount: 1500,
+      amount: amount,
       currency: 'AUD',
       status: 'pending',
       stripe_session_id: session.id,
       payment_type: payment_type,
-      account_type_granted: 'creative_entity',
+      account_type_granted: accountTypeGranted,
     });
     
     logStep("Payment record created");
