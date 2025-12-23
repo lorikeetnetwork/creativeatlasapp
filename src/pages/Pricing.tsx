@@ -34,7 +34,7 @@ const Pricing = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
-  const handlePayment = async () => {
+  const handlePayment = async (paymentType: 'basic_account' | 'creative_listing') => {
     if (!session) {
       toast({
         title: "Sign in required",
@@ -50,7 +50,7 @@ const Pricing = () => {
         error
       } = await supabase.functions.invoke('create-account-payment', {
         body: {
-          payment_type: 'creative_listing'
+          payment_type: paymentType
         }
       });
       if (error) throw error;
@@ -119,21 +119,65 @@ const Pricing = () => {
       {/* Hero Section */}
       <section className="py-12 md:py-20 bg-[#1a1a1a]">
         <div className="container mx-auto px-4 text-center">
-          <Badge className="mb-4 bg-[#333] text-white border-[#444]">One-Time Payment</Badge>
+          <Badge className="mb-4 bg-[#333] text-white border-[#444]">Yearly Subscription</Badge>
           <h1 className="text-3xl md:text-6xl font-bold mb-4 md:mb-6 text-white">
-            List Your Creative Business
+            Join Australia's Creative Community
           </h1>
           <p className="text-base md:text-xl text-gray-400 max-w-2xl mx-auto">
-            Free to browse. One-time payment to list your business on Australia's creative community map.
+            Affordable yearly plans for all users and creative businesses.
           </p>
         </div>
       </section>
 
       {/* Pricing Cards */}
       <section className="py-12 md:py-20 container mx-auto px-4">
-        <div className="max-w-2xl mx-auto mb-12 md:mb-20">
-          {/* Creative Listing Card */}
+        <div className="max-w-4xl mx-auto mb-12 md:mb-20 grid md:grid-cols-2 gap-6">
+          {/* Basic User Card */}
           <Card className="border-[#333] bg-[#1a1a1a]">
+            <CardHeader className="text-center">
+              <div className="flex justify-center mb-4">
+                <Badge variant="outline" className="gap-2 border-[#444] text-white">
+                  For All Users
+                </Badge>
+              </div>
+              <CardTitle className="text-2xl md:text-3xl text-white">Basic Account</CardTitle>
+              <CardDescription className="text-base md:text-lg mt-2 text-gray-400">
+                Full access to browse and save creative spaces
+              </CardDescription>
+              <div className="mt-4 md:mt-6">
+                <span className="text-5xl md:text-6xl font-bold text-white">$15</span>
+                <span className="text-gray-400 ml-2 text-sm md:text-base">AUD/year</span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {["Browse all creative spaces", "Save favorite locations", "Access to full map features", "Community updates", "Priority notifications"].map((feature, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                    <span className="text-sm md:text-base text-white">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <GradientButton 
+                className="w-full text-sm md:text-base" 
+                size="lg" 
+                variant="outline"
+                onClick={() => handlePayment('basic_account')} 
+                disabled={isLoadingListing}
+              >
+                {isLoadingListing ? "Processing..." : "Get Basic - $15/year"}
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </GradientButton>
+            </CardFooter>
+          </Card>
+
+          {/* Creative Listing Card */}
+          <Card className="border-primary/50 bg-[#1a1a1a] relative">
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
+            </div>
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
                 <Badge variant="outline" className="gap-2 border-[#444] text-white">
@@ -141,26 +185,33 @@ const Pricing = () => {
                   For Creative Businesses
                 </Badge>
               </div>
-              <CardTitle className="text-2xl md:text-4xl text-white">Creative Entity Listing</CardTitle>
-              <CardDescription className="text-base md:text-lg mt-2 text-gray-400">Full business profile with showcase features
-
-            </CardDescription>
+              <CardTitle className="text-2xl md:text-3xl text-white">Creative Entity Listing</CardTitle>
+              <CardDescription className="text-base md:text-lg mt-2 text-gray-400">
+                Full business profile with showcase features
+              </CardDescription>
               <div className="mt-4 md:mt-6">
-                <span className="text-5xl md:text-6xl font-bold text-white">$15</span>
-                <span className="text-gray-400 ml-2 text-sm md:text-base">AUD one-time payment</span>
+                <span className="text-5xl md:text-6xl font-bold text-white">$20</span>
+                <span className="text-gray-400 ml-2 text-sm md:text-base">AUD/year</span>
               </div>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {listingFeatures.map((feature, index) => <li key={index} className="flex items-start gap-2">
+                {listingFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-sm md:text-base text-white">{feature}</span>
-                  </li>)}
+                  </li>
+                ))}
               </ul>
             </CardContent>
             <CardFooter>
-              <GradientButton className="w-full text-sm md:text-base" size="lg" onClick={handlePayment} disabled={isLoadingListing}>
-                {isLoadingListing ? "Processing..." : "List Your Business - $15"}
+              <GradientButton 
+                className="w-full text-sm md:text-base" 
+                size="lg" 
+                onClick={() => handlePayment('creative_listing')} 
+                disabled={isLoadingListing}
+              >
+                {isLoadingListing ? "Processing..." : "List Your Business - $20/year"}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </GradientButton>
             </CardFooter>
@@ -197,12 +248,12 @@ const Pricing = () => {
 
             <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base md:text-lg text-white">How long does my listing stay active?</CardTitle>
+                <CardTitle className="text-base md:text-lg text-white">How does the yearly subscription work?</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm md:text-base text-gray-400">
-                  Your listing remains active permanently. This is a one-time payment with no recurring fees. 
-                  You maintain full control over your profile and can update it anytime.
+                  Your subscription renews annually. You maintain full control over your profile and can update it anytime.
+                  Cancel anytime before renewal to stop future charges.
                 </p>
               </CardContent>
             </Card>
