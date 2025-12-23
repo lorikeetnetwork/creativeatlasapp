@@ -47,10 +47,13 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    // Retrieve the session from Stripe
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+    // Retrieve the session from Stripe with subscription expansion
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      expand: ['subscription']
+    });
     logStep("Stripe session retrieved", { 
       status: session.payment_status,
+      mode: session.mode,
       metadata: session.metadata 
     });
 
@@ -58,7 +61,20 @@ serve(async (req) => {
       const payment_type = session.metadata.payment_type;
       const accountType = payment_type === 'basic_account' ? 'basic_paid' : 'creative_entity';
       
-      // Update user profile
+      // Handle subscription data
+      let subscriptionId = null;
+      let subscriptionStatus = 'active';
+      let subscriptionEndDate = null;
+
+      if (session.mode === 'subscription' && session.subscription) {
+        const subscription = session.subscription as Stripe.Subscription;
+        subscriptionId = subscription.id;
+        subscriptionStatus = subscription.status;
+        subscriptionEndDate = new Date(subscription.current_period_end * 1000).toISOString();
+        logStep("Subscription details", { subscriptionId, subscriptionStatus, subscriptionEndDate });
+      }
+      
+      // Update user profile with subscription data
       const { error: profileError } = await supabaseClient
         .from('profiles')
         .update({
@@ -66,7 +82,9 @@ serve(async (req) => {
           payment_verified: true,
           payment_date: new Date().toISOString(),
           stripe_customer_id: session.customer as string,
-          stripe_payment_intent_id: session.payment_intent as string,
+          stripe_subscription_id: subscriptionId,
+          subscription_status: subscriptionStatus,
+          subscription_end_date: subscriptionEndDate,
         })
         .eq('id', user.id);
       
@@ -85,11 +103,14 @@ serve(async (req) => {
         .eq('stripe_session_id', session_id)
         .eq('user_id', user.id);
       
-      logStep("Profile and payment updated successfully", { accountType });
+      logStep("Profile and payment updated successfully", { accountType, subscriptionId });
 
       return new Response(JSON.stringify({ 
         success: true, 
-        account_type: accountType 
+        account_type: accountType,
+        subscription_id: subscriptionId,
+        subscription_status: subscriptionStatus,
+        subscription_end_date: subscriptionEndDate
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
