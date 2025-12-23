@@ -4,11 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Check, Building2, ArrowRight, Menu } from "lucide-react";
+import { Check, Building2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
-import logoImage from "@/assets/creative-atlas-logo.png";
+import Navbar from "@/components/Navbar";
+
 const Pricing = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoadingListing, setIsLoadingListing] = useState(false);
@@ -73,48 +73,9 @@ const Pricing = () => {
     }
   };
   const listingFeatures = ["Your location on the map", "Full business profile page", "Photo & offerings galleries", "Videos & current projects", "Contact forms & social links", "Admin dashboard access", "Priority support"];
-  const navItems = [{
-    label: "Explore Map",
-    onClick: () => navigate("/map")
-  }, {
-    label: session ? "Dashboard" : "Sign In",
-    onClick: () => navigate(session ? "/dashboard" : "/auth")
-  }];
-  return <div className="min-h-screen bg-[#121212]">
-      {/* Header */}
-      <header className="border-b border-[#333] bg-[#121212] sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img src={logoImage} alt="Creative Atlas" className="h-8 md:h-10 w-auto object-contain" />
-          </div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-3">
-            {navItems.map(item => <GradientButton key={item.label} onClick={item.onClick}>
-                {item.label}
-              </GradientButton>)}
-          </div>
 
-          {/* Mobile Menu */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <GradientButton variant="ghost" size="icon" className="h-10 w-10">
-                <Menu className="h-5 w-5 text-white" />
-              </GradientButton>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] bg-[#121212] border-[#333]">
-              <div className="flex flex-col gap-4 mt-8">
-                {navItems.map(item => <GradientButton key={item.label} variant="ghost" className="justify-start text-lg h-12 text-white hover:bg-[#222]" onClick={() => {
-                item.onClick();
-                setMobileMenuOpen(false);
-              }}>
-                    {item.label}
-                  </GradientButton>)}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </header>
+  return <div className="min-h-screen bg-[#121212]">
+      <Navbar session={session} />
 
       {/* Hero Section */}
       <section className="py-12 md:py-20 bg-[#1a1a1a]">

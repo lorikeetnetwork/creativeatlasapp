@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, CreditCard, RefreshCw, Settings, Calendar, CheckCircle, AlertCircle, XCircle } from "lucide-react";
+import { CreditCard, RefreshCw, Settings, Calendar, CheckCircle, AlertCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import creativeLogo from "@/assets/creative-atlas-logo.png";
+import Navbar from "@/components/Navbar";
 
 interface SubscriptionData {
   subscribed: boolean;
@@ -138,20 +138,8 @@ const Subscription = () => {
   const isPaidAccount = profile?.account_type === 'basic_paid' || profile?.account_type === 'creative_entity';
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src={creativeLogo} alt="Creative Atlas" className="h-8" />
-            <span className="text-xl font-semibold text-foreground">Subscription</span>
-          </div>
-          <Button variant="outline" onClick={() => navigate('/dashboard')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#121212]">
+      <Navbar />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Current Plan Card */}
