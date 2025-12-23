@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, ArrowLeft } from "lucide-react";
+import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import { formatDistanceToNow } from "date-fns";
@@ -15,6 +15,8 @@ interface Profile {
   payment_date: string | null;
   full_name: string | null;
   email: string;
+  subscription_status: string | null;
+  subscription_end_date: string | null;
 }
 
 interface Payment {
@@ -58,7 +60,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('*')
+        .select('account_type, payment_verified, payment_date, full_name, email, subscription_status, subscription_end_date')
         .eq('id', userId)
         .single();
 
@@ -199,7 +201,16 @@ const Dashboard = () => {
                     <p className="text-xs md:text-sm text-gray-400 break-all">{profile.email}</p>
                   </div>
 
-                  {profile.payment_verified && profile.payment_date && (
+                  {profile.subscription_status === 'active' && profile.subscription_end_date && (
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
+                      <Calendar className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      <span>
+                        Renews {new Date(profile.subscription_end_date).toLocaleDateString('en-AU', { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                  )}
+
+                  {profile.payment_verified && !profile.subscription_end_date && profile.payment_date && (
                     <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                       <span>
@@ -246,6 +257,12 @@ const Dashboard = () => {
               <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm" onClick={() => navigate('/map')}>
                 Browse Map
               </GradientButton>
+              {(profile.account_type === 'creative_entity' || profile.account_type === 'basic_paid') && (
+                <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm" onClick={() => navigate('/subscription')}>
+                  <Settings className="w-4 h-4 mr-2" />
+                  Manage Subscription
+                </GradientButton>
+              )}
               {profile.account_type === 'creative_entity' && (
                 <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm">
                   Add Location
