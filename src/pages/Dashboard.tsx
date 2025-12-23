@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import logoImage from "@/assets/creative-atlas-logo.png";
 import { formatDistanceToNow } from "date-fns";
+import Navbar from "@/components/Navbar";
 
 interface Profile {
   account_type: 'free' | 'basic_paid' | 'creative_entity';
@@ -157,21 +157,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#121212]">
-      {/* Header */}
-      <header className="border-b border-[#333] bg-[#121212] sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-14 md:h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img 
-              src={logoImage} 
-              alt="Creative Atlas" 
-              className="h-8 md:h-10 w-auto object-contain"
-            />
-          </div>
-          <GradientButton size="sm" onClick={() => navigate("/map")}>
-            Back to Map
-          </GradientButton>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6 md:py-12 max-w-6xl">

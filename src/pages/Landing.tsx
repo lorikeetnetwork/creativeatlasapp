@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useNavigate } from "react-router-dom";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
-import { Map, Search, MapPin, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Building, Heart, Briefcase, ChevronRight, Menu, Sparkles, Lightbulb, Users2, Mic2, FlaskConical } from "lucide-react";
+import { Map, Search, MapPin, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Building, Heart, Briefcase, ChevronRight, Sparkles, Lightbulb, Users2, Mic2, FlaskConical } from "lucide-react";
+import Navbar from "@/components/Navbar";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
+
 const Landing = () => {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const features = [{
     icon: Map,
     title: "Collaborative Mapping",
@@ -87,51 +86,10 @@ const Landing = () => {
     description: "Sign in to add your venue, initiative, or creative hub and join a growing network committed to collaboration and societal good."
   }];
   const highlights = ["Venues, studios, stages, and live music infrastructure", "Festivals, producers, and cultural organisers", "Creative hubs, coworking spaces, and community centres", "Arts organisations, collectives, and peak bodies", "Digital and emerging technology projects that are \"good for society\"", "Education, training, and professional pathways", "Management, labels, platforms, and production partners"];
-  const navItems = [{
-    label: "Pricing",
-    onClick: () => navigate("/pricing")
-  }, {
-    label: "Explore Map",
-    onClick: () => navigate("/map")
-  }, {
-    label: "Sign In",
-    onClick: () => navigate("/auth")
-  }];
+
   return <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-background sticky top-0 z-50">
-        <div className="h-16 flex items-center justify-between w-full px-4 md:px-5 bg-[#121212]">
-          <div className="flex items-center gap-3">
-            <img src={logoImage} alt="Creative Atlas" className="h-10 md:h-14 w-auto object-contain" />
-          </div>
-          
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2">
-            {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors">
-                {item.label}
-              </Button>)}
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="h-10 w-10">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] bg-[#121212] border-border">
-              <div className="flex flex-col gap-4 mt-8">
-                {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors" onClick={() => {
-                  item.onClick();
-                  setMobileMenuOpen(false);
-                }}>
-                  {item.label}
-                </Button>)}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero Section */}
       <FuturisticAlienHero />

@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Loader2 } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -80,7 +81,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-primary/5 p-4">
+    <div className="min-h-screen bg-[#121212]">
+      <Navbar />
+      <div className="flex items-center justify-center p-4 py-12">
       <Card className="w-full max-w-md shadow-warm">
         <CardHeader className="space-y-3 text-center">
           <div className="flex items-center justify-center gap-2 text-primary">
@@ -179,6 +182,7 @@ const Auth = () => {
           </Tabs>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };
