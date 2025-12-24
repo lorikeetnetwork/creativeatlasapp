@@ -102,12 +102,12 @@ const Sidebar = ({
   onSignIn
 }: SidebarProps) => {
   return (
-    <div className="h-full flex flex-col bg-card-foreground border-r shadow-sm overflow-hidden">
-      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-card-foreground">
+    <div className="h-full flex flex-col bg-background border-r border-border shadow-sm overflow-hidden">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
         <div className="p-4 space-y-4">
           {/* SEARCH Section */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
               Search
             </h2>
             <div className="space-y-3">
@@ -159,8 +159,8 @@ const Sidebar = ({
 
           {/* CREATIVE ENTITIES Section */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
-              Creative Entities <span className="font-normal text-gray-600">({locations.length} in view)</span>
+            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
+              Creative Entities <span className="font-normal text-muted-foreground">({locations.length} in view)</span>
             </h2>
             <LocationList 
               locations={locations} 
