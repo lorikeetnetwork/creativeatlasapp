@@ -48,8 +48,8 @@ const App = () => (
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/business/:locationId" element={<BusinessProfile />} />
           
-          {/* Protected routes - require subscription */}
-          <Route path="/admin" element={<SubscriptionGate featureName="Admin Dashboard"><Admin /></SubscriptionGate>} />
+          {/* Admin - role-based access, not subscription-based */}
+          <Route path="/admin" element={<Admin />} />
           <Route path="/dashboard" element={<SubscriptionGate featureName="Dashboard"><Dashboard /></SubscriptionGate>} />
           
           {/* Blog - protected */}
