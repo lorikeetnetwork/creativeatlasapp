@@ -20,6 +20,13 @@ import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import EventEditor from "./pages/EventEditor";
 import MyEvents from "./pages/MyEvents";
+import Opportunities from "./pages/Opportunities";
+import OpportunityDetail from "./pages/OpportunityDetail";
+import OpportunityEditor from "./pages/OpportunityEditor";
+import MyOpportunities from "./pages/MyOpportunities";
+import Community from "./pages/Community";
+import MemberProfile from "./pages/MemberProfile";
+import EditMemberProfile from "./pages/EditMemberProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +57,14 @@ const App = () => (
           <Route path="/events/edit/:id" element={<EventEditor />} />
           <Route path="/events/my-events" element={<MyEvents />} />
           <Route path="/events/:slug" element={<EventDetail />} />
+          <Route path="/opportunities" element={<Opportunities />} />
+          <Route path="/opportunities/new" element={<OpportunityEditor />} />
+          <Route path="/opportunities/edit/:id" element={<OpportunityEditor />} />
+          <Route path="/opportunities/my-opportunities" element={<MyOpportunities />} />
+          <Route path="/opportunities/:slug" element={<OpportunityDetail />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/community/profile/:id" element={<MemberProfile />} />
+          <Route path="/community/edit-profile" element={<EditMemberProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

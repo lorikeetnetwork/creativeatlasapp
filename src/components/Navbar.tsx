@@ -42,17 +42,19 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
 
   const navItems = session
     ? [
-        { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
         { label: "Events", onClick: () => navigate("/events") },
+        { label: "Opportunities", onClick: () => navigate("/opportunities") },
+        { label: "Community", onClick: () => navigate("/community") },
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Dashboard", onClick: () => navigate("/dashboard") },
         { label: "Sign Out", onClick: handleSignOut },
       ]
     : [
-        { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
         { label: "Events", onClick: () => navigate("/events") },
+        { label: "Opportunities", onClick: () => navigate("/opportunities") },
+        { label: "Community", onClick: () => navigate("/community") },
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Sign In", onClick: () => navigate("/auth") },
       ];
