@@ -16,7 +16,7 @@ const AuthPromptOverlay = () => {
           </div>
           <div className="space-y-2">
             <Badge variant="secondary" className="px-3 py-1 text-sm font-medium">
-              100% FREE
+              FREE to explore
             </Badge>
             <CardTitle className="text-2xl font-bold">
               Create a Free Account

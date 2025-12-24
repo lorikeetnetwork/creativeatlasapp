@@ -95,7 +95,7 @@ const Auth = () => {
             Connect with venues, studios, and creative spaces across Australia
           </CardDescription>
           <Badge variant="secondary" className="mx-auto px-3 py-1">
-            100% FREE to browse
+            FREE to browse
           </Badge>
         </CardHeader>
         <CardContent>
