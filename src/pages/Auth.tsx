@@ -94,9 +94,6 @@ const Auth = () => {
           <CardDescription>
             Connect with venues, studios, and creative spaces across Australia
           </CardDescription>
-          <Badge variant="secondary" className="mx-auto px-3 py-1">
-            FREE to browse
-          </Badge>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
@@ -172,10 +169,10 @@ const Auth = () => {
                   />
                 </div>
                 <GradientButton type="submit" className="w-full" disabled={loading}>
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Free Account"}
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Account"}
                 </GradientButton>
                 <p className="text-xs text-center text-muted-foreground">
-                  No credit card required. Free forever.
+                  Subscription required after sign up to access all features.
                 </p>
               </form>
             </TabsContent>

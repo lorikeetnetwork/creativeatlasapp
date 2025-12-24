@@ -247,7 +247,7 @@ const Pricing = () => {
               Explore the Map
             </GradientButton>
             <GradientButton size="lg" variant="outline" onClick={() => navigate("/auth")} className="border-[#333] text-white hover:bg-[#1a1a1a]">
-              Sign Up Free
+              Get Started
             </GradientButton>
           </div>
         </div>
