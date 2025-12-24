@@ -197,12 +197,13 @@ const Pricing = () => {
 
             <Card className="border-[#333] bg-[#1a1a1a]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base md:text-lg text-white">Is it really free to browse?</CardTitle>
+                <CardTitle className="text-base md:text-lg text-white">What's included with a subscription?</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm md:text-base text-gray-400">
-                  Yes! You can create a free account and browse all locations on the map with no payment required. 
-                  Only pay if you want to list your creative business.
+                  A subscription unlocks access to all features including Events, Opportunities Board, 
+                  Community Directory, Blog, and the ability to create your own member profile. 
+                  You can browse the map for free, but premium features require a subscription.
                 </p>
               </CardContent>
             </Card>

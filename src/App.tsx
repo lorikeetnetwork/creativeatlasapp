@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SubscriptionGate } from "@/components/SubscriptionGate";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -38,33 +39,45 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/map" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/business/:locationId" element={<BusinessProfile />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/new" element={<BlogEditor />} />
-          <Route path="/blog/edit/:id" element={<BlogEditor />} />
-          <Route path="/blog/my-articles" element={<MyArticles />} />
-          <Route path="/blog/:slug" element={<BlogArticle />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/events/new" element={<EventEditor />} />
-          <Route path="/events/edit/:id" element={<EventEditor />} />
-          <Route path="/events/my-events" element={<MyEvents />} />
-          <Route path="/events/:slug" element={<EventDetail />} />
-          <Route path="/opportunities" element={<Opportunities />} />
-          <Route path="/opportunities/new" element={<OpportunityEditor />} />
-          <Route path="/opportunities/edit/:id" element={<OpportunityEditor />} />
-          <Route path="/opportunities/my-opportunities" element={<MyOpportunities />} />
-          <Route path="/opportunities/:slug" element={<OpportunityDetail />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/community/profile/:id" element={<MemberProfile />} />
-          <Route path="/community/edit-profile" element={<EditMemberProfile />} />
+          
+          {/* Protected routes - require subscription */}
+          <Route path="/admin" element={<SubscriptionGate featureName="Admin Dashboard"><Admin /></SubscriptionGate>} />
+          <Route path="/dashboard" element={<SubscriptionGate featureName="Dashboard"><Dashboard /></SubscriptionGate>} />
+          
+          {/* Blog - protected */}
+          <Route path="/blog" element={<SubscriptionGate featureName="Blog"><Blog /></SubscriptionGate>} />
+          <Route path="/blog/new" element={<SubscriptionGate featureName="Blog Editor"><BlogEditor /></SubscriptionGate>} />
+          <Route path="/blog/edit/:id" element={<SubscriptionGate featureName="Blog Editor"><BlogEditor /></SubscriptionGate>} />
+          <Route path="/blog/my-articles" element={<SubscriptionGate featureName="My Articles"><MyArticles /></SubscriptionGate>} />
+          <Route path="/blog/:slug" element={<SubscriptionGate featureName="Blog Articles"><BlogArticle /></SubscriptionGate>} />
+          
+          {/* Events - protected */}
+          <Route path="/events" element={<SubscriptionGate featureName="Events"><Events /></SubscriptionGate>} />
+          <Route path="/events/new" element={<SubscriptionGate featureName="Event Editor"><EventEditor /></SubscriptionGate>} />
+          <Route path="/events/edit/:id" element={<SubscriptionGate featureName="Event Editor"><EventEditor /></SubscriptionGate>} />
+          <Route path="/events/my-events" element={<SubscriptionGate featureName="My Events"><MyEvents /></SubscriptionGate>} />
+          <Route path="/events/:slug" element={<SubscriptionGate featureName="Event Details"><EventDetail /></SubscriptionGate>} />
+          
+          {/* Opportunities - protected */}
+          <Route path="/opportunities" element={<SubscriptionGate featureName="Opportunities"><Opportunities /></SubscriptionGate>} />
+          <Route path="/opportunities/new" element={<SubscriptionGate featureName="Opportunity Editor"><OpportunityEditor /></SubscriptionGate>} />
+          <Route path="/opportunities/edit/:id" element={<SubscriptionGate featureName="Opportunity Editor"><OpportunityEditor /></SubscriptionGate>} />
+          <Route path="/opportunities/my-opportunities" element={<SubscriptionGate featureName="My Opportunities"><MyOpportunities /></SubscriptionGate>} />
+          <Route path="/opportunities/:slug" element={<SubscriptionGate featureName="Opportunity Details"><OpportunityDetail /></SubscriptionGate>} />
+          
+          {/* Community - protected */}
+          <Route path="/community" element={<SubscriptionGate featureName="Community Directory"><Community /></SubscriptionGate>} />
+          <Route path="/community/profile/:id" element={<SubscriptionGate featureName="Member Profile"><MemberProfile /></SubscriptionGate>} />
+          <Route path="/community/edit-profile" element={<SubscriptionGate featureName="Edit Profile"><EditMemberProfile /></SubscriptionGate>} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
