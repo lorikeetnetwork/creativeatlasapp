@@ -415,6 +415,304 @@ export type Database = {
           },
         ]
       }
+      discussion_likes: {
+        Row: {
+          created_at: string
+          discussion_id: string | null
+          id: string
+          reply_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          discussion_id?: string | null
+          id?: string
+          reply_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          discussion_id?: string | null
+          id?: string
+          reply_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_likes_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_likes_reply_id_fkey"
+            columns: ["reply_id"]
+            isOneToOne: false
+            referencedRelation: "discussion_replies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussion_replies: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          discussion_id: string
+          id: string
+          parent_reply_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          discussion_id: string
+          id?: string
+          parent_reply_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          discussion_id?: string
+          id?: string
+          parent_reply_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_replies_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_replies_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_replies_parent_reply_id_fkey"
+            columns: ["parent_reply_id"]
+            isOneToOne: false
+            referencedRelation: "discussion_replies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussions: {
+        Row: {
+          author_id: string
+          category: Database["public"]["Enums"]["discussion_category"]
+          content: Json | null
+          created_at: string
+          id: string
+          is_locked: boolean | null
+          is_pinned: boolean | null
+          last_activity_at: string | null
+          reply_count: number | null
+          slug: string
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author_id: string
+          category?: Database["public"]["Enums"]["discussion_category"]
+          content?: Json | null
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_activity_at?: string | null
+          reply_count?: number | null
+          slug: string
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author_id?: string
+          category?: Database["public"]["Enums"]["discussion_category"]
+          content?: Json | null
+          created_at?: string
+          id?: string
+          is_locked?: boolean | null
+          is_pinned?: boolean | null
+          last_activity_at?: string | null
+          reply_count?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_rsvps: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          status: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_rsvps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_rsvps_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          category: Database["public"]["Enums"]["location_category"] | null
+          cover_image_url: string | null
+          created_at: string
+          creator_id: string
+          description: string | null
+          end_date: string | null
+          end_time: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          excerpt: string | null
+          id: string
+          is_featured: boolean | null
+          is_free: boolean | null
+          is_online: boolean | null
+          location_id: string | null
+          online_url: string | null
+          slug: string
+          start_date: string
+          start_time: string | null
+          status: Database["public"]["Enums"]["event_status"]
+          ticket_price_max: number | null
+          ticket_price_min: number | null
+          ticket_url: string | null
+          title: string
+          updated_at: string
+          venue_address: string | null
+          venue_name: string | null
+          view_count: number | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["location_category"] | null
+          cover_image_url?: string | null
+          created_at?: string
+          creator_id: string
+          description?: string | null
+          end_date?: string | null
+          end_time?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          is_online?: boolean | null
+          location_id?: string | null
+          online_url?: string | null
+          slug: string
+          start_date: string
+          start_time?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          ticket_price_max?: number | null
+          ticket_price_min?: number | null
+          ticket_url?: string | null
+          title: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["location_category"] | null
+          cover_image_url?: string | null
+          created_at?: string
+          creator_id?: string
+          description?: string | null
+          end_date?: string | null
+          end_time?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          is_online?: boolean | null
+          location_id?: string | null
+          online_url?: string | null
+          slug?: string
+          start_date?: string
+          start_time?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          ticket_price_max?: number | null
+          ticket_price_min?: number | null
+          ticket_url?: string | null
+          title?: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       location_photos: {
         Row: {
           caption: string | null
@@ -552,6 +850,436 @@ export type Database = {
         }
         Relationships: []
       }
+      member_portfolio_items: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          member_id: string
+          project_url: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          member_id: string
+          project_url?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          member_id?: string
+          project_url?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_portfolio_items_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "member_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      member_profiles: {
+        Row: {
+          avatar_url: string | null
+          banner_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          experience_years: number | null
+          id: string
+          instagram: string | null
+          is_available_for_collaboration: boolean | null
+          is_available_for_hire: boolean | null
+          is_mentor: boolean | null
+          is_public: boolean | null
+          linkedin: string | null
+          other_social: string | null
+          portfolio_url: string | null
+          primary_discipline:
+            | Database["public"]["Enums"]["location_category"]
+            | null
+          skills: string[] | null
+          state: string | null
+          suburb: string | null
+          tagline: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          experience_years?: number | null
+          id?: string
+          instagram?: string | null
+          is_available_for_collaboration?: boolean | null
+          is_available_for_hire?: boolean | null
+          is_mentor?: boolean | null
+          is_public?: boolean | null
+          linkedin?: string | null
+          other_social?: string | null
+          portfolio_url?: string | null
+          primary_discipline?:
+            | Database["public"]["Enums"]["location_category"]
+            | null
+          skills?: string[] | null
+          state?: string | null
+          suburb?: string | null
+          tagline?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          experience_years?: number | null
+          id?: string
+          instagram?: string | null
+          is_available_for_collaboration?: boolean | null
+          is_available_for_hire?: boolean | null
+          is_mentor?: boolean | null
+          is_public?: boolean | null
+          linkedin?: string | null
+          other_social?: string | null
+          portfolio_url?: string | null
+          primary_discipline?:
+            | Database["public"]["Enums"]["location_category"]
+            | null
+          skills?: string[] | null
+          state?: string | null
+          suburb?: string | null
+          tagline?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_matches: {
+        Row: {
+          created_at: string
+          id: string
+          mentee_id: string
+          mentor_id: string
+          request_id: string
+          status: Database["public"]["Enums"]["mentorship_match_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mentee_id: string
+          mentor_id: string
+          request_id: string
+          status?: Database["public"]["Enums"]["mentorship_match_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mentee_id?: string
+          mentor_id?: string
+          request_id?: string
+          status?: Database["public"]["Enums"]["mentorship_match_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_matches_mentee_id_fkey"
+            columns: ["mentee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentorship_matches_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentorship_matches_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_requests: {
+        Row: {
+          areas_seeking_help: string[] | null
+          created_at: string
+          description: string
+          id: string
+          mentor_id: string | null
+          preferred_format:
+            | Database["public"]["Enums"]["preferred_format"]
+            | null
+          requester_id: string
+          status: Database["public"]["Enums"]["mentorship_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          areas_seeking_help?: string[] | null
+          created_at?: string
+          description: string
+          id?: string
+          mentor_id?: string | null
+          preferred_format?:
+            | Database["public"]["Enums"]["preferred_format"]
+            | null
+          requester_id: string
+          status?: Database["public"]["Enums"]["mentorship_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          areas_seeking_help?: string[] | null
+          created_at?: string
+          description?: string
+          id?: string
+          mentor_id?: string | null
+          preferred_format?:
+            | Database["public"]["Enums"]["preferred_format"]
+            | null
+          requester_id?: string
+          status?: Database["public"]["Enums"]["mentorship_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_requests_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "member_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentorship_requests_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          is_verified: boolean | null
+          preferences: Json | null
+          subscribed_at: string
+          unsubscribed_at: string | null
+          user_id: string | null
+          verification_token: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_verified?: boolean | null
+          preferences?: Json | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+          verification_token?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_verified?: boolean | null
+          preferences?: Json | null
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+          verification_token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_subscribers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunities: {
+        Row: {
+          application_email: string | null
+          application_url: string | null
+          category: Database["public"]["Enums"]["location_category"] | null
+          compensation_details: string | null
+          compensation_type: Database["public"]["Enums"]["compensation_type"]
+          created_at: string
+          deadline: string | null
+          description: string
+          experience_level:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          id: string
+          is_featured: boolean | null
+          is_remote: boolean | null
+          location_id: string | null
+          location_text: string | null
+          opportunity_type: Database["public"]["Enums"]["opportunity_type"]
+          poster_id: string
+          slug: string
+          start_date: string | null
+          status: Database["public"]["Enums"]["opportunity_status"]
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          application_email?: string | null
+          application_url?: string | null
+          category?: Database["public"]["Enums"]["location_category"] | null
+          compensation_details?: string | null
+          compensation_type?: Database["public"]["Enums"]["compensation_type"]
+          created_at?: string
+          deadline?: string | null
+          description: string
+          experience_level?:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          id?: string
+          is_featured?: boolean | null
+          is_remote?: boolean | null
+          location_id?: string | null
+          location_text?: string | null
+          opportunity_type: Database["public"]["Enums"]["opportunity_type"]
+          poster_id: string
+          slug: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          application_email?: string | null
+          application_url?: string | null
+          category?: Database["public"]["Enums"]["location_category"] | null
+          compensation_details?: string | null
+          compensation_type?: Database["public"]["Enums"]["compensation_type"]
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          experience_level?:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          id?: string
+          is_featured?: boolean | null
+          is_remote?: boolean | null
+          location_id?: string | null
+          location_text?: string | null
+          opportunity_type?: Database["public"]["Enums"]["opportunity_type"]
+          poster_id?: string
+          slug?: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunities_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunities_poster_id_fkey"
+            columns: ["poster_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunity_applications: {
+        Row: {
+          cover_message: string | null
+          created_at: string
+          id: string
+          opportunity_id: string
+          resume_url: string | null
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cover_message?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id: string
+          resume_url?: string | null
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cover_message?: string | null
+          created_at?: string
+          id?: string
+          opportunity_id?: string
+          resume_url?: string | null
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunity_applications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           account_type_granted:
@@ -659,6 +1387,173 @@ export type Database = {
         }
         Relationships: []
       }
+      resource_tags: {
+        Row: {
+          resource_id: string
+          tag_id: string
+        }
+        Insert: {
+          resource_id: string
+          tag_id: string
+        }
+        Update: {
+          resource_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_tags_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          author_id: string
+          category: Database["public"]["Enums"]["location_category"] | null
+          content: Json | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          external_url: string | null
+          id: string
+          is_featured: boolean | null
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          slug: string
+          status: Database["public"]["Enums"]["article_status"]
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author_id: string
+          category?: Database["public"]["Enums"]["location_category"] | null
+          content?: Json | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          slug: string
+          status?: Database["public"]["Enums"]["article_status"]
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author_id?: string
+          category?: Database["public"]["Enums"]["location_category"] | null
+          content?: Json | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          is_featured?: boolean | null
+          resource_type?: Database["public"]["Enums"]["resource_type"]
+          slug?: string
+          status?: Database["public"]["Enums"]["article_status"]
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      showcases: {
+        Row: {
+          category: Database["public"]["Enums"]["location_category"] | null
+          collaborators: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string
+          gallery_images: string[] | null
+          id: string
+          is_approved: boolean | null
+          is_featured: boolean | null
+          linked_location_id: string | null
+          project_title: string
+          project_url: string | null
+          slug: string
+          submitted_by: string
+          tags: string[] | null
+          video_url: string | null
+          view_count: number | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["location_category"] | null
+          collaborators?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description: string
+          gallery_images?: string[] | null
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          linked_location_id?: string | null
+          project_title: string
+          project_url?: string | null
+          slug: string
+          submitted_by: string
+          tags?: string[] | null
+          video_url?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["location_category"] | null
+          collaborators?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string
+          gallery_images?: string[] | null
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          linked_location_id?: string | null
+          project_title?: string
+          project_url?: string | null
+          slug?: string
+          submitted_by?: string
+          tags?: string[] | null
+          video_url?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "showcases_linked_location_id_fkey"
+            columns: ["linked_location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "showcases_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tags: {
         Row: {
           created_at: string
@@ -717,8 +1612,38 @@ export type Database = {
     Enums: {
       account_type: "free" | "basic_paid" | "creative_entity"
       app_role: "public" | "owner" | "admin"
+      application_status:
+        | "submitted"
+        | "reviewed"
+        | "shortlisted"
+        | "rejected"
+        | "accepted"
       article_status: "draft" | "published" | "archived"
       article_type: "article" | "update" | "announcement" | "event"
+      compensation_type:
+        | "paid"
+        | "unpaid"
+        | "honorarium"
+        | "equity"
+        | "negotiable"
+      discussion_category:
+        | "general"
+        | "help"
+        | "showcase"
+        | "opportunities"
+        | "events"
+        | "introductions"
+      event_status: "draft" | "published" | "cancelled" | "completed"
+      event_type:
+        | "workshop"
+        | "concert"
+        | "exhibition"
+        | "festival"
+        | "conference"
+        | "meetup"
+        | "networking"
+        | "other"
+      experience_level: "entry" | "mid" | "senior" | "any"
       location_category:
         | "Venue"
         | "Studio"
@@ -928,6 +1853,29 @@ export type Database = {
         | "Rejected"
         | "Inactive"
         | "PendingPayment"
+      mentorship_match_status:
+        | "pending"
+        | "accepted"
+        | "declined"
+        | "active"
+        | "completed"
+      mentorship_status:
+        | "open"
+        | "matched"
+        | "in_progress"
+        | "completed"
+        | "closed"
+      opportunity_status: "open" | "closed" | "filled"
+      opportunity_type:
+        | "job"
+        | "gig"
+        | "residency"
+        | "grant"
+        | "collaboration"
+        | "volunteer"
+        | "internship"
+      preferred_format: "virtual" | "in_person" | "either"
+      resource_type: "guide" | "template" | "tool" | "directory" | "tutorial"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1057,8 +2005,42 @@ export const Constants = {
     Enums: {
       account_type: ["free", "basic_paid", "creative_entity"],
       app_role: ["public", "owner", "admin"],
+      application_status: [
+        "submitted",
+        "reviewed",
+        "shortlisted",
+        "rejected",
+        "accepted",
+      ],
       article_status: ["draft", "published", "archived"],
       article_type: ["article", "update", "announcement", "event"],
+      compensation_type: [
+        "paid",
+        "unpaid",
+        "honorarium",
+        "equity",
+        "negotiable",
+      ],
+      discussion_category: [
+        "general",
+        "help",
+        "showcase",
+        "opportunities",
+        "events",
+        "introductions",
+      ],
+      event_status: ["draft", "published", "cancelled", "completed"],
+      event_type: [
+        "workshop",
+        "concert",
+        "exhibition",
+        "festival",
+        "conference",
+        "meetup",
+        "networking",
+        "other",
+      ],
+      experience_level: ["entry", "mid", "senior", "any"],
       location_category: [
         "Venue",
         "Studio",
@@ -1270,6 +2252,32 @@ export const Constants = {
         "Inactive",
         "PendingPayment",
       ],
+      mentorship_match_status: [
+        "pending",
+        "accepted",
+        "declined",
+        "active",
+        "completed",
+      ],
+      mentorship_status: [
+        "open",
+        "matched",
+        "in_progress",
+        "completed",
+        "closed",
+      ],
+      opportunity_status: ["open", "closed", "filled"],
+      opportunity_type: [
+        "job",
+        "gig",
+        "residency",
+        "grant",
+        "collaboration",
+        "volunteer",
+        "internship",
+      ],
+      preferred_format: ["virtual", "in_person", "either"],
+      resource_type: ["guide", "template", "tool", "directory", "tutorial"],
     },
   },
 } as const
