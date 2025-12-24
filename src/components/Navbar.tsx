@@ -44,6 +44,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
     ? [
         { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Events", onClick: () => navigate("/events") },
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Dashboard", onClick: () => navigate("/dashboard") },
         { label: "Sign Out", onClick: handleSignOut },
@@ -51,6 +52,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
     : [
         { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Events", onClick: () => navigate("/events") },
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Sign In", onClick: () => navigate("/auth") },
       ];
