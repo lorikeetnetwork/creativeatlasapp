@@ -40,7 +40,7 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                 </div>
                 <CardTitle className="text-2xl text-white">Sign In Required</CardTitle>
                 <CardDescription className="text-gray-400 text-base">
-                  Create a free account to access {featureName}
+                  Create an account and subscribe to access {featureName}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -53,7 +53,7 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </GradientButton>
                 <p className="text-sm text-gray-500">
-                  Already have an account? Sign in to continue.
+                  Starting from $15/year
                 </p>
               </CardContent>
             </Card>
