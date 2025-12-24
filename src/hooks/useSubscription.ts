@@ -6,6 +6,7 @@ interface SubscriptionState {
   isLoading: boolean;
   isAuthenticated: boolean;
   isSubscribed: boolean;
+  isAdmin: boolean;
   subscriptionStatus: string | null;
   accountType: string | null;
   subscriptionEnd: string | null;
@@ -18,6 +19,7 @@ export const useSubscription = () => {
     isLoading: true,
     isAuthenticated: false,
     isSubscribed: false,
+    isAdmin: false,
     subscriptionStatus: null,
     accountType: null,
     subscriptionEnd: null,
@@ -32,6 +34,7 @@ export const useSubscription = () => {
         isLoading: false,
         isAuthenticated: false,
         isSubscribed: false,
+        isAdmin: false,
         subscriptionStatus: null,
         accountType: null,
         subscriptionEnd: null,
@@ -42,7 +45,31 @@ export const useSubscription = () => {
     }
 
     try {
-      // Check subscription via edge function
+      // First check if user has admin/owner role - they get full access
+      const { data: roles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', session.user.id);
+      
+      const isAdmin = roles?.some(r => r.role === 'admin' || r.role === 'owner') ?? false;
+      
+      // If admin, grant full access immediately
+      if (isAdmin) {
+        setState({
+          isLoading: false,
+          isAuthenticated: true,
+          isSubscribed: true, // Admins get full access
+          isAdmin: true,
+          subscriptionStatus: 'admin',
+          accountType: 'admin',
+          subscriptionEnd: null,
+          user: session.user,
+          session,
+        });
+        return;
+      }
+
+      // Check subscription via edge function for non-admins
       const { data, error } = await supabase.functions.invoke('check-subscription');
       
       if (error) {
@@ -62,6 +89,7 @@ export const useSubscription = () => {
           isLoading: false,
           isAuthenticated: true,
           isSubscribed,
+          isAdmin: false,
           subscriptionStatus: profile?.subscription_status || null,
           accountType: profile?.account_type || null,
           subscriptionEnd: profile?.subscription_end_date || null,
@@ -77,6 +105,7 @@ export const useSubscription = () => {
         isLoading: false,
         isAuthenticated: true,
         isSubscribed,
+        isAdmin: false,
         subscriptionStatus: data?.subscription_status || null,
         accountType: null, // Will be updated from profile
         subscriptionEnd: data?.subscription_end || null,
@@ -104,6 +133,7 @@ export const useSubscription = () => {
         isLoading: false,
         isAuthenticated: true,
         isSubscribed: false,
+        isAdmin: false,
         user: session.user,
         session,
       }));
@@ -136,6 +166,7 @@ export const useSubscription = () => {
             ...prev,
             isLoading: false,
             isSubscribed: false,
+            isAdmin: false,
             subscriptionStatus: null,
             accountType: null,
             subscriptionEnd: null,
