@@ -16,6 +16,10 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import BlogEditor from "./pages/BlogEditor";
 import MyArticles from "./pages/MyArticles";
+import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
+import EventEditor from "./pages/EventEditor";
+import MyEvents from "./pages/MyEvents";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +45,11 @@ const App = () => (
           <Route path="/blog/edit/:id" element={<BlogEditor />} />
           <Route path="/blog/my-articles" element={<MyArticles />} />
           <Route path="/blog/:slug" element={<BlogArticle />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/new" element={<EventEditor />} />
+          <Route path="/events/edit/:id" element={<EventEditor />} />
+          <Route path="/events/my-events" element={<MyEvents />} />
+          <Route path="/events/:slug" element={<EventDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
