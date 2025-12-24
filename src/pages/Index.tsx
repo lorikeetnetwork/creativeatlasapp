@@ -138,7 +138,7 @@ const Index = () => {
   if (isMobile) {
     return <div className="h-screen flex flex-col bg-background">
         {/* Mobile Topbar */}
-        <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={true} onToggleSidebar={() => setMobileSheetOpen(true)} className="bg-[#fff700]" />
+        <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={true} onToggleSidebar={() => setMobileSheetOpen(true)} />
 
         {/* Full Screen Map */}
         <div className="flex-1 relative">
@@ -180,7 +180,7 @@ const Index = () => {
   // Desktop Layout
   return <div className="h-screen flex flex-col bg-background">
       {/* Topbar */}
-      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="bg-card-foreground" />
+      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
 
       {/* Fixed Layout without resize */}
       <div className="flex-1 flex">
