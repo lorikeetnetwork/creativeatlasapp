@@ -44,12 +44,14 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
     ? [
         { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Dashboard", onClick: () => navigate("/dashboard") },
         { label: "Sign Out", onClick: handleSignOut },
       ]
     : [
         { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Sign In", onClick: () => navigate("/auth") },
       ];
 
