@@ -84,16 +84,16 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
 
       <div className="flex flex-wrap gap-3">
         <Select
-          value={filters.discipline || ''}
+          value={filters.discipline || 'all'}
           onValueChange={(value) =>
-            onFiltersChange({ ...filters, discipline: value || undefined })
+            onFiltersChange({ ...filters, discipline: value === 'all' ? undefined : value })
           }
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Discipline" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Disciplines</SelectItem>
+            <SelectItem value="all">All Disciplines</SelectItem>
             {DISCIPLINES.map((d) => (
               <SelectItem key={d} value={d}>
                 {d}
@@ -103,16 +103,16 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
         </Select>
 
         <Select
-          value={filters.state || ''}
+          value={filters.state || 'all'}
           onValueChange={(value) =>
-            onFiltersChange({ ...filters, state: value || undefined })
+            onFiltersChange({ ...filters, state: value === 'all' ? undefined : value })
           }
         >
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All States</SelectItem>
+            <SelectItem value="all">All States</SelectItem>
             {STATES.map((s) => (
               <SelectItem key={s} value={s}>
                 {s}
