@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-card";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
 import { 
-  Map, Search, MapPin, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
-  GraduationCap, Building, Heart, Briefcase, ChevronRight, Sparkles, Lightbulb, 
+  Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
+  GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, 
   Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, 
-  BookOpen, Handshake, Star, Globe, Zap
+  Star, Globe, Zap
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import logoImage from "@/assets/creative-atlas-logo.png";
@@ -18,76 +18,8 @@ import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 const Landing = () => {
   const navigate = useNavigate();
   
-  const features = [
-    {
-      icon: Map,
-      title: "Interactive Map",
-      description: "Navigate Australia's creative ecosystem—venues, studios, festivals, and creative hubs, all mapped for easy discovery."
-    },
-    {
-      icon: Calendar,
-      title: "Events Calendar",
-      description: "Discover workshops, exhibitions, concerts, festivals, and networking events happening across the creative community."
-    },
-    {
-      icon: Briefcase,
-      title: "Opportunities Board",
-      description: "Find jobs, gigs, residencies, grants, and collaborations tailored to creative professionals."
-    },
-    {
-      icon: Users,
-      title: "Community Directory",
-      description: "Connect with fellow creatives, view portfolios, and find collaborators or mentors in your discipline."
-    }
-  ];
-
-  const communityFeatures = [
-    {
-      icon: FileText,
-      title: "Blog & Articles",
-      description: "Read and share insights, stories, and updates from the creative community.",
-      link: "/blog",
-      color: "text-purple-400"
-    },
-    {
-      icon: Calendar,
-      title: "Events",
-      description: "Browse and RSVP to workshops, exhibitions, concerts, and creative meetups.",
-      link: "/events",
-      color: "text-orange-400"
-    },
-    {
-      icon: Briefcase,
-      title: "Opportunities",
-      description: "Discover jobs, gigs, grants, residencies, and collaboration opportunities.",
-      link: "/opportunities",
-      color: "text-green-400"
-    },
-    {
-      icon: Users2,
-      title: "Community",
-      description: "Connect with creatives, explore portfolios, and find your next collaborator.",
-      link: "/community",
-      color: "text-blue-400"
-    },
-    {
-      icon: MessageSquare,
-      title: "Discussions",
-      description: "Join conversations, ask questions, and share knowledge with the community.",
-      link: "/discussions",
-      color: "text-pink-400"
-    },
-    {
-      icon: Award,
-      title: "Showcase",
-      description: "Celebrate outstanding creative projects and get inspired by community work.",
-      link: "/showcase",
-      color: "text-yellow-400"
-    }
-  ];
-
   const categories = [
-    { name: "Music Industry", icon: Music },
+    { name: "Music", icon: Music },
     { name: "Visual Arts", icon: Palette },
     { name: "Venues", icon: Building2 },
     { name: "Festivals", icon: Radio },
@@ -101,386 +33,394 @@ const Landing = () => {
     { name: "Events", icon: Calendar }
   ];
 
-  const steps = [
-    {
-      number: "01",
-      title: "Explore the Map",
-      description: "Use the interactive map to discover creative spaces, organisations, and initiatives across Australia."
-    },
-    {
-      number: "02",
-      title: "Join the Community",
-      description: "Create your profile, connect with fellow creatives, and participate in discussions and events."
-    },
-    {
-      number: "03",
-      title: "Find Opportunities",
-      description: "Browse jobs, gigs, grants, and collaborations—or post your own to find the perfect creative partner."
-    }
-  ];
-
-  const stats = [
-    { label: "Creative Spaces", value: "500+", icon: Building2 },
-    { label: "Community Members", value: "Growing", icon: Users },
-    { label: "Events Listed", value: "Active", icon: Calendar },
-    { label: "Opportunities", value: "Live", icon: Briefcase }
-  ];
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen bg-[#121212]">
       <Navbar />
-
-      {/* Hero Section */}
       <FuturisticAlienHero />
 
-      <Separator className="bg-border" />
-
-      {/* Intro Text Section */}
-      <section className="py-16 md:py-20 bg-[#121212]">
+      {/* Main Bento Content */}
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-4xl font-bold mb-6 text-white">
-              Australia's Creative Community Platform
-            </h2>
-            <p className="text-base md:text-lg text-gray-400 leading-relaxed mb-8">
-              More than a map—Creative Atlas is your gateway to discovering spaces, connecting with creatives, 
-              finding opportunities, and engaging with Australia's thriving creative ecosystem.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" onClick={() => navigate("/map")} className="gap-2">
-                <Map className="h-5 w-5" />
-                Explore Map
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate("/events")} className="gap-2">
-                <Calendar className="h-5 w-5" />
-                Browse Events
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate("/opportunities")} className="gap-2">
-                <Briefcase className="h-5 w-5" />
-                Find Opportunities
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Separator className="bg-border" />
-
-      {/* Stats Section */}
-      <section className="py-12 md:py-16 bg-[#0a0a0a]">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <stat.icon className="w-6 h-6 text-primary" />
-                </div>
-                <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-400">{stat.label}</div>
+          
+          {/* Hero Intro + Stats Row */}
+          <BentoGrid className="lg:grid-cols-6 mb-4">
+            {/* Main Intro Card - Large */}
+            <BentoCard 
+              className="md:col-span-2 lg:col-span-3 lg:row-span-2"
+              title="Australia's Creative Community Platform"
+            >
+              <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+                More than a map—Creative Atlas is your gateway to discovering spaces, connecting with creatives, 
+                finding opportunities, and engaging with Australia's thriving creative ecosystem.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-auto">
+                <Button onClick={() => navigate("/map")} className="gap-2">
+                  <Map className="h-4 w-4" />
+                  Explore Map
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/auth")} className="gap-2">
+                  <Users className="h-4 w-4" />
+                  Join Free
+                </Button>
               </div>
-            ))}
-          </div>
+            </BentoCard>
+            
+            {/* Stats Cards */}
+            <BentoCard className="lg:col-span-1" onClick={() => navigate("/map")}>
+              <div className="flex flex-col items-center text-center h-full justify-center">
+                <Building2 className="w-8 h-8 text-primary mb-2" />
+                <div className="text-2xl font-bold text-white">500+</div>
+                <div className="text-xs text-gray-400">Creative Spaces</div>
+              </div>
+            </BentoCard>
+            
+            <BentoCard className="lg:col-span-1" onClick={() => navigate("/community")}>
+              <div className="flex flex-col items-center text-center h-full justify-center">
+                <Users className="w-8 h-8 text-primary mb-2" />
+                <div className="text-2xl font-bold text-white">Growing</div>
+                <div className="text-xs text-gray-400">Community</div>
+              </div>
+            </BentoCard>
+            
+            <BentoCard className="lg:col-span-1" onClick={() => navigate("/events")}>
+              <div className="flex flex-col items-center text-center h-full justify-center">
+                <Calendar className="w-8 h-8 text-primary mb-2" />
+                <div className="text-2xl font-bold text-white">Active</div>
+                <div className="text-xs text-gray-400">Events</div>
+              </div>
+            </BentoCard>
+            
+            <BentoCard className="lg:col-span-1" onClick={() => navigate("/opportunities")}>
+              <div className="flex flex-col items-center text-center h-full justify-center">
+                <Briefcase className="w-8 h-8 text-primary mb-2" />
+                <div className="text-2xl font-bold text-white">Live</div>
+                <div className="text-xs text-gray-400">Opportunities</div>
+              </div>
+            </BentoCard>
+            
+            <BentoCard className="lg:col-span-2">
+              <div className="flex flex-col items-center text-center h-full justify-center">
+                <Globe className="w-8 h-8 text-primary mb-2" />
+                <div className="text-2xl font-bold text-white">All States</div>
+                <div className="text-xs text-gray-400">Nationwide Coverage</div>
+              </div>
+            </BentoCard>
+          </BentoGrid>
+
+          <BentoSectionFooter 
+            title="Everything You Need to Thrive Creatively"
+            description="From discovery to collaboration, Creative Atlas provides the tools to connect and grow."
+          />
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
-      {/* Core Features Section */}
-      <section className="py-16 md:py-24 bg-[#121212]">
+      {/* Core Platform Features */}
+      <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+          <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Platform Features
             </Badge>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
-              Everything You Need to Thrive Creatively
-            </h2>
-            <p className="text-gray-400">
-              From discovery to collaboration, Creative Atlas provides the tools to connect and grow.
-            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {features.map((feature, index) => (
-              <Card key={index} className="transition-all duration-300 hover:shadow-lg hover:border-primary/50 group bg-[#1a1a1a] border-[#333]">
-                <CardHeader className="pb-3">
-                  <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-lg md:text-xl text-white">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm md:text-base text-gray-400">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          <BentoGrid className="lg:grid-cols-4 mb-4">
+            <BentoCard 
+              className="lg:col-span-2 lg:row-span-2"
+              onClick={() => navigate("/map")}
+            >
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-primary/10">
+                  <Map className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-1">Interactive Map</h3>
+                  <p className="text-gray-400 text-sm">Navigate Australia's creative ecosystem—venues, studios, festivals, and creative hubs, all mapped for easy discovery.</p>
+                </div>
+              </div>
+              <div className="rounded-lg overflow-hidden border border-[#333] mt-4 flex-1">
+                <MapPreview />
+              </div>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/events")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-orange-500/10 mb-4">
+                <Calendar className="w-5 h-5 text-orange-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Events Calendar</h3>
+              <p className="text-gray-400 text-sm">Discover workshops, exhibitions, concerts, festivals, and networking events happening across the creative community.</p>
+              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                Browse Events <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/opportunities")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-green-500/10 mb-4">
+                <Briefcase className="w-5 h-5 text-green-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Opportunities Board</h3>
+              <p className="text-gray-400 text-sm">Find jobs, gigs, residencies, grants, and collaborations tailored to creative professionals.</p>
+              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                Find Work <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/community")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-500/10 mb-4">
+                <Users className="w-5 h-5 text-blue-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Community Directory</h3>
+              <p className="text-gray-400 text-sm">Connect with fellow creatives, view portfolios, and find collaborators or mentors in your discipline.</p>
+              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                Meet Creatives <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/blog")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-purple-500/10 mb-4">
+                <FileText className="w-5 h-5 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Blog & Articles</h3>
+              <p className="text-gray-400 text-sm">Read and share insights, stories, and updates from the creative community.</p>
+              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                Read Stories <ArrowRight className="w-4 h-4 ml-1" />
+              </div>
+            </BentoCard>
+          </BentoGrid>
+
+          <BentoSectionFooter 
+            title="A Complete Creative Ecosystem"
+            description="Engage with the community through events, discussions, opportunities, and more."
+          />
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
-      {/* Community Features Grid */}
-      <section className="py-16 md:py-24 bg-[#0a0a0a]">
+      {/* Community Hub Grid */}
+      <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+          <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Community Hub
             </Badge>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
-              A Complete Creative Ecosystem
-            </h2>
-            <p className="text-gray-400">
-              Engage with the community through events, discussions, opportunities, and more.
-            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
-            {communityFeatures.map((feature, index) => (
-              <Card 
-                key={index} 
-                className="transition-all duration-300 hover:shadow-lg hover:border-primary/50 cursor-pointer group bg-[#1a1a1a] border-[#333]"
-                onClick={() => navigate(feature.link)}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#333] group-hover:bg-[#444] transition-colors">
-                      <feature.icon className={`w-5 h-5 ${feature.color}`} />
-                    </div>
-                    <CardTitle className="text-lg text-white group-hover:text-primary transition-colors">
-                      {feature.title}
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm text-gray-400">
-                    {feature.description}
-                  </CardDescription>
-                  <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    Explore <ArrowRight className="w-4 h-4 ml-1" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          <BentoGrid className="lg:grid-cols-3 mb-4">
+            <BentoCard 
+              className="lg:row-span-2"
+              onClick={() => navigate("/discussions")}
+            >
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-pink-500/10 mb-4">
+                <MessageSquare className="w-6 h-6 text-pink-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Discussions</h3>
+              <p className="text-gray-400 text-sm mb-4">Join conversations, ask questions, share knowledge, and connect with creatives across Australia. From technical help to networking introductions.</p>
+              <ul className="space-y-2 text-sm text-gray-400 mt-auto">
+                <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> General discussions</li>
+                <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> Help & support</li>
+                <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> Introductions</li>
+                <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> Opportunities</li>
+              </ul>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/showcase")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-yellow-500/10 mb-4">
+                <Award className="w-5 h-5 text-yellow-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Showcase Gallery</h3>
+              <p className="text-gray-400 text-sm">Celebrate outstanding creative projects and get inspired by community work.</p>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/resources")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-cyan-500/10 mb-4">
+                <Lightbulb className="w-5 h-5 text-cyan-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Resources Library</h3>
+              <p className="text-gray-400 text-sm">Access guides, templates, tools, and tutorials for creative professionals.</p>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/mentorship")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-emerald-500/10 mb-4">
+                <Users2 className="w-5 h-5 text-emerald-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Mentorship</h3>
+              <p className="text-gray-400 text-sm">Connect with experienced mentors or share your expertise with emerging creatives.</p>
+            </BentoCard>
+            
+            <BentoCard onClick={() => navigate("/newsletter")}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-rose-500/10 mb-4">
+                <Sparkles className="w-5 h-5 text-rose-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Newsletter</h3>
+              <p className="text-gray-400 text-sm">Get weekly updates on events, opportunities, and community highlights.</p>
+            </BentoCard>
+          </BentoGrid>
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
-      {/* Map Preview Section */}
-      <section className="py-16 md:py-24 bg-[#121212]">
-        <div className="container mx-auto px-4">
-          <Card className="text-center max-w-3xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
-            <CardHeader>
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                Interactive Map
-              </Badge>
-              <CardTitle className="text-2xl md:text-4xl font-bold text-white">
-                Discover Creative Australia
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <CardDescription className="text-base md:text-lg text-gray-400">
-                Explore venues, studios, galleries, festivals, creative hubs, and more across every state and territory.
-              </CardDescription>
-            </CardContent>
-          </Card>
-          <div className="rounded-xl overflow-hidden border border-border shadow-lg">
-            <MapPreview />
-          </div>
-          <div className="text-center mt-8">
-            <Button size="lg" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
-              Explore Full Map
-              <Map className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <Separator className="bg-border" />
-
-      {/* How It Works Section */}
+      {/* How It Works */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
-          <Card className="text-center max-w-2xl mx-auto mb-12 md:mb-16 backdrop-blur-sm bg-card/80 border-border/50">
-            <CardHeader>
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                How It Works
-              </Badge>
-              <CardTitle className="text-2xl md:text-4xl font-bold text-white">
-                Get Started in Three Simple Steps
-              </CardTitle>
-            </CardHeader>
-          </Card>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {steps.map((step, index) => (
-              <div key={index} className="relative text-center group">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full text-xl md:text-2xl font-bold flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-lg group-hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground">
-                  {step.number}
-                </div>
-                <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-white">
-                  {step.title}
-                </h3>
-                <p className="text-sm md:text-base text-gray-400">
-                  {step.description}
-                </p>
-                {index < steps.length - 1 && (
-                  <ChevronRight className="hidden md:block absolute top-10 -right-4 w-8 h-8 text-gray-600" />
-                )}
-              </div>
-            ))}
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              How It Works
+            </Badge>
           </div>
+          
+          <BentoGrid className="lg:grid-cols-3 max-w-4xl mx-auto">
+            <BentoCard className="text-center">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold flex items-center justify-center mx-auto mb-4">
+                01
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Explore the Map</h3>
+              <p className="text-gray-400 text-sm">Use the interactive map to discover creative spaces, organisations, and initiatives across Australia.</p>
+            </BentoCard>
+            
+            <BentoCard className="text-center">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold flex items-center justify-center mx-auto mb-4">
+                02
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Join the Community</h3>
+              <p className="text-gray-400 text-sm">Create your profile, connect with fellow creatives, and participate in discussions and events.</p>
+            </BentoCard>
+            
+            <BentoCard className="text-center">
+              <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground text-2xl font-bold flex items-center justify-center mx-auto mb-4">
+                03
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Find Opportunities</h3>
+              <p className="text-gray-400 text-sm">Browse jobs, gigs, grants, and collaborations—or post your own to find the perfect creative partner.</p>
+            </BentoCard>
+          </BentoGrid>
+
+          <BentoSectionFooter 
+            title="Get Started in Three Simple Steps"
+            description="Whether you're a creative professional or an organisation, Creative Atlas makes it easy to connect and grow."
+          />
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
-      {/* Categories Preview */}
+      {/* Categories */}
       <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
-          <Card className="text-center max-w-3xl mx-auto mb-8 md:mb-12 backdrop-blur-sm bg-card/80 border-border/50">
-            <CardHeader>
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                Categories
-              </Badge>
-              <CardTitle className="text-2xl md:text-4xl font-bold text-white">
-                Explore by Category
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-base md:text-lg text-gray-400">
-                From music venues to tech labs, discover the full spectrum of Australia's creative ecosystem
-              </CardDescription>
-            </CardContent>
-          </Card>
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              Categories
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Explore by Category</h2>
+          </div>
+          
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 max-w-4xl mx-auto">
             {categories.map((category, index) => (
-              <Card 
-                key={index} 
-                className="cursor-pointer transition-all duration-300 hover:shadow-md hover:border-primary/50 group bg-[#1a1a1a] border-[#333]" 
+              <BentoCard 
+                key={index}
+                className="p-3 md:p-4"
                 onClick={() => navigate("/map")}
               >
-                <CardContent className="p-3 md:p-4 flex flex-col items-center text-center gap-2">
+                <div className="flex flex-col items-center text-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-[#333] flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
                   </div>
-                  <span className="text-xs font-medium text-white">
-                    {category.name}
-                  </span>
-                </CardContent>
-              </Card>
+                  <span className="text-xs font-medium text-white">{category.name}</span>
+                </div>
+              </BentoCard>
             ))}
           </div>
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
       {/* Membership Benefits */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5">
-                Membership
-              </Badge>
-              <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
-                Unlock the Full Experience
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Join Creative Atlas to access all features and become part of Australia's creative network.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="bg-[#1a1a1a] border-[#333]">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Users className="w-5 h-5 text-primary" />
-                    For Creatives
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <ul className="space-y-2 text-gray-400 text-sm">
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Access the full interactive map</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Browse & RSVP to events</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Apply for opportunities</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Create your member profile</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Join community discussions</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Publish articles & stories</li>
-                  </ul>
-                  <Button className="w-full mt-4" onClick={() => navigate("/pricing")}>
-                    View Pricing
-                  </Button>
-                </CardContent>
-              </Card>
-              <Card className="bg-[#1a1a1a] border-[#333]">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Building2 className="w-5 h-5 text-primary" />
-                    For Creative Entities
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <ul className="space-y-2 text-gray-400 text-sm">
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> List your venue, studio, or org</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Create a rich business profile</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Post events & opportunities</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Showcase your work & offerings</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Receive inquiries from members</li>
-                    <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary" /> Connect with the community</li>
-                  </ul>
-                  <Button className="w-full mt-4" onClick={() => navigate("/pricing")}>
-                    View Pricing
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              Membership
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Unlock the Full Experience</h2>
           </div>
+          
+          <BentoGrid className="lg:grid-cols-2 max-w-4xl mx-auto">
+            <BentoCard>
+              <div className="flex items-center gap-3 mb-4">
+                <Users className="w-6 h-6 text-primary" />
+                <h3 className="text-xl font-semibold text-white">For Creatives</h3>
+              </div>
+              <ul className="space-y-3 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Access the full interactive map</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Browse & RSVP to events</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Apply for opportunities</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create your member profile</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Join community discussions</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Publish articles & stories</li>
+              </ul>
+              <Button className="w-full" onClick={() => navigate("/pricing")}>
+                View Pricing
+              </Button>
+            </BentoCard>
+            
+            <BentoCard>
+              <div className="flex items-center gap-3 mb-4">
+                <Building2 className="w-6 h-6 text-primary" />
+                <h3 className="text-xl font-semibold text-white">For Creative Entities</h3>
+              </div>
+              <ul className="space-y-3 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> List your venue, studio, or org</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a rich business profile</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Post events & opportunities</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Showcase your work & offerings</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Receive inquiries from members</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Connect with the community</li>
+              </ul>
+              <Button className="w-full" onClick={() => navigate("/pricing")}>
+                View Pricing
+              </Button>
+            </BentoCard>
+          </BentoGrid>
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-[#121212]">
-        <div className="container mx-auto px-4 text-center">
-          <Card className="max-w-3xl mx-auto backdrop-blur-sm bg-card/80 border-border/50">
-            <CardHeader>
-              <Badge variant="secondary" className="mb-4 px-4 py-1.5 w-fit mx-auto">
-                Get Started
-              </Badge>
-              <CardTitle className="text-2xl md:text-5xl font-bold text-white">
-                Join Australia's Creative Community Today
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6 md:space-y-8">
-              <CardDescription className="text-lg md:text-xl max-w-2xl mx-auto text-gray-400">
-                Discover spaces, connect with creatives, find opportunities, and be part of a thriving ecosystem 
-                dedicated to collaboration and innovation.
-              </CardDescription>
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4">
-                <Button size="lg" onClick={() => navigate("/auth")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
-                  Create Account
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate("/map")} className="text-base md:text-lg h-12 px-6 md:px-8 gap-2">
-                  Explore the Map
-                  <Map className="h-5 w-5" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="container mx-auto px-4">
+          <BentoCard className="max-w-3xl mx-auto text-center py-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              Get Started
+            </Badge>
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+              Join Australia's Creative Community Today
+            </h2>
+            <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              Discover spaces, connect with creatives, find opportunities, and be part of a thriving ecosystem 
+              dedicated to collaboration and innovation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" onClick={() => navigate("/auth")} className="gap-2">
+                Create Account
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => navigate("/map")} className="gap-2">
+                Explore the Map
+                <Map className="h-5 w-5" />
+              </Button>
+            </div>
+          </BentoCard>
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <Separator className="bg-[#333]" />
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 md:py-12 bg-[#121212]">
+      <footer className="border-t border-[#333] py-8 md:py-12 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
