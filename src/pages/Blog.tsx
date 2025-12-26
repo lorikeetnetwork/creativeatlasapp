@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, PenSquare, Filter } from "lucide-react";
+import { Search, PenSquare, FileText } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,6 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoFilterCard,
+  BentoEmptyState,
+  BentoContentCard,
+} from "@/components/ui/bento-page-layout";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -96,75 +103,74 @@ const Blog = () => {
   const regularArticles = filteredArticles?.filter((a) => !a.is_featured);
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
 
-      <main className="px-4 md:px-8 py-8">
+      <BentoMain>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              Creative Atlas Blog
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Stories, updates, and insights from the creative community
-            </p>
-          </div>
-          <Button
-            onClick={() => navigate("/blog/new")}
-            className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            <PenSquare className="h-4 w-4" />
-            Write Article
-          </Button>
-        </div>
+        <BentoPageHeader
+          icon={<FileText className="h-8 w-8" />}
+          title="Creative Atlas Blog"
+          description="Stories, updates, and insights from the creative community"
+          actions={
+            <Button
+              onClick={() => navigate("/blog/new")}
+              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <PenSquare className="h-4 w-4" />
+              Write Article
+            </Button>
+          }
+        />
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+        <BentoFilterCard>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Search articles..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-[#222] border-[#333] text-white placeholder:text-gray-500"
+              />
+            </div>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-full md:w-[180px] bg-[#222] border-[#333] text-white">
+                <SelectValue placeholder="Article Type" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1a1a1a] border-[#333]">
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="article">Articles</SelectItem>
+                <SelectItem value="update">Updates</SelectItem>
+                <SelectItem value="announcement">Announcements</SelectItem>
+                <SelectItem value="event">Events</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={selectedTag} onValueChange={setSelectedTag}>
+              <SelectTrigger className="w-full md:w-[180px] bg-[#222] border-[#333] text-white">
+                <SelectValue placeholder="Filter by Tag" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1a1a1a] border-[#333]">
+                <SelectItem value="all">All Tags</SelectItem>
+                {tags?.map((tag) => (
+                  <SelectItem key={tag.id} value={tag.id}>
+                    {tag.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Article Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="article">Articles</SelectItem>
-              <SelectItem value="update">Updates</SelectItem>
-              <SelectItem value="announcement">Announcements</SelectItem>
-              <SelectItem value="event">Events</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={selectedTag} onValueChange={setSelectedTag}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Filter by Tag" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Tags</SelectItem>
-              {tags?.map((tag) => (
-                <SelectItem key={tag.id} value={tag.id}>
-                  {tag.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        </BentoFilterCard>
 
         {/* Loading State */}
         {articlesLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="space-y-4">
-                <Skeleton className="h-48 w-full rounded-lg" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+              <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-4">
+                <Skeleton className="h-48 w-full rounded-lg bg-[#333]" />
+                <Skeleton className="h-4 w-3/4 bg-[#333]" />
+                <Skeleton className="h-4 w-1/2 bg-[#333]" />
               </div>
             ))}
           </div>
@@ -172,10 +178,7 @@ const Blog = () => {
 
         {/* Featured Articles */}
         {featuredArticles && featuredArticles.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <span className="text-primary">★</span> Featured
-            </h2>
+          <BentoContentCard title="★ Featured" className="mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {featuredArticles.slice(0, 2).map((article) => (
                 <ArticleCard
@@ -188,15 +191,12 @@ const Blog = () => {
                 />
               ))}
             </div>
-          </section>
+          </BentoContentCard>
         )}
 
         {/* Regular Articles Grid */}
         {regularArticles && regularArticles.length > 0 && (
-          <section>
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              Latest Articles
-            </h2>
+          <BentoContentCard title="Latest Articles">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {regularArticles.map((article) => (
                 <ArticleCard
@@ -208,30 +208,32 @@ const Blog = () => {
                 />
               ))}
             </div>
-          </section>
+          </BentoContentCard>
         )}
 
         {/* Empty State */}
         {!articlesLoading && filteredArticles?.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg">
-              No articles found matching your criteria.
-            </p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedType("all");
-                setSelectedTag("all");
-              }}
-            >
-              Clear Filters
-            </Button>
-          </div>
+          <BentoEmptyState
+            icon={<FileText className="h-16 w-16" />}
+            title="No articles found"
+            description="No articles found matching your criteria."
+            action={
+              <Button
+                variant="outline"
+                className="border-[#333] text-white hover:bg-[#222]"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedType("all");
+                  setSelectedTag("all");
+                }}
+              >
+                Clear Filters
+              </Button>
+            }
+          />
         )}
-      </main>
-    </div>
+      </BentoMain>
+    </BentoPage>
   );
 };
 

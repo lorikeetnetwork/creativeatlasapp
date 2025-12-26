@@ -11,6 +11,13 @@ import { useEvents, type EventFilters as EventFiltersType } from "@/hooks/useEve
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoFilterCard,
+  BentoEmptyState,
+} from "@/components/ui/bento-page-layout";
 
 const Events = () => {
   const navigate = useNavigate();
@@ -28,53 +35,52 @@ const Events = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
       
-      <main className="px-4 md:px-8 py-8">
+      <BentoMain>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Events</h1>
-            <p className="text-muted-foreground mt-1">
-              Discover creative industry events across Australia
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Tabs value={view} onValueChange={(v) => setView(v as "list" | "calendar")}>
-              <TabsList>
-                <TabsTrigger value="list" className="gap-2">
-                  <List className="h-4 w-4" />
-                  List
-                </TabsTrigger>
-                <TabsTrigger value="calendar" className="gap-2">
-                  <Calendar className="h-4 w-4" />
-                  Calendar
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            {isAuthenticated && (
-              <Button onClick={() => navigate("/events/new")}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Event
-              </Button>
-            )}
-          </div>
-        </div>
+        <BentoPageHeader
+          icon={<Calendar className="h-8 w-8" />}
+          title="Events"
+          description="Discover creative industry events across Australia"
+          actions={
+            <div className="flex items-center gap-3">
+              <Tabs value={view} onValueChange={(v) => setView(v as "list" | "calendar")}>
+                <TabsList className="bg-[#222] border border-[#333]">
+                  <TabsTrigger value="list" className="gap-2 data-[state=active]:bg-[#333] data-[state=active]:text-white">
+                    <List className="h-4 w-4" />
+                    List
+                  </TabsTrigger>
+                  <TabsTrigger value="calendar" className="gap-2 data-[state=active]:bg-[#333] data-[state=active]:text-white">
+                    <Calendar className="h-4 w-4" />
+                    Calendar
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+              {isAuthenticated && (
+                <Button onClick={() => navigate("/events/new")} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Event
+                </Button>
+              )}
+            </div>
+          }
+        />
 
         {/* Filters */}
-        <div className="mb-8">
+        <BentoFilterCard>
           <EventFilters filters={filters} onFiltersChange={setFilters} />
-        </div>
+        </BentoFilterCard>
 
         {/* Content */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="space-y-3">
-                <Skeleton className="aspect-video rounded-lg" />
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+              <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-3">
+                <Skeleton className="aspect-video rounded-lg bg-[#333]" />
+                <Skeleton className="h-6 w-3/4 bg-[#333]" />
+                <Skeleton className="h-4 w-1/2 bg-[#333]" />
               </div>
             ))}
           </div>
@@ -87,21 +93,23 @@ const Events = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-xl font-semibold mb-2">No events found</h2>
-                <p className="text-muted-foreground mb-6">
-                  {Object.keys(filters).length > 0
+              <BentoEmptyState
+                icon={<Calendar className="h-16 w-16" />}
+                title="No events found"
+                description={
+                  Object.keys(filters).length > 0
                     ? "Try adjusting your filters to see more events."
-                    : "Be the first to create an event!"}
-                </p>
-                {isAuthenticated && (
-                  <Button onClick={() => navigate("/events/new")}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Event
-                  </Button>
-                )}
-              </div>
+                    : "Be the first to create an event!"
+                }
+                action={
+                  isAuthenticated && (
+                    <Button onClick={() => navigate("/events/new")} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Event
+                    </Button>
+                  )
+                }
+              />
             )}
           </>
         ) : (
@@ -112,8 +120,8 @@ const Events = () => {
             onEventClick={(event) => navigate(`/events/${event.slug}`)}
           />
         )}
-      </main>
-    </div>
+      </BentoMain>
+    </BentoPage>
   );
 };
 

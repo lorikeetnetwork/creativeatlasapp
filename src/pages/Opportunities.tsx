@@ -8,6 +8,13 @@ import OpportunityCard from "@/components/opportunities/OpportunityCard";
 import OpportunityFilters from "@/components/opportunities/OpportunityFilters";
 import { useOpportunities, type OpportunityFilters as OpportunityFiltersType } from "@/hooks/useOpportunities";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoFilterCard,
+  BentoEmptyState,
+} from "@/components/ui/bento-page-layout";
 
 const Opportunities = () => {
   const navigate = useNavigate();
@@ -23,37 +30,36 @@ const Opportunities = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
 
-      <main className="px-4 md:px-8 py-8">
+      <BentoMain>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Opportunities</h1>
-            <p className="text-muted-foreground mt-1">
-              Find jobs, gigs, grants, and collaborations in the creative industry
-            </p>
-          </div>
-          {isAuthenticated && (
-            <Button onClick={() => navigate("/opportunities/new")}>
-              <Plus className="h-4 w-4 mr-2" />
-              Post Opportunity
-            </Button>
-          )}
-        </div>
+        <BentoPageHeader
+          icon={<Briefcase className="h-8 w-8" />}
+          title="Opportunities"
+          description="Find jobs, gigs, grants, and collaborations in the creative industry"
+          actions={
+            isAuthenticated && (
+              <Button onClick={() => navigate("/opportunities/new")} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Plus className="h-4 w-4 mr-2" />
+                Post Opportunity
+              </Button>
+            )
+          }
+        />
 
         {/* Filters */}
-        <div className="mb-8">
+        <BentoFilterCard>
           <OpportunityFilters filters={filters} onFiltersChange={setFilters} />
-        </div>
+        </BentoFilterCard>
 
         {/* Content */}
         {isLoading ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="space-y-3">
-                <Skeleton className="h-48 rounded-lg" />
+              <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a]">
+                <Skeleton className="h-48 rounded-lg bg-[#333]" />
               </div>
             ))}
           </div>
@@ -64,24 +70,26 @@ const Opportunities = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <Briefcase className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No opportunities found</h2>
-            <p className="text-muted-foreground mb-6">
-              {Object.keys(filters).length > 0
+          <BentoEmptyState
+            icon={<Briefcase className="h-16 w-16" />}
+            title="No opportunities found"
+            description={
+              Object.keys(filters).length > 0
                 ? "Try adjusting your filters to see more opportunities."
-                : "Be the first to post an opportunity!"}
-            </p>
-            {isAuthenticated && (
-              <Button onClick={() => navigate("/opportunities/new")}>
-                <Plus className="h-4 w-4 mr-2" />
-                Post Opportunity
-              </Button>
-            )}
-          </div>
+                : "Be the first to post an opportunity!"
+            }
+            action={
+              isAuthenticated && (
+                <Button onClick={() => navigate("/opportunities/new")} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Post Opportunity
+                </Button>
+              )
+            }
+          />
         )}
-      </main>
-    </div>
+      </BentoMain>
+    </BentoPage>
   );
 };
 

@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { GradientButton } from "@/components/ui/gradient-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar } from "lucide-react";
+import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar, LayoutDashboard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import Navbar from "@/components/Navbar";
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoContentCard,
+  BentoSidebarCard,
+} from "@/components/ui/bento-page-layout";
 
 interface Profile {
   account_type: 'free' | 'basic_paid' | 'creative_entity';
@@ -127,7 +133,7 @@ const Dashboard = () => {
     switch (status.toLowerCase()) {
       case 'paid':
       case 'completed':
-        return <Badge className="bg-green-500 text-xs">Paid</Badge>;
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">Paid</Badge>;
       case 'pending':
         return <Badge variant="secondary" className="bg-[#333] text-white text-xs">Pending</Badge>;
       case 'failed':
@@ -139,107 +145,102 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#121212] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
+      <BentoPage>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </BentoPage>
     );
   }
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#121212] flex items-center justify-center p-4">
-        <p className="text-gray-400">Unable to load profile</p>
-      </div>
+      <BentoPage>
+        <div className="flex items-center justify-center min-h-screen p-4">
+          <p className="text-gray-400">Unable to load profile</p>
+        </div>
+      </BentoPage>
     );
   }
 
   const canUpgrade = profile.account_type === 'free';
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <BentoPage>
       <Navbar />
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6 md:py-12 max-w-6xl">
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-4xl font-bold mb-2 text-white">Account Dashboard</h1>
-          <p className="text-sm md:text-base text-gray-400">Manage your account and view payment history</p>
-        </div>
+      <BentoMain className="container mx-auto max-w-6xl">
+        <BentoPageHeader
+          icon={<LayoutDashboard className="h-8 w-8" />}
+          title="Account Dashboard"
+          description="Manage your account and view payment history"
+        />
 
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="grid md:grid-cols-3 gap-6 mb-6">
           {/* Account Status Card */}
-          <Card className="md:col-span-2 border-[#333] bg-[#1a1a1a]">
-            <CardHeader className="pb-3 md:pb-6">
-              <CardTitle className="text-lg md:text-xl text-white">Account Status</CardTitle>
-              <CardDescription className="text-sm text-gray-400">Your current plan and benefits</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
-                <div className="flex-shrink-0">
-                  {getAccountIcon(profile.account_type)}
-                </div>
-                <div className="flex-1 space-y-4 w-full">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
-                      <h3 className="text-xl md:text-2xl font-semibold text-white">{profile.full_name || 'User'}</h3>
-                      {getAccountTypeBadge(profile.account_type)}
-                    </div>
-                    <p className="text-xs md:text-sm text-gray-400 break-all">{profile.email}</p>
-                  </div>
-
-                  {profile.subscription_status === 'active' && profile.subscription_end_date && (
-                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
-                      <Calendar className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span>
-                        Renews {new Date(profile.subscription_end_date).toLocaleDateString('en-AU', { year: 'numeric', month: 'short', day: 'numeric' })}
-                      </span>
-                    </div>
-                  )}
-
-                  {profile.payment_verified && !profile.subscription_end_date && profile.payment_date && (
-                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span>
-                        Payment verified {formatDistanceToNow(new Date(profile.payment_date), { addSuffix: true })}
-                      </span>
-                    </div>
-                  )}
-
-                  {profile.account_type === 'free' && (
-                    <div className="bg-[#222] p-3 md:p-4 rounded-lg border border-[#333]">
-                      <p className="text-xs md:text-sm mb-3 text-gray-400">
-                        <strong className="text-white">List your creative business</strong> on the map to reach more customers.
-                      </p>
-                      <GradientButton size="sm" onClick={() => navigate('/pricing')}>
-                        View Pricing
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </GradientButton>
-                    </div>
-                  )}
-
-                  {profile.account_type === 'creative_entity' && (
-                    <div className="space-y-2">
-                      <p className="text-xs md:text-sm font-medium text-white">Your benefits:</p>
-                      <ul className="text-xs md:text-sm text-gray-400 space-y-1">
-                        <li>✓ Location on the map</li>
-                        <li>✓ Full business profile page</li>
-                        <li>✓ Photo & offerings galleries</li>
-                        <li>✓ Video embeds & current projects</li>
-                        <li>✓ Contact forms & social links</li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
+          <BentoContentCard title="Account Status" className="md:col-span-2">
+            <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-6">
+              <div className="flex-shrink-0">
+                {getAccountIcon(profile.account_type)}
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex-1 space-y-4 w-full">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                    <h3 className="text-xl md:text-2xl font-semibold text-white">{profile.full_name || 'User'}</h3>
+                    {getAccountTypeBadge(profile.account_type)}
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-400 break-all">{profile.email}</p>
+                </div>
+
+                {profile.subscription_status === 'active' && profile.subscription_end_date && (
+                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
+                    <Calendar className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>
+                      Renews {new Date(profile.subscription_end_date).toLocaleDateString('en-AU', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+                {profile.payment_verified && !profile.subscription_end_date && profile.payment_date && (
+                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>
+                      Payment verified {formatDistanceToNow(new Date(profile.payment_date), { addSuffix: true })}
+                    </span>
+                  </div>
+                )}
+
+                {profile.account_type === 'free' && (
+                  <div className="bg-[#222] p-3 md:p-4 rounded-lg border border-[#333]">
+                    <p className="text-xs md:text-sm mb-3 text-gray-400">
+                      <strong className="text-white">List your creative business</strong> on the map to reach more customers.
+                    </p>
+                    <GradientButton size="sm" onClick={() => navigate('/pricing')}>
+                      View Pricing
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </GradientButton>
+                  </div>
+                )}
+
+                {profile.account_type === 'creative_entity' && (
+                  <div className="space-y-2">
+                    <p className="text-xs md:text-sm font-medium text-white">Your benefits:</p>
+                    <ul className="text-xs md:text-sm text-gray-400 space-y-1">
+                      <li>✓ Location on the map</li>
+                      <li>✓ Full business profile page</li>
+                      <li>✓ Photo & offerings galleries</li>
+                      <li>✓ Video embeds & current projects</li>
+                      <li>✓ Contact forms & social links</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </BentoContentCard>
 
           {/* Quick Actions Card */}
-          <Card className="border-[#333] bg-[#1a1a1a]">
-            <CardHeader className="pb-3 md:pb-6">
-              <CardTitle className="text-lg md:text-xl text-white">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
+          <BentoSidebarCard title="Quick Actions">
+            <div className="space-y-2">
               <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm" onClick={() => navigate('/map')}>
                 Browse Map
               </GradientButton>
@@ -259,86 +260,76 @@ const Dashboard = () => {
                   List Your Business
                 </GradientButton>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </BentoSidebarCard>
         </div>
 
         {/* Payment History */}
-        <Card className="border-[#333] bg-[#1a1a1a]">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg md:text-xl text-white">Payment History</CardTitle>
-                <CardDescription className="text-sm text-gray-400">View all your transactions</CardDescription>
-              </div>
-              <CreditCard className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />
+        <BentoContentCard
+          title="Payment History"
+          headerActions={<CreditCard className="w-5 h-5 md:w-6 md:h-6 text-gray-400" />}
+        >
+          {payments.length === 0 ? (
+            <div className="text-center py-8 md:py-12">
+              <Clock className="w-10 h-10 md:w-12 md:h-12 text-gray-500 mx-auto mb-4" />
+              <p className="text-sm md:text-base text-gray-400 mb-4">No payment history yet</p>
+              {profile.account_type === 'free' && (
+                <GradientButton size="sm" onClick={() => navigate('/pricing')}>
+                  View Pricing Plans
+                </GradientButton>
+              )}
             </div>
-          </CardHeader>
-          <CardContent>
-            {payments.length === 0 ? (
-              <div className="text-center py-8 md:py-12">
-                <Clock className="w-10 h-10 md:w-12 md:h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-sm md:text-base text-gray-400 mb-4">No payment history yet</p>
-                {profile.account_type === 'free' && (
-                  <GradientButton size="sm" onClick={() => navigate('/pricing')}>
-                    View Pricing Plans
-                  </GradientButton>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-3 md:space-y-4">
-                {payments.map((payment) => (
-                  <div key={payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 border border-[#333] rounded-lg gap-3">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      <div className="flex-shrink-0 hidden sm:block">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <CreditCard className="w-5 h-5 text-primary" />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <p className="font-medium text-sm md:text-base text-white">
-                            {payment.payment_type === 'creative_listing' ? 'Creative Entity Listing' : 'Payment'}
-                          </p>
-                          {getStatusBadge(payment.status)}
-                        </div>
-                        <p className="text-xs md:text-sm text-gray-400">
-                          {new Date(payment.created_at).toLocaleDateString('en-AU', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                          })}
-                        </p>
+          ) : (
+            <div className="space-y-3 md:space-y-4">
+              {payments.map((payment) => (
+                <div key={payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 border border-[#333] rounded-lg gap-3 bg-[#222]">
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div className="flex-shrink-0 hidden sm:block">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <CreditCard className="w-5 h-5 text-primary" />
                       </div>
                     </div>
-                    <div className="text-left sm:text-right">
-                      <p className="font-semibold text-sm md:text-base text-white">{formatAmount(payment.amount, payment.currency)}</p>
-                      {payment.account_type_granted === 'creative_entity' && (
-                        <p className="text-xs text-gray-400">Creative Entity</p>
-                      )}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <p className="font-medium text-sm md:text-base text-white">
+                          {payment.payment_type === 'creative_listing' ? 'Creative Entity Listing' : 'Payment'}
+                        </p>
+                        {getStatusBadge(payment.status)}
+                      </div>
+                      <p className="text-xs md:text-sm text-gray-400">
+                        {new Date(payment.created_at).toLocaleDateString('en-AU', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  <div className="text-left sm:text-right">
+                    <p className="font-semibold text-sm md:text-base text-white">{formatAmount(payment.amount, payment.currency)}</p>
+                    {payment.account_type_granted === 'creative_entity' && (
+                      <p className="text-xs text-gray-400">Creative Entity</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </BentoContentCard>
 
         {/* Help Section */}
-        <Card className="mt-4 md:mt-6 border-[#333] bg-[#1a1a1a]">
-          <CardContent className="pt-4 md:pt-6">
-            <div className="text-center">
-              <p className="text-xs md:text-sm text-gray-400 mb-2">
-                Need help with your account or payments?
-              </p>
-              <p className="text-xs md:text-sm text-white">
-                Contact us at <a href="mailto:support@creativeatlas.com.au" className="text-primary hover:underline">support@creativeatlas.com.au</a>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+        <BentoContentCard className="mt-6">
+          <div className="text-center">
+            <p className="text-xs md:text-sm text-gray-400 mb-2">
+              Need help with your account or payments?
+            </p>
+            <p className="text-xs md:text-sm text-white">
+              Contact us at <a href="mailto:support@creativeatlas.com.au" className="text-primary hover:underline">support@creativeatlas.com.au</a>
+            </p>
+          </div>
+        </BentoContentCard>
+      </BentoMain>
+    </BentoPage>
   );
 };
 
