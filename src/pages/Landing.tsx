@@ -12,7 +12,6 @@ import {
   Star, Globe, Zap
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import logoImage from "@/assets/creative-atlas-logo.png";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 
 const Landing = () => {
@@ -462,24 +461,12 @@ const Landing = () => {
           
           <Separator className="my-6 md:my-8 bg-[#333]" />
           
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex flex-col md:flex-row items-center gap-3 text-center md:text-left">
-              <img src={logoImage} alt="Creative Atlas" className="h-8 w-auto object-contain" />
-              <span className="text-xs md:text-sm text-gray-400">
-                © 2025 Creative Atlas. Australia's creative community platform.
-              </span>
-            </div>
-          </div>
-          
-          <Separator className="my-6 md:my-8 bg-[#333]" />
-          
-          {/* Lorikeet Network Attribution */}
           <div className="flex flex-col items-center gap-3">
             <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
               <img src={lorikeetLogo} alt="Lorikeet Network" className="h-10 md:h-12 w-auto object-contain" />
             </a>
             <p className="text-xs md:text-sm text-gray-400 text-center max-w-md">
-              A project of the{" "}
+              © 2025 Creative Atlas. A project of the{" "}
               <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">
                 Lorikeet Network
               </a>
