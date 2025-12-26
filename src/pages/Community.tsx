@@ -9,6 +9,13 @@ import { MemberFilters } from '@/components/community/MemberFilters';
 import { useMemberProfiles, useCurrentUserMemberProfile } from '@/hooks/useMemberProfiles';
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoFilterCard,
+  BentoEmptyState,
+} from "@/components/ui/bento-page-layout";
 
 export default function Community() {
   const navigate = useNavigate();
@@ -38,39 +45,39 @@ export default function Community() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar session={session} />
 
-      <main className="px-4 md:px-8 py-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <Users className="h-8 w-8 text-primary" />
-              Community Directory
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Discover and connect with creative professionals in the community
-            </p>
-          </div>
+      <BentoMain>
+        <BentoPageHeader
+          icon={<Users className="h-8 w-8" />}
+          title="Community Directory"
+          description="Discover and connect with creative professionals in the community"
+          actions={
+            session && (
+              <Button 
+                onClick={() => navigate('/community/edit-profile')} 
+                className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                {currentProfile ? 'Edit Profile' : <><Plus className="h-4 w-4" /> Create Profile</>}
+              </Button>
+            )
+          }
+        />
 
-          {session && (
-            <Button onClick={() => navigate('/community/edit-profile')} className="gap-2">
-              {currentProfile ? 'Edit Profile' : <><Plus className="h-4 w-4" /> Create Profile</>}
-            </Button>
-          )}
-        </div>
+        <BentoFilterCard>
+          <MemberFilters filters={filters} onFiltersChange={setFilters} />
+        </BentoFilterCard>
 
-        <MemberFilters filters={filters} onFiltersChange={setFilters} />
-
-        <div className="mt-8">
+        <div className="mt-2">
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="space-y-4">
-                  <Skeleton className="h-24 w-full" />
-                  <Skeleton className="h-16 w-16 rounded-full" />
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
+                <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-4">
+                  <Skeleton className="h-24 w-full bg-[#333]" />
+                  <Skeleton className="h-16 w-16 rounded-full bg-[#333]" />
+                  <Skeleton className="h-4 w-3/4 bg-[#333]" />
+                  <Skeleton className="h-4 w-1/2 bg-[#333]" />
                 </div>
               ))}
             </div>
@@ -81,23 +88,25 @@ export default function Community() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <Users className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">No members found</h3>
-              <p className="text-muted-foreground mb-6">
-                {Object.keys(filters).length > 0
+            <BentoEmptyState
+              icon={<Users className="h-16 w-16" />}
+              title="No members found"
+              description={
+                Object.keys(filters).length > 0
                   ? 'Try adjusting your filters to find more members.'
-                  : 'Be the first to create a profile and join the community!'}
-              </p>
-              {session && !currentProfile && (
-                <Button onClick={() => navigate('/community/edit-profile')}>
-                  Create Your Profile
-                </Button>
-              )}
-            </div>
+                  : 'Be the first to create a profile and join the community!'
+              }
+              action={
+                session && !currentProfile && (
+                  <Button onClick={() => navigate('/community/edit-profile')} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                    Create Your Profile
+                  </Button>
+                )
+              }
+            />
           )}
         </div>
-      </main>
-    </div>
+      </BentoMain>
+    </BentoPage>
   );
 }

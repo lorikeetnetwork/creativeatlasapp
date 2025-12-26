@@ -5,11 +5,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable";
 import { BulkImport } from "@/components/admin/BulkImport";
-import { Loader2, ArrowLeft, ImageIcon } from "lucide-react";
+import { Loader2, ArrowLeft, ImageIcon, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
+import {
+  BentoPage,
+  BentoMain,
+  BentoPageHeader,
+  BentoContentCard,
+} from "@/components/ui/bento-page-layout";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -37,7 +43,6 @@ export default function Admin() {
         return;
       }
 
-      // Check if user has admin role
       const { data, error } = await supabase
         .rpc('has_role', { _user_id: user.id, _role: 'admin' });
 
@@ -70,7 +75,6 @@ export default function Admin() {
   const handleFetchOgImages = async () => {
     setFetchingImages(true);
     try {
-      // Get locations with website but no og_image_url
       const { data: locations, error } = await supabase
         .from("locations")
         .select("id, website")
@@ -131,9 +135,11 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#121212]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <BentoPage>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </BentoPage>
     );
   }
 
@@ -142,10 +148,10 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#121212]">
-      <div className="container mx-auto py-4 md:py-8 px-4">
+    <BentoPage>
+      <BentoMain className="container mx-auto">
         {/* Header */}
-        <div className="mb-6 md:mb-8">
+        <div className="mb-6">
           <GradientButton
             variant="ghost"
             size="sm"
@@ -155,18 +161,21 @@ export default function Admin() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Map
           </GradientButton>
-          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-sm md:text-base text-gray-400">Manage locations and review submissions</p>
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-4 md:space-y-6">
-          {/* Scrollable Tabs for Mobile */}
+        <BentoPageHeader
+          icon={<Shield className="h-8 w-8" />}
+          title="Admin Dashboard"
+          description="Manage locations and review submissions"
+        />
+
+        <Tabs defaultValue="overview" className="space-y-6">
           <ScrollArea className="w-full">
             <TabsList className="inline-flex w-auto min-w-full bg-[#1a1a1a] border border-[#333] p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Overview</TabsTrigger>
-              <TabsTrigger value="pending" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Pending</TabsTrigger>
-              <TabsTrigger value="all" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">All Locations</TabsTrigger>
-              <TabsTrigger value="bulk-import" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-3 md:px-4 text-sm">Bulk Import</TabsTrigger>
+              <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="pending" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm">Pending</TabsTrigger>
+              <TabsTrigger value="all" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm">All Locations</TabsTrigger>
+              <TabsTrigger value="bulk-import" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm">Bulk Import</TabsTrigger>
             </TabsList>
             <ScrollBar orientation="horizontal" className="invisible" />
           </ScrollArea>
@@ -174,18 +183,13 @@ export default function Admin() {
           <TabsContent value="overview" className="space-y-6">
             <AdminStats />
             
-            {/* Fetch OG Images Section */}
-            <div className="p-4 bg-[#1a1a1a] border border-[#333] rounded-lg">
-              <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-                <ImageIcon className="w-4 h-4" />
-                Fetch Social Images
-              </h3>
+            <BentoContentCard title="Fetch Social Images" headerActions={<ImageIcon className="w-4 h-4 text-gray-400" />}>
               <p className="text-gray-400 text-sm mb-4">
                 Fetch Open Graph images from websites for locations that have a website but no OG image yet.
               </p>
               {fetchingImages && (
                 <div className="mb-4">
-                  <Progress value={(fetchProgress.current / fetchProgress.total) * 100} className="h-2" />
+                  <Progress value={(fetchProgress.current / fetchProgress.total) * 100} className="h-2 bg-[#333]" />
                   <p className="text-xs text-gray-400 mt-1">
                     Processing {fetchProgress.current} of {fetchProgress.total} locations...
                   </p>
@@ -209,22 +213,28 @@ export default function Admin() {
                   </>
                 )}
               </GradientButton>
-            </div>
+            </BentoContentCard>
           </TabsContent>
 
           <TabsContent value="pending">
-            <PendingLocationsTable status="Pending" />
+            <BentoContentCard>
+              <PendingLocationsTable status="Pending" />
+            </BentoContentCard>
           </TabsContent>
 
           <TabsContent value="all">
-            <PendingLocationsTable status="all" />
+            <BentoContentCard>
+              <PendingLocationsTable status="all" />
+            </BentoContentCard>
           </TabsContent>
 
           <TabsContent value="bulk-import">
-            <BulkImport />
+            <BentoContentCard>
+              <BulkImport />
+            </BentoContentCard>
           </TabsContent>
         </Tabs>
-      </div>
-    </div>
+      </BentoMain>
+    </BentoPage>
   );
 }
