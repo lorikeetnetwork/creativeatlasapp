@@ -37,14 +37,12 @@ const Index = () => {
   } = useToast();
   const isMobile = useIsMobile();
   useEffect(() => {
-    console.log("Index component mounted");
     supabase.auth.getSession().then(({
       data: {
         session
       }
     }) => {
       setSession(session);
-      console.log("Session loaded:", session ? "authenticated" : "not authenticated");
     });
     const {
       data: {
@@ -63,20 +61,17 @@ const Index = () => {
   }, [locations, searchQuery, selectedCategories, mapBounds]);
   const fetchLocations = async () => {
     try {
-      console.log("Fetching locations...");
       const {
         data,
         error
       } = await supabase.from("locations").select("*").eq("status", "Active").order("name");
       if (error) {
-        console.error("Error fetching locations:", error);
         toast({
           title: "Error",
           description: "Failed to load locations",
           variant: "destructive"
         });
       } else {
-        console.log("Locations loaded:", data?.length || 0);
         setLocations(data || []);
       }
     } catch (err) {

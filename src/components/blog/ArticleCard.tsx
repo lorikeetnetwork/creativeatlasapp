@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Heart, MessageCircle, Clock, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { BentoCard } from '@/components/ui/bento-card';
 
 interface ArticleCardProps {
   article: {
@@ -32,9 +32,9 @@ interface ArticleCardProps {
 
 const typeColors: Record<string, string> = {
   article: 'bg-primary/10 text-primary',
-  update: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-  announcement: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-  event: 'bg-green-500/10 text-green-600 dark:text-green-400',
+  update: 'bg-blue-500/10 text-blue-400',
+  announcement: 'bg-amber-500/10 text-amber-400',
+  event: 'bg-green-500/10 text-green-400',
 };
 
 export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => {
@@ -44,13 +44,13 @@ export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => 
 
   return (
     <Link to={`/blog/${article.slug}`}>
-      <Card className={cn(
-        "group overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/30",
+      <BentoCard className={cn(
+        "p-0 overflow-hidden",
         featured && "md:flex md:h-80"
       )}>
         {article.cover_image_url && (
           <div className={cn(
-            "relative overflow-hidden bg-muted",
+            "relative overflow-hidden",
             featured ? "md:w-1/2 h-48 md:h-full" : "h-48"
           )}>
             <img
@@ -62,7 +62,7 @@ export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => 
           </div>
         )}
         
-        <CardContent className={cn(
+        <div className={cn(
           "p-5",
           featured && "md:w-1/2 md:flex md:flex-col md:justify-center"
         )}>
@@ -71,14 +71,14 @@ export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => 
               {article.article_type.charAt(0).toUpperCase() + article.article_type.slice(1)}
             </Badge>
             {article.tags?.slice(0, 2).map((tag) => (
-              <Badge key={tag.slug} variant="outline" className="text-xs">
+              <Badge key={tag.slug} variant="outline" className="text-xs border-[#333] text-gray-400">
                 {tag.name}
               </Badge>
             ))}
           </div>
           
           <h3 className={cn(
-            "font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors",
+            "font-bold text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors",
             featured ? "text-2xl" : "text-lg"
           )}>
             {article.title}
@@ -86,24 +86,24 @@ export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => 
           
           {article.excerpt && (
             <p className={cn(
-              "text-muted-foreground line-clamp-2 mb-4",
+              "text-gray-400 line-clamp-2 mb-4",
               featured ? "text-base" : "text-sm"
             )}>
               {article.excerpt}
             </p>
           )}
           
-          <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center justify-between mt-auto pt-4 border-t border-[#333]">
             <div className="flex items-center gap-2">
               <Avatar className="h-7 w-7">
                 <AvatarFallback className="text-xs bg-primary/10 text-primary">
                   {authorInitials}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm text-muted-foreground">{authorName}</span>
+              <span className="text-sm text-gray-400">{authorName}</span>
             </div>
             
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-3 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {article.read_time_minutes || 1} min
@@ -126,8 +126,8 @@ export const ArticleCard = ({ article, featured = false }: ArticleCardProps) => 
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </BentoCard>
     </Link>
   );
 };
