@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { MapPin, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { BentoPage, BentoContainer } from "@/components/ui/bento-page-layout";
+import { useOnboarding } from "@/components/onboarding/OnboardingContext";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { checkOnboardingStatus } = useOnboarding();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -50,9 +52,13 @@ const Auth = () => {
     } else {
       toast({
         title: "Account created!",
-        description: "Welcome! Redirecting you to the map...",
+        description: "Welcome! Let us show you around...",
       });
-      setTimeout(() => navigate("/map"), 1500);
+      // Trigger onboarding for new users
+      setTimeout(async () => {
+        await checkOnboardingStatus();
+        navigate("/map");
+      }, 500);
     }
   };
 

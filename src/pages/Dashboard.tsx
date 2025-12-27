@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar, LayoutDashboard } from "lucide-react";
+import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar, LayoutDashboard, Compass } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import Navbar from "@/components/Navbar";
@@ -14,6 +14,7 @@ import {
   BentoContentCard,
   BentoSidebarCard,
 } from "@/components/ui/bento-page-layout";
+import { useOnboarding } from "@/components/onboarding/OnboardingContext";
 
 interface Profile {
   account_type: 'free' | 'basic_paid' | 'creative_entity';
@@ -41,6 +42,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { openOnboarding } = useOnboarding();
 
   useEffect(() => {
     checkAuth();
@@ -243,6 +245,10 @@ const Dashboard = () => {
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start text-sm" onClick={() => navigate('/map')}>
                 Browse Map
+              </Button>
+              <Button variant="outline" className="w-full justify-start text-sm" onClick={openOnboarding}>
+                <Compass className="w-4 h-4 mr-2" />
+                Take a Tour
               </Button>
               {(profile.account_type === 'creative_entity' || profile.account_type === 'basic_paid') && (
                 <Button variant="outline" className="w-full justify-start text-sm" onClick={() => navigate('/subscription')}>
