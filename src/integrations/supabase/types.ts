@@ -1346,6 +1346,7 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          onboarding_completed: boolean | null
           payment_date: string | null
           payment_verified: boolean | null
           stripe_customer_id: string | null
@@ -1361,6 +1362,7 @@ export type Database = {
           email: string
           full_name?: string | null
           id: string
+          onboarding_completed?: boolean | null
           payment_date?: string | null
           payment_verified?: boolean | null
           stripe_customer_id?: string | null
@@ -1376,6 +1378,7 @@ export type Database = {
           email?: string
           full_name?: string | null
           id?: string
+          onboarding_completed?: boolean | null
           payment_date?: string | null
           payment_verified?: boolean | null
           stripe_customer_id?: string | null
