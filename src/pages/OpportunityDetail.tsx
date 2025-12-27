@@ -17,11 +17,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
 import ApplicationForm from "@/components/opportunities/ApplicationForm";
 import DeadlineCountdown from "@/components/opportunities/DeadlineCountdown";
 import { useOpportunity } from "@/hooks/useOpportunity";
 import { useToast } from "@/hooks/use-toast";
+import { BentoPage, BentoContentCard, BentoSidebarCard } from "@/components/ui/bento-page-layout";
 
 const opportunityTypeColors: Record<string, string> = {
   job: "bg-blue-500/20 text-blue-400 border-blue-500/30",
@@ -58,7 +58,7 @@ const OpportunityDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Skeleton className="h-8 w-32 mb-6" />
@@ -71,17 +71,17 @@ const OpportunityDetail = () => {
             <Skeleton className="h-64" />
           </div>
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
   if (error || !opportunity) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold mb-4">Opportunity not found</h1>
-          <p className="text-muted-foreground mb-6">
+          <h1 className="text-2xl font-bold mb-4 text-white">Opportunity not found</h1>
+          <p className="text-gray-400 mb-6">
             This opportunity may have been removed or doesn't exist.
           </p>
           <Button onClick={() => navigate("/opportunities")}>
@@ -89,7 +89,7 @@ const OpportunityDetail = () => {
             Back to Opportunities
           </Button>
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
@@ -98,25 +98,25 @@ const OpportunityDetail = () => {
     : opportunity.location_text || opportunity.location?.suburb || "Location flexible";
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
 
       <main className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Button
           variant="ghost"
-          className="mb-6"
+          className="mb-6 text-gray-400 hover:text-white"
           onClick={() => navigate("/opportunities")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Opportunities
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Header */}
-            <div>
+            <BentoContentCard>
+              {/* Header */}
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <Badge
                   variant="outline"
@@ -144,135 +144,133 @@ const OpportunityDetail = () => {
                   </Badge>
                 )}
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold">{opportunity.title}</h1>
-            </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">{opportunity.title}</h1>
 
-            {/* Organization Info */}
-            <div className="flex items-center gap-4">
-              {opportunity.location?.logo_url ? (
-                <img
-                  src={opportunity.location.logo_url}
-                  alt={opportunity.location.name}
-                  className="w-14 h-14 rounded-lg object-cover"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Building2 className="h-7 w-7 text-primary" />
-                </div>
-              )}
-              <div>
-                <p className="font-medium text-lg">
-                  {opportunity.location?.name || opportunity.poster?.full_name || "Anonymous"}
-                </p>
-                {opportunity.location && (
-                  <Link
-                    to={`/business/${opportunity.location.id}`}
-                    className="text-sm text-primary hover:underline"
-                  >
-                    View organization profile
-                  </Link>
+              {/* Organization Info */}
+              <div className="flex items-center gap-4 mt-6">
+                {opportunity.location?.logo_url ? (
+                  <img
+                    src={opportunity.location.logo_url}
+                    alt={opportunity.location.name}
+                    className="w-14 h-14 rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Building2 className="h-7 w-7 text-primary" />
+                  </div>
                 )}
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="prose prose-invert max-w-none">
-              <h2 className="text-xl font-semibold mb-3">About this opportunity</h2>
-              <p className="text-muted-foreground whitespace-pre-wrap">
-                {opportunity.description}
-              </p>
-            </div>
-
-            {/* Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {opportunity.experience_level && opportunity.experience_level !== "any" && (
-                <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                  <Briefcase className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Experience Level</p>
-                    <p className="font-medium capitalize">{opportunity.experience_level}</p>
-                  </div>
-                </div>
-              )}
-
-              {opportunity.compensation_details && (
-                <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                  <DollarSign className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Compensation</p>
-                    <p className="font-medium">{opportunity.compensation_details}</p>
-                  </div>
-                </div>
-              )}
-
-              {opportunity.start_date && (
-                <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Start Date</p>
-                    <p className="font-medium">
-                      {format(new Date(opportunity.start_date), "MMMM d, yyyy")}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">{locationText}</p>
+                  <p className="font-medium text-lg text-white">
+                    {opportunity.location?.name || opportunity.poster?.full_name || "Anonymous"}
+                  </p>
+                  {opportunity.location && (
+                    <Link
+                      to={`/business/${opportunity.location.id}`}
+                      className="text-sm text-primary hover:underline"
+                    >
+                      View organization profile
+                    </Link>
+                  )}
                 </div>
               </div>
-            </div>
+
+              {/* Description */}
+              <div className="mt-6">
+                <h2 className="text-xl font-semibold mb-3 text-white">About this opportunity</h2>
+                <p className="text-gray-400 whitespace-pre-wrap">
+                  {opportunity.description}
+                </p>
+              </div>
+
+              {/* Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                {opportunity.experience_level && opportunity.experience_level !== "any" && (
+                  <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
+                    <Briefcase className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Experience Level</p>
+                      <p className="font-medium text-white capitalize">{opportunity.experience_level}</p>
+                    </div>
+                  </div>
+                )}
+
+                {opportunity.compensation_details && (
+                  <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
+                    <DollarSign className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Compensation</p>
+                      <p className="font-medium text-white">{opportunity.compensation_details}</p>
+                    </div>
+                  </div>
+                )}
+
+                {opportunity.start_date && (
+                  <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
+                    <Calendar className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm text-gray-500">Start Date</p>
+                      <p className="font-medium text-white">
+                        {format(new Date(opportunity.start_date), "MMMM d, yyyy")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg border border-[#333]">
+                  <MapPin className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">Location</p>
+                    <p className="font-medium text-white">{locationText}</p>
+                  </div>
+                </div>
+              </div>
+            </BentoContentCard>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                {/* Deadline */}
-                {opportunity.deadline && (
-                  <>
-                    <DeadlineCountdown deadline={opportunity.deadline} className="text-lg font-medium" />
-                    <Separator />
-                  </>
-                )}
+            <BentoSidebarCard sticky>
+              {/* Deadline */}
+              {opportunity.deadline && (
+                <>
+                  <DeadlineCountdown deadline={opportunity.deadline} className="text-lg font-medium" />
+                  <Separator className="my-4 bg-[#333]" />
+                </>
+              )}
 
-                {/* Apply Button */}
-                <ApplicationForm
-                  opportunityId={opportunity.id}
-                  opportunityTitle={opportunity.title}
-                  applicationEmail={opportunity.application_email}
-                  applicationUrl={opportunity.application_url}
-                />
+              {/* Apply Button */}
+              <ApplicationForm
+                opportunityId={opportunity.id}
+                opportunityTitle={opportunity.title}
+                applicationEmail={opportunity.application_email}
+                applicationUrl={opportunity.application_url}
+              />
 
-                <Separator />
+              <Separator className="my-4 bg-[#333]" />
 
-                {/* Share */}
-                <Button variant="outline" className="w-full" onClick={handleShare}>
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share Opportunity
+              {/* Share */}
+              <Button variant="outline" className="w-full border-[#333] text-white hover:bg-[#222]" onClick={handleShare}>
+                <Share2 className="h-4 w-4 mr-2" />
+                Share Opportunity
+              </Button>
+
+              {/* Organization Website */}
+              {opportunity.location?.website && (
+                <Button variant="outline" className="w-full mt-3 border-[#333] text-white hover:bg-[#222]" asChild>
+                  <a
+                    href={opportunity.location.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Visit Website
+                  </a>
                 </Button>
-
-                {/* Organization Website */}
-                {opportunity.location?.website && (
-                  <Button variant="outline" className="w-full" asChild>
-                    <a
-                      href={opportunity.location.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Visit Website
-                    </a>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
+              )}
+            </BentoSidebarCard>
 
             {/* Posted Info */}
-            <div className="text-sm text-muted-foreground text-center">
+            <div className="text-sm text-gray-500 text-center">
               Posted {format(new Date(opportunity.created_at), "MMMM d, yyyy")}
               <br />
               {opportunity.view_count || 0} views
@@ -280,7 +278,7 @@ const OpportunityDetail = () => {
           </div>
         </div>
       </main>
-    </div>
+    </BentoPage>
   );
 };
 

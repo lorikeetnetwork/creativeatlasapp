@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Calendar, Clock, Eye, MapPin } from "lucide-react";
 import { format } from "date-fns";
+import { BentoPage, BentoContentCard } from "@/components/ui/bento-page-layout";
 
 const BlogArticle = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -88,7 +89,7 @@ const BlogArticle = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-8 max-w-4xl">
           <Skeleton className="h-8 w-32 mb-6" />
@@ -101,24 +102,24 @@ const BlogArticle = () => {
             <Skeleton className="h-4 w-3/4" />
           </div>
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">
+          <h1 className="text-2xl font-bold text-white mb-4">
             Article Not Found
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-gray-400 mb-8">
             The article you're looking for doesn't exist or has been removed.
           </p>
           <Button onClick={() => navigate("/blog")}>Back to Blog</Button>
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
@@ -130,14 +131,14 @@ const BlogArticle = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Back Button */}
         <Button
           variant="ghost"
-          className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
+          className="mb-6 -ml-2 text-gray-400 hover:text-white"
           onClick={() => navigate("/blog")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -161,18 +162,18 @@ const BlogArticle = () => {
             )}
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
             {article.title}
           </h1>
 
           {article.excerpt && (
-            <p className="text-lg text-muted-foreground mb-6">
+            <p className="text-lg text-gray-400 mb-6">
               {article.excerpt}
             </p>
           )}
 
           {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
             {article.published_at && (
               <span className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
@@ -209,7 +210,7 @@ const BlogArticle = () => {
 
         {/* Cover Image */}
         {article.cover_image_url && (
-          <div className="mb-8 rounded-xl overflow-hidden">
+          <div className="mb-8 rounded-xl overflow-hidden border border-[#333]">
             <img
               src={article.cover_image_url}
               alt={article.title}
@@ -219,12 +220,12 @@ const BlogArticle = () => {
         )}
 
         {/* Article Content */}
-        <article className="mb-12">
+        <BentoContentCard className="mb-8">
           <PlateRenderer
             content={article.content as any[]}
-            className="prose-headings:text-foreground prose-p:text-foreground prose-a:text-primary"
+            className="prose-headings:text-white prose-p:text-gray-300 prose-a:text-primary"
           />
-        </article>
+        </BentoContentCard>
 
         {/* Tags */}
         {articleTagsData && articleTagsData.length > 0 && (
@@ -239,12 +240,9 @@ const BlogArticle = () => {
         </div>
 
         {/* Comments Section */}
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-foreground mb-6">
-            Comments
-          </h2>
+        <BentoContentCard title="Comments" className="mb-8">
           <ArticleComments articleId={article.id} />
-        </section>
+        </BentoContentCard>
 
         {/* Related Articles */}
         <RelatedArticles
@@ -252,7 +250,7 @@ const BlogArticle = () => {
           tagSlugs={articleTagsData?.filter(Boolean).map((t: any) => t?.slug) || []}
         />
       </main>
-    </div>
+    </BentoPage>
   );
 };
 

@@ -7,9 +7,9 @@ import {
   DollarSign,
   Globe,
 } from "lucide-react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { BentoCard } from "@/components/ui/bento-card";
 
 interface OpportunityCardProps {
   opportunity: {
@@ -83,120 +83,117 @@ const OpportunityCard = ({ opportunity, compact = false }: OpportunityCardProps)
 
   if (compact) {
     return (
-      <Card
-        className="cursor-pointer hover:border-primary/50 transition-colors bg-card/50"
+      <BentoCard
+        className="p-4"
         onClick={() => navigate(`/opportunities/${opportunity.slug}`)}
       >
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            {opportunity.location?.logo_url ? (
-              <img
-                src={opportunity.location.logo_url}
-                alt={opportunity.location.name}
-                className="w-10 h-10 rounded-lg object-cover"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-primary" />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-medium truncate">{opportunity.title}</h3>
-              <p className="text-sm text-muted-foreground truncate">
-                {opportunity.location?.name || opportunity.poster?.full_name}
-              </p>
-            </div>
-            <Badge
-              variant="outline"
-              className={opportunityTypeColors[opportunity.opportunity_type] || ""}
-            >
-              {opportunity.opportunity_type}
-            </Badge>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <Card
-      className="overflow-hidden cursor-pointer hover:border-primary/50 transition-all group bg-card/50"
-      onClick={() => navigate(`/opportunities/${opportunity.slug}`)}
-    >
-      <CardContent className="p-5 space-y-4">
-        {/* Header */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3">
           {opportunity.location?.logo_url ? (
             <img
               src={opportunity.location.logo_url}
               alt={opportunity.location.name}
-              className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+              className="w-10 h-10 rounded-lg object-cover"
             />
           ) : (
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Building2 className="h-6 w-6 text-primary" />
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Briefcase className="h-5 w-5 text-primary" />
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <Badge
-                variant="outline"
-                className={opportunityTypeColors[opportunity.opportunity_type] || ""}
-              >
-                {opportunity.opportunity_type.charAt(0).toUpperCase() +
-                  opportunity.opportunity_type.slice(1)}
-              </Badge>
-              <Badge
-                variant="secondary"
-                className={compensationColors[opportunity.compensation_type] || ""}
-              >
-                {opportunity.compensation_type.charAt(0).toUpperCase() +
-                  opportunity.compensation_type.slice(1)}
-              </Badge>
-              {opportunity.is_remote && (
-                <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
-                  <Globe className="h-3 w-3 mr-1" />
-                  Remote
-                </Badge>
-              )}
-            </div>
-            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors line-clamp-1">
-              {opportunity.title}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              {opportunity.location?.name || opportunity.poster?.full_name || "Anonymous"}
+            <h3 className="font-medium truncate text-white">{opportunity.title}</h3>
+            <p className="text-sm text-gray-400 truncate">
+              {opportunity.location?.name || opportunity.poster?.full_name}
             </p>
           </div>
+          <Badge
+            variant="outline"
+            className={opportunityTypeColors[opportunity.opportunity_type] || ""}
+          >
+            {opportunity.opportunity_type}
+          </Badge>
         </div>
+      </BentoCard>
+    );
+  }
 
-        {/* Description */}
-        <p className="text-sm text-muted-foreground line-clamp-2">
-          {opportunity.description}
-        </p>
-
-        {/* Meta Info */}
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <MapPin className="h-4 w-4" />
-            <span>{locationText}</span>
+  return (
+    <BentoCard
+      className="p-5"
+      onClick={() => navigate(`/opportunities/${opportunity.slug}`)}
+    >
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        {opportunity.location?.logo_url ? (
+          <img
+            src={opportunity.location.logo_url}
+            alt={opportunity.location.name}
+            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+          />
+        ) : (
+          <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <Building2 className="h-6 w-6 text-primary" />
           </div>
-          {opportunity.experience_level && opportunity.experience_level !== "any" && (
-            <div className="flex items-center gap-1">
-              <Briefcase className="h-4 w-4" />
-              <span className="capitalize">{opportunity.experience_level} level</span>
-            </div>
-          )}
-          {opportunity.compensation_details && (
-            <div className="flex items-center gap-1">
-              <DollarSign className="h-4 w-4" />
-              <span>{opportunity.compensation_details}</span>
-            </div>
-          )}
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <Badge
+              variant="outline"
+              className={opportunityTypeColors[opportunity.opportunity_type] || ""}
+            >
+              {opportunity.opportunity_type.charAt(0).toUpperCase() +
+                opportunity.opportunity_type.slice(1)}
+            </Badge>
+            <Badge
+              variant="secondary"
+              className={compensationColors[opportunity.compensation_type] || ""}
+            >
+              {opportunity.compensation_type.charAt(0).toUpperCase() +
+                opportunity.compensation_type.slice(1)}
+            </Badge>
+            {opportunity.is_remote && (
+              <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
+                <Globe className="h-3 w-3 mr-1" />
+                Remote
+              </Badge>
+            )}
+          </div>
+          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors line-clamp-1 text-white">
+            {opportunity.title}
+          </h3>
+          <p className="text-sm text-gray-400">
+            {opportunity.location?.name || opportunity.poster?.full_name || "Anonymous"}
+          </p>
         </div>
-      </CardContent>
+      </div>
 
-      <CardFooter className="px-5 pb-4 pt-0 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">
+      {/* Description */}
+      <p className="text-sm text-gray-400 line-clamp-2 mt-4">
+        {opportunity.description}
+      </p>
+
+      {/* Meta Info */}
+      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-4">
+        <div className="flex items-center gap-1">
+          <MapPin className="h-4 w-4" />
+          <span>{locationText}</span>
+        </div>
+        {opportunity.experience_level && opportunity.experience_level !== "any" && (
+          <div className="flex items-center gap-1">
+            <Briefcase className="h-4 w-4" />
+            <span className="capitalize">{opportunity.experience_level} level</span>
+          </div>
+        )}
+        {opportunity.compensation_details && (
+          <div className="flex items-center gap-1">
+            <DollarSign className="h-4 w-4" />
+            <span>{opportunity.compensation_details}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-4 mt-4 border-t border-[#333]">
+        <span className="text-xs text-gray-500">
           Posted {formatDistanceToNow(new Date(opportunity.created_at), { addSuffix: true })}
         </span>
         {deadlineStatus && (
@@ -208,8 +205,8 @@ const OpportunityCard = ({ opportunity, compact = false }: OpportunityCardProps)
             {deadlineStatus.text}
           </Badge>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </BentoCard>
   );
 };
 

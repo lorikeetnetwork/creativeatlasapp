@@ -20,6 +20,7 @@ import RSVPButton from "@/components/events/RSVPButton";
 import { useEvent } from "@/hooks/useEvent";
 import { useEventRSVPCounts } from "@/hooks/useEventRSVP";
 import { useToast } from "@/hooks/use-toast";
+import { BentoPage, BentoContentCard, BentoSidebarCard } from "@/components/ui/bento-page-layout";
 
 const eventTypeColors: Record<string, string> = {
   workshop: "bg-blue-500/20 text-blue-400 border-blue-500/30",
@@ -70,7 +71,7 @@ const EventDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Skeleton className="h-8 w-32 mb-6" />
@@ -78,17 +79,17 @@ const EventDetail = () => {
           <Skeleton className="h-10 w-2/3 mb-4" />
           <Skeleton className="h-6 w-1/3" />
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
   if (error || !event) {
     return (
-      <div className="min-h-screen bg-background">
+      <BentoPage>
         <Navbar />
         <main className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold mb-4">Event not found</h1>
-          <p className="text-muted-foreground mb-6">
+          <h1 className="text-2xl font-bold mb-4 text-white">Event not found</h1>
+          <p className="text-gray-400 mb-6">
             This event may have been removed or doesn't exist.
           </p>
           <Button onClick={() => navigate("/events")}>
@@ -96,31 +97,31 @@ const EventDetail = () => {
             Back to Events
           </Button>
         </main>
-      </div>
+      </BentoPage>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <BentoPage>
       <Navbar />
 
       <main className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <Button
           variant="ghost"
-          className="mb-6"
+          className="mb-6 text-gray-400 hover:text-white"
           onClick={() => navigate("/events")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Events
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Cover Image */}
             {event.cover_image_url && (
-              <div className="aspect-video rounded-lg overflow-hidden">
+              <div className="aspect-video rounded-lg overflow-hidden border border-[#333]">
                 <img
                   src={event.cover_image_url}
                   alt={event.title}
@@ -129,8 +130,8 @@ const EventDetail = () => {
               </div>
             )}
 
-            {/* Title & Badges */}
-            <div>
+            <BentoContentCard>
+              {/* Title & Badges */}
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <Badge
                   variant="outline"
@@ -155,36 +156,35 @@ const EventDetail = () => {
                   </Badge>
                 )}
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold">{event.title}</h1>
-            </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">{event.title}</h1>
 
-            {/* Description */}
-            {event.description && (
-              <div className="prose prose-invert max-w-none">
-                <p className="text-muted-foreground whitespace-pre-wrap">
-                  {event.description}
-                </p>
-              </div>
-            )}
+              {/* Description */}
+              {event.description && (
+                <div className="mt-6">
+                  <p className="text-gray-400 whitespace-pre-wrap">
+                    {event.description}
+                  </p>
+                </div>
+              )}
 
-            {/* Organizer */}
-            {event.creator && (
-              <div className="pt-4 border-t">
-                <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                  Organized by
-                </h3>
-                <p className="font-medium">{event.creator.full_name || event.creator.email}</p>
-              </div>
-            )}
+              {/* Organizer */}
+              {event.creator && (
+                <div className="pt-6 mt-6 border-t border-[#333]">
+                  <h3 className="text-sm font-medium text-gray-500 mb-2">
+                    Organized by
+                  </h3>
+                  <p className="font-medium text-white">{event.creator.full_name || event.creator.email}</p>
+                </div>
+              )}
+            </BentoContentCard>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* RSVP Card */}
-            <div className="bg-card rounded-lg border p-6 space-y-4">
+            <BentoSidebarCard sticky>
               <RSVPButton eventId={event.id} size="lg" />
 
-              <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center justify-center gap-6 text-sm text-gray-400 mt-4">
                 {rsvpCounts && rsvpCounts.going > 0 && (
                   <span className="flex items-center gap-1">
                     <Users className="h-4 w-4" />
@@ -196,23 +196,23 @@ const EventDetail = () => {
                 )}
               </div>
 
-              <Separator />
+              <Separator className="my-4 bg-[#333]" />
 
               {/* Date & Time */}
               <div className="flex items-start gap-3">
-                <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
+                <Calendar className="h-5 w-5 text-gray-500 mt-0.5" />
                 <div>
-                  <p className="font-medium">
+                  <p className="font-medium text-white">
                     {format(new Date(event.start_date), "EEEE, MMMM d, yyyy")}
                   </p>
                   {event.start_time && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-gray-400">
                       {formatTime(event.start_time)}
                       {event.end_time && ` - ${formatTime(event.end_time)}`}
                     </p>
                   )}
                   {event.end_date && event.end_date !== event.start_date && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-gray-400">
                       to {format(new Date(event.end_date), "MMMM d, yyyy")}
                     </p>
                   )}
@@ -220,12 +220,12 @@ const EventDetail = () => {
               </div>
 
               {/* Location */}
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+              <div className="flex items-start gap-3 mt-4">
+                <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
                 <div>
                   {event.is_online ? (
                     <>
-                      <p className="font-medium">Online Event</p>
+                      <p className="font-medium text-white">Online Event</p>
                       {event.online_url && (
                         <a
                           href={event.online_url}
@@ -240,11 +240,11 @@ const EventDetail = () => {
                     </>
                   ) : (
                     <>
-                      <p className="font-medium">
+                      <p className="font-medium text-white">
                         {event.venue_name || event.location?.name || "Location TBA"}
                       </p>
                       {event.venue_address && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-gray-400">
                           {event.venue_address}
                         </p>
                       )}
@@ -263,10 +263,10 @@ const EventDetail = () => {
 
               {/* Price */}
               {formatPrice() && (
-                <div className="flex items-start gap-3">
-                  <Ticket className="h-5 w-5 text-muted-foreground mt-0.5" />
+                <div className="flex items-start gap-3 mt-4">
+                  <Ticket className="h-5 w-5 text-gray-500 mt-0.5" />
                   <div>
-                    <p className="font-medium">{formatPrice()}</p>
+                    <p className="font-medium text-white">{formatPrice()}</p>
                     {event.ticket_url && (
                       <a
                         href={event.ticket_url}
@@ -282,18 +282,18 @@ const EventDetail = () => {
                 </div>
               )}
 
-              <Separator />
+              <Separator className="my-4 bg-[#333]" />
 
               {/* Share */}
-              <Button variant="outline" className="w-full" onClick={handleShare}>
+              <Button variant="outline" className="w-full border-[#333] text-white hover:bg-[#222]" onClick={handleShare}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share Event
               </Button>
-            </div>
+            </BentoSidebarCard>
           </div>
         </div>
       </main>
-    </div>
+    </BentoPage>
   );
 };
 

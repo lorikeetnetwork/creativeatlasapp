@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MapPin, Briefcase, Users, GraduationCap } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
+import { BentoCard } from '@/components/ui/bento-card';
 
 type MemberProfile = Database['public']['Tables']['member_profiles']['Row'];
 
@@ -24,8 +24,8 @@ export function MemberCard({ member }: MemberCardProps) {
   const location = [member.suburb, member.state].filter(Boolean).join(', ');
 
   return (
-    <Card
-      className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-card border-border overflow-hidden"
+    <BentoCard
+      className="p-0 overflow-hidden"
       onClick={() => navigate(`/community/profile/${member.id}`)}
     >
       {member.banner_url && (
@@ -37,20 +37,20 @@ export function MemberCard({ member }: MemberCardProps) {
           />
         </div>
       )}
-      <CardContent className={`p-6 ${member.banner_url ? '-mt-8' : ''}`}>
+      <div className={`p-6 ${member.banner_url ? '-mt-8' : ''}`}>
         <div className="flex items-start gap-4">
-          <Avatar className={`h-16 w-16 border-4 border-background ${member.banner_url ? 'ring-2 ring-border' : ''}`}>
+          <Avatar className={`h-16 w-16 border-4 border-[#1a1a1a] ${member.banner_url ? 'ring-2 ring-[#333]' : ''}`}>
             <AvatarImage src={member.avatar_url || undefined} alt={member.display_name || 'Member'} />
             <AvatarFallback className="bg-primary/10 text-primary text-lg">
               {initials}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg text-foreground truncate">
+            <h3 className="font-semibold text-lg text-white truncate">
               {member.display_name || 'Anonymous'}
             </h3>
             {member.tagline && (
-              <p className="text-sm text-muted-foreground line-clamp-1">
+              <p className="text-sm text-gray-400 line-clamp-1">
                 {member.tagline}
               </p>
             )}
@@ -64,7 +64,7 @@ export function MemberCard({ member }: MemberCardProps) {
         )}
 
         {location && (
-          <div className="flex items-center gap-1.5 mt-3 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1.5 mt-3 text-sm text-gray-400">
             <MapPin className="h-3.5 w-3.5" />
             <span>{location}</span>
           </div>
@@ -92,20 +92,20 @@ export function MemberCard({ member }: MemberCardProps) {
         </div>
 
         {member.skills && member.skills.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-4">
+          <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-[#333]">
             {member.skills.slice(0, 4).map((skill) => (
-              <Badge key={skill} variant="secondary" className="text-xs bg-secondary/50">
+              <Badge key={skill} variant="secondary" className="text-xs bg-[#222]">
                 {skill}
               </Badge>
             ))}
             {member.skills.length > 4 && (
-              <Badge variant="secondary" className="text-xs bg-secondary/50">
+              <Badge variant="secondary" className="text-xs bg-[#222]">
                 +{member.skills.length - 4}
               </Badge>
             )}
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </BentoCard>
   );
 }

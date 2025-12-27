@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import { Calendar, MapPin, Users, Clock, ExternalLink } from "lucide-react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { BentoCard } from "@/components/ui/bento-card";
 
 interface EventCardProps {
   event: {
@@ -75,35 +75,33 @@ const EventCard = ({ event, compact = false }: EventCardProps) => {
 
   if (compact) {
     return (
-      <Card
-        className="cursor-pointer hover:border-primary/50 transition-colors bg-card/50"
+      <BentoCard
+        className="p-4"
         onClick={() => navigate(`/events/${event.slug}`)}
       >
-        <CardContent className="p-4">
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 w-14 h-14 bg-primary/10 rounded-lg flex flex-col items-center justify-center">
-              <span className="text-xs text-muted-foreground uppercase">
-                {format(new Date(event.start_date), "MMM")}
-              </span>
-              <span className="text-lg font-bold text-primary">
-                {format(new Date(event.start_date), "d")}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-medium truncate">{event.title}</h3>
-              <p className="text-sm text-muted-foreground truncate">
-                {locationText}
-              </p>
-            </div>
+        <div className="flex gap-3">
+          <div className="flex-shrink-0 w-14 h-14 bg-primary/10 rounded-lg flex flex-col items-center justify-center">
+            <span className="text-xs text-gray-500 uppercase">
+              {format(new Date(event.start_date), "MMM")}
+            </span>
+            <span className="text-lg font-bold text-primary">
+              {format(new Date(event.start_date), "d")}
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-medium truncate text-white">{event.title}</h3>
+            <p className="text-sm text-gray-400 truncate">
+              {locationText}
+            </p>
+          </div>
+        </div>
+      </BentoCard>
     );
   }
 
   return (
-    <Card
-      className="overflow-hidden cursor-pointer hover:border-primary/50 transition-all group bg-card/50"
+    <BentoCard
+      className="p-0 overflow-hidden"
       onClick={() => navigate(`/events/${event.slug}`)}
     >
       {event.cover_image_url && (
@@ -121,7 +119,7 @@ const EventCard = ({ event, compact = false }: EventCardProps) => {
         </div>
       )}
 
-      <CardContent className="p-4 space-y-3">
+      <div className="p-4 space-y-3">
         <div className="flex items-center gap-2 flex-wrap">
           <Badge
             variant="outline"
@@ -142,17 +140,17 @@ const EventCard = ({ event, compact = false }: EventCardProps) => {
         </div>
 
         <div>
-          <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors text-white">
             {event.title}
           </h3>
           {event.excerpt && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+            <p className="text-sm text-gray-400 line-clamp-2 mt-1">
               {event.excerpt}
             </p>
           )}
         </div>
 
-        <div className="space-y-2 text-sm text-muted-foreground">
+        <div className="space-y-2 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 flex-shrink-0" />
             <span>
@@ -165,25 +163,25 @@ const EventCard = ({ event, compact = false }: EventCardProps) => {
             <span className="truncate">{locationText}</span>
           </div>
         </div>
-      </CardContent>
 
-      <CardFooter className="px-4 pb-4 pt-0 flex items-center justify-between">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          {goingCount > 0 && (
-            <span className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              {goingCount} going
-            </span>
-          )}
-          {interestedCount > 0 && (
-            <span>{interestedCount} interested</span>
+        <div className="flex items-center justify-between pt-2 border-t border-[#333]">
+          <div className="flex items-center gap-3 text-sm text-gray-500">
+            {goingCount > 0 && (
+              <span className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                {goingCount} going
+              </span>
+            )}
+            {interestedCount > 0 && (
+              <span>{interestedCount} interested</span>
+            )}
+          </div>
+          {formatPrice() && !event.is_free && (
+            <span className="text-sm font-medium text-white">{formatPrice()}</span>
           )}
         </div>
-        {formatPrice() && !event.is_free && (
-          <span className="text-sm font-medium">{formatPrice()}</span>
-        )}
-      </CardFooter>
-    </Card>
+      </div>
+    </BentoCard>
   );
 };
 
