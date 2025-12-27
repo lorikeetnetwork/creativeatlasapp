@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Lock, Crown, ArrowRight, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -44,14 +44,14 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <GradientButton 
+                <Button 
                   className="w-full" 
                   size="lg"
                   onClick={() => navigate(`/auth?return=${encodeURIComponent(window.location.pathname)}`)}
                 >
                   Sign In or Create Account
                   <ArrowRight className="ml-2 w-4 h-4" />
-                </GradientButton>
+                </Button>
                 <p className="text-sm text-gray-500">
                   Starting from $15/year
                 </p>
@@ -112,14 +112,14 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                 </div>
                 
                 <div className="space-y-3">
-                  <GradientButton 
+                  <Button 
                     className="w-full" 
                     size="lg"
                     onClick={() => navigate('/pricing')}
                   >
                     View Pricing Plans
                     <ArrowRight className="ml-2 w-4 h-4" />
-                  </GradientButton>
+                  </Button>
                   <p className="text-xs text-gray-500">
                     Starting from just $15/year
                   </p>

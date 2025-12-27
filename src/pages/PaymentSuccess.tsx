@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Sparkles, Building2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -125,22 +125,22 @@ const PaymentSuccess = () => {
                         </p>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <GradientButton 
+                        <Button 
                           className="flex-1" 
                           size="lg"
                           onClick={() => navigate("/map")}
                         >
                           Start Exploring
                           <ArrowRight className="ml-2 w-4 h-4" />
-                        </GradientButton>
-                        <GradientButton 
-                          className="flex-1 border-[#333] text-white hover:bg-[#1a1a1a]" 
+                        </Button>
+                        <Button 
+                          className="flex-1" 
                           variant="outline"
                           size="lg"
                           onClick={() => navigate("/pricing")}
                         >
                           Upgrade to Listing
-                        </GradientButton>
+                        </Button>
                       </div>
                     </>
                   ) : (
@@ -166,22 +166,22 @@ const PaymentSuccess = () => {
                         </ol>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <GradientButton 
+                        <Button 
                           className="flex-1" 
                           size="lg"
                           onClick={() => navigate("/map")}
                         >
                           Add Your Location
                           <ArrowRight className="ml-2 w-4 h-4" />
-                        </GradientButton>
-                        <GradientButton 
-                          className="flex-1 border-[#333] text-white hover:bg-[#1a1a1a]" 
+                        </Button>
+                        <Button 
+                          className="flex-1" 
                           variant="outline"
                           size="lg"
                           onClick={() => navigate("/dashboard")}
                         >
                           View Dashboard
-                        </GradientButton>
+                        </Button>
                       </div>
                     </>
                   )}

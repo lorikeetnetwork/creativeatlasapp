@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Building2, ArrowRight, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -107,7 +107,7 @@ const Pricing = () => {
                 </li>
               ))}
             </ul>
-            <GradientButton 
+            <Button 
               className="w-full text-sm md:text-base" 
               size="lg" 
               variant="outline"
@@ -116,7 +116,7 @@ const Pricing = () => {
             >
               {isLoadingListing ? "Processing..." : "Get Basic - $15/year"}
               <ArrowRight className="ml-2 w-4 h-4" />
-            </GradientButton>
+            </Button>
           </BentoContainer>
 
           {/* Creative Listing Card */}
@@ -146,7 +146,7 @@ const Pricing = () => {
                 </li>
               ))}
             </ul>
-            <GradientButton 
+            <Button 
               className="w-full text-sm md:text-base" 
               size="lg" 
               onClick={() => handlePayment('creative_listing')} 
@@ -154,7 +154,7 @@ const Pricing = () => {
             >
               {isLoadingListing ? "Processing..." : "List Your Business - $20/year"}
               <ArrowRight className="ml-2 w-4 h-4" />
-            </GradientButton>
+            </Button>
           </BentoContainer>
         </div>
 
@@ -200,12 +200,12 @@ const Pricing = () => {
             Start exploring creative spaces or showcase your own business today
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-            <GradientButton size="lg" onClick={() => navigate("/map")}>
+            <Button size="lg" onClick={() => navigate("/map")}>
               Explore the Map
-            </GradientButton>
-            <GradientButton size="lg" variant="outline" onClick={() => navigate("/auth")} className="border-[#333] text-white hover:bg-[#222]">
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate("/auth")}>
               Get Started
-            </GradientButton>
+            </Button>
           </div>
         </BentoContainer>
       </BentoMain>

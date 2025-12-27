@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -126,9 +126,9 @@ const Auth = () => {
                     className="bg-[#222] border-[#333] text-white placeholder:text-gray-500"
                   />
                 </div>
-                <GradientButton type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
-                </GradientButton>
+                </Button>
               </form>
             </TabsContent>
             
@@ -171,9 +171,9 @@ const Auth = () => {
                     className="bg-[#222] border-[#333] text-white placeholder:text-gray-500"
                   />
                 </div>
-                <GradientButton type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Account"}
-                </GradientButton>
+                </Button>
                 <p className="text-xs text-center text-gray-400">
                   Subscription required after sign up to access all features.
                 </p>
