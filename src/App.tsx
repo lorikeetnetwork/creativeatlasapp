@@ -29,6 +29,7 @@ import Community from "./pages/Community";
 import MemberProfile from "./pages/MemberProfile";
 import EditMemberProfile from "./pages/EditMemberProfile";
 import NotFound from "./pages/NotFound";
+import Collaborate from "./pages/Collaborate";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
           {/* Public routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/map" element={<Index />} />
+          <Route path="/collaborate" element={<Collaborate />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />

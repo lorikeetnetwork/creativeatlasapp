@@ -449,8 +449,9 @@ const Landing = () => {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">Legal</h4>
+              <h4 className="font-semibold text-white mb-4">About</h4>
               <ul className="space-y-2 text-sm">
+                <li><button onClick={() => navigate("/collaborate")} className="text-gray-400 hover:text-white transition-colors">Collaborate</button></li>
                 <li><button className="text-gray-400 hover:text-white transition-colors">About</button></li>
                 <li><button className="text-gray-400 hover:text-white transition-colors">Contact</button></li>
                 <li><button className="text-gray-400 hover:text-white transition-colors">Terms</button></li>
