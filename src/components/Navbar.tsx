@@ -47,6 +47,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Opportunities", onClick: () => navigate("/opportunities") },
         { label: "Community", onClick: () => navigate("/community") },
         { label: "Blog", onClick: () => navigate("/blog") },
+        { label: "Collaborate", onClick: () => navigate("/collaborate") },
         { label: "Dashboard", onClick: () => navigate("/dashboard") },
         { label: "Sign Out", onClick: handleSignOut },
       ]
@@ -56,6 +57,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Opportunities", onClick: () => navigate("/opportunities") },
         { label: "Community", onClick: () => navigate("/community") },
         { label: "Blog", onClick: () => navigate("/blog") },
+        { label: "Collaborate", onClick: () => navigate("/collaborate") },
         { label: "Sign In", onClick: () => navigate("/auth") },
       ];
 
