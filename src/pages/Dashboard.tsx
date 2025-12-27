@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, User, CreditCard, Building2, ArrowRight, Loader2, Settings, Calendar, LayoutDashboard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -215,10 +215,10 @@ const Dashboard = () => {
                     <p className="text-xs md:text-sm mb-3 text-gray-400">
                       <strong className="text-white">List your creative business</strong> on the map to reach more customers.
                     </p>
-                    <GradientButton size="sm" onClick={() => navigate('/pricing')}>
+                    <Button size="sm" onClick={() => navigate('/pricing')}>
                       View Pricing
                       <ArrowRight className="ml-2 w-4 h-4" />
-                    </GradientButton>
+                    </Button>
                   </div>
                 )}
 
@@ -241,24 +241,24 @@ const Dashboard = () => {
           {/* Quick Actions Card */}
           <BentoSidebarCard title="Quick Actions">
             <div className="space-y-2">
-              <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm" onClick={() => navigate('/map')}>
+              <Button variant="outline" className="w-full justify-start text-sm" onClick={() => navigate('/map')}>
                 Browse Map
-              </GradientButton>
+              </Button>
               {(profile.account_type === 'creative_entity' || profile.account_type === 'basic_paid') && (
-                <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm" onClick={() => navigate('/subscription')}>
+                <Button variant="outline" className="w-full justify-start text-sm" onClick={() => navigate('/subscription')}>
                   <Settings className="w-4 h-4 mr-2" />
                   Manage Subscription
-                </GradientButton>
+                </Button>
               )}
               {profile.account_type === 'creative_entity' && (
-                <GradientButton variant="outline" className="w-full justify-start border-[#333] text-white hover:bg-[#222] text-sm">
+                <Button variant="outline" className="w-full justify-start text-sm">
                   Add Location
-                </GradientButton>
+                </Button>
               )}
               {canUpgrade && (
-                <GradientButton className="w-full justify-start text-sm" onClick={() => navigate('/pricing')}>
+                <Button className="w-full justify-start text-sm" onClick={() => navigate('/pricing')}>
                   List Your Business
-                </GradientButton>
+                </Button>
               )}
             </div>
           </BentoSidebarCard>
@@ -274,9 +274,9 @@ const Dashboard = () => {
               <Clock className="w-10 h-10 md:w-12 md:h-12 text-gray-500 mx-auto mb-4" />
               <p className="text-sm md:text-base text-gray-400 mb-4">No payment history yet</p>
               {profile.account_type === 'free' && (
-                <GradientButton size="sm" onClick={() => navigate('/pricing')}>
-                  View Pricing Plans
-                </GradientButton>
+              <Button size="sm" onClick={() => navigate('/pricing')}>
+                View Pricing Plans
+              </Button>
               )}
             </div>
           ) : (

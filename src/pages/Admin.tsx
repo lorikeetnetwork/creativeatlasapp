@@ -7,7 +7,7 @@ import { PendingLocationsTable } from "@/components/admin/PendingLocationsTable"
 import { BulkImport } from "@/components/admin/BulkImport";
 import { Loader2, ArrowLeft, ImageIcon, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -152,15 +152,15 @@ export default function Admin() {
       <BentoMain className="container mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <GradientButton
+          <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate("/map")}
-            className="mb-4 text-gray-400 hover:text-white"
+            className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Map
-          </GradientButton>
+          </Button>
         </div>
 
         <BentoPageHeader
@@ -195,11 +195,10 @@ export default function Admin() {
                   </p>
                 </div>
               )}
-              <GradientButton
+              <Button
                 onClick={handleFetchOgImages}
                 disabled={fetchingImages}
                 variant="outline"
-                className="bg-transparent border-[#333] text-white hover:bg-[#333]"
               >
                 {fetchingImages ? (
                   <>
@@ -212,7 +211,7 @@ export default function Admin() {
                     Fetch OG Images
                   </>
                 )}
-              </GradientButton>
+              </Button>
             </BentoContentCard>
           </TabsContent>
 

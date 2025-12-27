@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { GradientButton } from "@/components/ui/gradient-button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -130,9 +130,9 @@ const BusinessProfile = () => {
         <Card className="border-[#333] bg-[#1a1a1a]">
           <CardContent className="pt-6">
             <p className="text-gray-400">Business not found</p>
-            <GradientButton onClick={() => navigate("/map")} className="mt-4">
+            <Button onClick={() => navigate("/map")} className="mt-4">
               Back to Map
-            </GradientButton>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -153,24 +153,24 @@ const BusinessProfile = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/50 to-transparent" />
         <div className="absolute top-4 left-4">
-          <GradientButton
+          <Button
             variant="secondary"
             size="icon"
             onClick={() => navigate("/map")}
             className="backdrop-blur-sm bg-[#1a1a1a]/80 border-[#333] hover:bg-[#222] h-10 w-10"
           >
             <ArrowLeft className="w-4 h-4" />
-          </GradientButton>
+          </Button>
         </div>
         <div className="absolute top-4 right-4">
-          <GradientButton
+          <Button
             variant="secondary"
             size="icon"
             onClick={handleShare}
             className="backdrop-blur-sm bg-[#1a1a1a]/80 border-[#333] hover:bg-[#222] h-10 w-10"
           >
             <Share2 className="w-4 h-4" />
-          </GradientButton>
+          </Button>
         </div>
       </div>
 
@@ -275,10 +275,10 @@ const BusinessProfile = () => {
                   </a>
                 )}
               </div>
-              <GradientButton className="w-full" size="sm" onClick={() => navigate(`/map?location=${locationId}`)}>
+              <Button className="w-full" size="sm" onClick={() => navigate(`/map?location=${locationId}`)}>
                 <MapPin className="w-4 h-4 mr-2" />
                 View on Map
-              </GradientButton>
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -417,10 +417,10 @@ const BusinessProfile = () => {
                     <span>{location.instagram}</span>
                   </a>
                 )}
-                <GradientButton className="w-full" onClick={() => navigate(`/map?location=${locationId}`)}>
+                <Button className="w-full" onClick={() => navigate(`/map?location=${locationId}`)}>
                   <MapPin className="w-4 h-4 mr-2" />
                   View on Map
-                </GradientButton>
+                </Button>
               </CardContent>
             </Card>
           </div>
