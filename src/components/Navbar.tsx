@@ -58,6 +58,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Community", onClick: () => navigate("/community") },
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Collaborate", onClick: () => navigate("/collaborate") },
+        { label: "Pricing", onClick: () => navigate("/pricing") },
         { label: "Sign In", onClick: () => navigate("/auth") },
       ];
 
