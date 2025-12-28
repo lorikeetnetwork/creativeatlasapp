@@ -6,16 +6,15 @@ import { Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import type { Session } from "@supabase/supabase-js";
-
 interface NavbarProps {
   session?: Session | null;
 }
-
-const Navbar = ({ session: propSession }: NavbarProps) => {
+const Navbar = ({
+  session: propSession
+}: NavbarProps) => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(propSession ?? null);
-
   useEffect(() => {
     // If session is passed as prop, use it
     if (propSession !== undefined) {
@@ -24,69 +23,83 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
     }
 
     // Otherwise, fetch session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({
+      data: {
+        session
+      }
+    }) => {
       setSession(session);
     });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: {
+        subscription
+      }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
     return () => subscription.unsubscribe();
   }, [propSession]);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
-
-  const navItems = session
-    ? [
-        { label: "Explore Map", onClick: () => navigate("/map") },
-        { label: "Events", onClick: () => navigate("/events") },
-        { label: "Opportunities", onClick: () => navigate("/opportunities") },
-        { label: "Community", onClick: () => navigate("/community") },
-        { label: "Blog", onClick: () => navigate("/blog") },
-        { label: "Collaborate", onClick: () => navigate("/collaborate") },
-        { label: "Dashboard", onClick: () => navigate("/dashboard") },
-        { label: "Sign Out", onClick: handleSignOut },
-      ]
-    : [
-        { label: "Explore Map", onClick: () => navigate("/map") },
-        { label: "Events", onClick: () => navigate("/events") },
-        { label: "Opportunities", onClick: () => navigate("/opportunities") },
-        { label: "Community", onClick: () => navigate("/community") },
-        { label: "Blog", onClick: () => navigate("/blog") },
-        { label: "Collaborate", onClick: () => navigate("/collaborate") },
-        { label: "Sign In", onClick: () => navigate("/auth") },
-      ];
-
-  return (
-    <header className="border-b border-border bg-[#121212] sticky top-0 z-50">
-      <div className="h-16 flex items-center justify-between w-full px-4 md:px-5">
-        <div 
-          className="flex items-center gap-3 cursor-pointer" 
-          onClick={() => navigate("/")}
-        >
-          <img 
-            src={logoImage} 
-            alt="Creative Atlas" 
-            className="h-10 md:h-14 w-auto object-contain" 
-          />
+  const navItems = session ? [{
+    label: "Explore Map",
+    onClick: () => navigate("/map")
+  }, {
+    label: "Events",
+    onClick: () => navigate("/events")
+  }, {
+    label: "Opportunities",
+    onClick: () => navigate("/opportunities")
+  }, {
+    label: "Community",
+    onClick: () => navigate("/community")
+  }, {
+    label: "Blog",
+    onClick: () => navigate("/blog")
+  }, {
+    label: "Collaborate",
+    onClick: () => navigate("/collaborate")
+  }, {
+    label: "Dashboard",
+    onClick: () => navigate("/dashboard")
+  }, {
+    label: "Sign Out",
+    onClick: handleSignOut
+  }] : [{
+    label: "Explore Map",
+    onClick: () => navigate("/map")
+  }, {
+    label: "Events",
+    onClick: () => navigate("/events")
+  }, {
+    label: "Opportunities",
+    onClick: () => navigate("/opportunities")
+  }, {
+    label: "Community",
+    onClick: () => navigate("/community")
+  }, {
+    label: "Blog",
+    onClick: () => navigate("/blog")
+  }, {
+    label: "Collaborate",
+    onClick: () => navigate("/collaborate")
+  }, {
+    label: "Sign In",
+    onClick: () => navigate("/auth")
+  }];
+  return <header className="border-b border-border bg-[#121212] sticky top-0 z-50">
+      <div className="h-16 flex items-center justify-between w-full px-4 md:px-5 bg-current">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+          <img src={logoImage} alt="Creative Atlas" className="h-10 md:h-14 w-auto object-contain" />
         </div>
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-2">
-          {navItems.map(item => (
-            <Button 
-              key={item.label} 
-              variant="ghost" 
-              onClick={item.onClick} 
-              className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors"
-            >
+          {navItems.map(item => <Button key={item.label} variant="ghost" onClick={item.onClick} className="hover:bg-transparent transition-colors text-secondary-foreground border-secondary-foreground border-2 rounded-md shadow-warm opacity-80 mx-0 px-[5px] py-[5px]">
               {item.label}
-            </Button>
-          ))}
+            </Button>)}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -98,25 +111,16 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
           </SheetTrigger>
           <SheetContent side="right" className="w-[280px] bg-[#121212] border-border">
             <div className="flex flex-col gap-4 mt-8">
-              {navItems.map(item => (
-                <Button 
-                  key={item.label} 
-                  variant="ghost" 
-                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors" 
-                  onClick={() => {
-                    item.onClick();
-                    setMobileMenuOpen(false);
-                  }}
-                >
+              {navItems.map(item => <Button key={item.label} variant="ghost" className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors" onClick={() => {
+              item.onClick();
+              setMobileMenuOpen(false);
+            }}>
                   {item.label}
-                </Button>
-              ))}
+                </Button>)}
             </div>
           </SheetContent>
         </Sheet>
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Navbar;
