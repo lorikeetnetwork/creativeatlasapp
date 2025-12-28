@@ -12,6 +12,20 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CUSTOMER-PORTAL] ${step}${detailsStr}`);
 };
 
+const getSafeErrorMessage = (error: Error): string => {
+  const msg = error.message.toLowerCase();
+  if (msg.includes('not authenticated') || msg.includes('authorization') || msg.includes('email not available')) {
+    return 'Authentication required. Please log in.';
+  }
+  if (msg.includes('no stripe customer') || msg.includes('customer')) {
+    return 'No subscription found. Please subscribe first.';
+  }
+  if (msg.includes('stripe') || msg.includes('portal')) {
+    return 'Unable to open subscription portal. Please try again.';
+  }
+  return 'An error occurred. Please try again later.';
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -65,7 +79,7 @@ serve(async (req) => {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logStep("ERROR", { message: errorMessage });
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    return new Response(JSON.stringify({ error: getSafeErrorMessage(error as Error) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });

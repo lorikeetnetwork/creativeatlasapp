@@ -12,6 +12,17 @@ const logStep = (step: string, details?: any) => {
   console.log(`[VERIFY-PAYMENT] ${step}${detailsStr}`);
 };
 
+const getSafeErrorMessage = (error: Error): string => {
+  const msg = error.message.toLowerCase();
+  if (msg.includes('not authenticated') || msg.includes('authorization')) {
+    return 'Authentication required. Please log in.';
+  }
+  if (msg.includes('session') || msg.includes('stripe')) {
+    return 'Payment verification error. Please try again.';
+  }
+  return 'An error occurred. Please try again later.';
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -132,7 +143,7 @@ serve(async (req) => {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logStep("ERROR", { message: errorMessage });
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    return new Response(JSON.stringify({ error: getSafeErrorMessage(error as Error) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
