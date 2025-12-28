@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import MapView, { type MapBounds } from "@/components/MapView";
@@ -16,9 +16,10 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocations } from "@/hooks/useLocations";
+
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [locations, setLocations] = useState<Tables<"locations">[]>([]);
   const [filteredLocations, setFilteredLocations] = useState<Tables<"locations">[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Tables<"locations"> | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,60 +27,41 @@ const Index = () => {
   const [region, setRegion] = useState("All Australia");
   const [showDetail, setShowDetail] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const isMobile = useIsMobile();
+
+  // Use rate-limited locations hook
+  const { locations, loading: isLoading, error: locationsError } = useLocations();
+
   useEffect(() => {
-    supabase.auth.getSession().then(({
-      data: {
-        session
-      }
-    }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
-    const {
-      data: {
-        subscription
-      }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
     return () => subscription.unsubscribe();
   }, []);
-  useEffect(() => {
-    fetchLocations();
-  }, []);
+
   useEffect(() => {
     filterLocations();
   }, [locations, searchQuery, selectedCategories, mapBounds]);
-  const fetchLocations = async () => {
-    try {
-      const {
-        data,
-        error
-      } = await supabase.from("locations").select("*").eq("status", "Active").order("name");
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to load locations",
-          variant: "destructive"
-        });
-      } else {
-        setLocations(data || []);
-      }
-    } catch (err) {
-      console.error("Exception fetching locations:", err);
-    } finally {
-      setIsLoading(false);
+
+  useEffect(() => {
+    if (locationsError) {
+      toast({
+        title: "Error",
+        description: locationsError,
+        variant: "destructive"
+      });
     }
-  };
+  }, [locationsError, toast]);
+
   const filterLocations = () => {
     let filtered = [...locations];
     
@@ -107,6 +89,7 @@ const Index = () => {
   const handleBoundsChange = useCallback((bounds: MapBounds) => {
     setMapBounds(bounds);
   }, []);
+
   const handleLocationSelect = (location: Tables<"locations">) => {
     setSelectedLocation(location);
     if (isMobile) {
@@ -115,6 +98,7 @@ const Index = () => {
       setShowDetail(true);
     }
   };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast({
@@ -122,9 +106,11 @@ const Index = () => {
       description: "You have been signed out successfully"
     });
   };
+
   const handleCategoryToggle = (category: string) => {
     setSelectedCategories(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
   };
+
   const handleOpenForm = () => {
     setIsFormOpen(true);
   };
@@ -165,7 +151,6 @@ const Index = () => {
           <DialogContent className="max-w-[95vw] max-h-[90vh] overflow-y-auto">
             <LocationSubmissionForm session={session} onSuccess={() => {
             setIsFormOpen(false);
-            fetchLocations();
           }} onCancel={() => setIsFormOpen(false)} />
           </DialogContent>
         </Dialog>
@@ -203,10 +188,10 @@ const Index = () => {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <LocationSubmissionForm session={session} onSuccess={() => {
           setIsFormOpen(false);
-          fetchLocations();
         }} onCancel={() => setIsFormOpen(false)} />
         </DialogContent>
       </Dialog>
     </div>;
 };
+
 export default Index;

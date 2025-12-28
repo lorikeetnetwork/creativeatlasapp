@@ -1,43 +1,57 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
+import { toast } from "@/hooks/use-toast";
 
 interface LocationWithPhotos extends Tables<"locations"> {
   location_photos?: { photo_url: string; display_order: number | null }[];
+}
+
+interface RateLimitInfo {
+  limit: number;
+  remaining: number;
+  resetTime: number;
 }
 
 export const useLocations = () => {
   const [locations, setLocations] = useState<LocationWithPhotos[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSubscriber, setIsSubscriber] = useState(false);
+  const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitInfo | null>(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         setLoading(true);
-        const { data, error: fetchError } = await supabase
-          .from("locations")
-          .select(`
-            *,
-            location_photos (
-              photo_url,
-              display_order
-            )
-          `)
-          .eq("status", "Active")
-          .order("created_at", { ascending: false });
+        
+        const { data, error: invokeError } = await supabase.functions.invoke('get-locations');
 
-        if (fetchError) throw fetchError;
-        
-        // Sort photos by display_order for each location
-        const locationsWithSortedPhotos = (data || []).map(location => ({
-          ...location,
-          location_photos: location.location_photos?.sort(
-            (a, b) => (a.display_order || 0) - (b.display_order || 0)
-          )
-        }));
-        
-        setLocations(locationsWithSortedPhotos);
+        if (invokeError) {
+          // Check for rate limit error (429)
+          if (invokeError.message?.includes('429') || invokeError.message?.includes('Too many requests')) {
+            toast({
+              title: "Slow down!",
+              description: "Too many requests. Please wait a moment before refreshing.",
+              variant: "destructive",
+            });
+            setError("Rate limited. Please wait before trying again.");
+            return;
+          }
+          throw invokeError;
+        }
+
+        if (!data) {
+          throw new Error("No data received");
+        }
+
+        // Parse rate limit headers if available
+        if (data.rateLimitInfo) {
+          setRateLimitInfo(data.rateLimitInfo);
+        }
+
+        setLocations(data.locations || []);
+        setIsSubscriber(data.isSubscriber || false);
         setError(null);
       } catch (err) {
         console.error("Error fetching locations:", err);
@@ -50,5 +64,5 @@ export const useLocations = () => {
     fetchLocations();
   }, []);
 
-  return { locations, loading, error };
+  return { locations, loading, error, isSubscriber, rateLimitInfo };
 };
