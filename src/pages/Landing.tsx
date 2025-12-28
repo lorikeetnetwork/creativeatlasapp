@@ -302,10 +302,8 @@ const Landing = () => {
       <section className="py-16 bg-[#c3c0b7] md:py-[15px]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
-              Categories
-            </Badge>
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-primary-foreground text-primary">Explore by Category</h2>
+            
+            
           </div>
           
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 max-w-4xl mx-auto">
