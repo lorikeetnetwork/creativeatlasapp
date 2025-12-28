@@ -24,6 +24,7 @@ import ContactForm from "@/components/business/ContactForm";
 import OfferingsGallery from "@/components/business/OfferingsGallery";
 import VideosSection from "@/components/business/VideosSection";
 import CurrentProjectCard from "@/components/business/CurrentProjectCard";
+import { ContactDetailsGate, useContactAccess } from "@/components/ContactDetailsGate";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Location = Tables<"locations">;
@@ -34,6 +35,7 @@ const BusinessProfile = () => {
   const { locationId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { hasAccess } = useContactAccess();
   const [location, setLocation] = useState<Location | null>(null);
   const [profile, setProfile] = useState<BusinessProfileType | null>(null);
   const [photos, setPhotos] = useState<LocationPhoto[]>([]);
@@ -233,48 +235,87 @@ const BusinessProfile = () => {
           <Card className="border-[#333] bg-[#1a1a1a]">
             <CardContent className="pt-4 pb-4 space-y-3">
               <h3 className="font-semibold text-white text-sm">Contact Information</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {location.email && (
-                  <a
-                    href={`mailto:${location.email}`}
-                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>Email</span>
-                  </a>
-                )}
-                {location.phone && (
-                  <a
-                    href={`tel:${location.phone}`}
-                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
-                  >
-                    <Phone className="w-4 h-4" />
-                    <span>Call</span>
-                  </a>
-                )}
-                {location.website && (
-                  <a
-                    href={location.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
-                  >
-                    <Globe className="w-4 h-4" />
-                    <span>Website</span>
-                  </a>
-                )}
-                {location.instagram && (
-                  <a
-                    href={`https://instagram.com/${location.instagram.replace("@", "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
-                  >
-                    <Instagram className="w-4 h-4" />
-                    <span>Instagram</span>
-                  </a>
-                )}
-              </div>
+              
+              {/* Gated contact details for email/phone */}
+              {(location.email || location.phone) && !hasAccess ? (
+                <ContactDetailsGate 
+                  email={location.email} 
+                  phone={location.phone} 
+                  showAs="card" 
+                />
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  {location.email && (
+                    <a
+                      href={`mailto:${location.email}`}
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Email</span>
+                    </a>
+                  )}
+                  {location.phone && (
+                    <a
+                      href={`tel:${location.phone}`}
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Phone className="w-4 h-4" />
+                      <span>Call</span>
+                    </a>
+                  )}
+                  {location.website && (
+                    <a
+                      href={location.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Globe className="w-4 h-4" />
+                      <span>Website</span>
+                    </a>
+                  )}
+                  {location.instagram && (
+                    <a
+                      href={`https://instagram.com/${location.instagram.replace("@", "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Instagram className="w-4 h-4" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+                </div>
+              )}
+              
+              {/* Website and Instagram always visible (not PII) */}
+              {!hasAccess && (location.website || location.instagram) && (
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  {location.website && (
+                    <a
+                      href={location.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Globe className="w-4 h-4" />
+                      <span>Website</span>
+                    </a>
+                  )}
+                  {location.instagram && (
+                    <a
+                      href={`https://instagram.com/${location.instagram.replace("@", "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-primary transition-colors p-2 rounded-lg bg-[#222]"
+                    >
+                      <Instagram className="w-4 h-4" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+                </div>
+              )}
+              
               <Button className="w-full" size="sm" onClick={() => navigate(`/map?location=${locationId}`)}>
                 <MapPin className="w-4 h-4 mr-2" />
                 View on Map
@@ -377,24 +418,38 @@ const BusinessProfile = () => {
             <Card className="sticky top-4 border-[#333] bg-[#1a1a1a]">
               <CardContent className="pt-6 space-y-4">
                 <h3 className="font-semibold text-white">Contact Information</h3>
-                {location.email && (
-                  <a
-                    href={`mailto:${location.email}`}
-                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>{location.email}</span>
-                  </a>
+                
+                {/* Gated email/phone for non-subscribers */}
+                {(location.email || location.phone) && !hasAccess ? (
+                  <ContactDetailsGate 
+                    email={location.email} 
+                    phone={location.phone} 
+                    showAs="card" 
+                  />
+                ) : (
+                  <>
+                    {location.email && (
+                      <a
+                        href={`mailto:${location.email}`}
+                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
+                      >
+                        <Mail className="w-4 h-4" />
+                        <span>{location.email}</span>
+                      </a>
+                    )}
+                    {location.phone && (
+                      <a
+                        href={`tel:${location.phone}`}
+                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
+                      >
+                        <Phone className="w-4 h-4" />
+                        <span>{location.phone}</span>
+                      </a>
+                    )}
+                  </>
                 )}
-                {location.phone && (
-                  <a
-                    href={`tel:${location.phone}`}
-                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
-                  >
-                    <Phone className="w-4 h-4" />
-                    <span>{location.phone}</span>
-                  </a>
-                )}
+                
+                {/* Website and Instagram always visible */}
                 {location.website && (
                   <a
                     href={location.website}
