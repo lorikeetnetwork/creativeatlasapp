@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Session } from "@supabase/supabase-js";
-import { User, Building2, Compass } from "lucide-react";
+import { User, Building2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { PricingCard, PricingTier } from "@/components/pricing/PricingCard";
 import { PricingHero } from "@/components/pricing/PricingHero";
@@ -13,27 +13,12 @@ import { PricingCTA } from "@/components/pricing/PricingCTA";
 
 const pricingTiers: PricingTier[] = [
   {
-    name: "Free",
-    price: 0,
-    period: "forever",
-    description: "Browse and discover creative spaces",
-    features: [
-      "Browse all creative spaces",
-      "View location details",
-      "Explore the interactive map",
-      "Read articles & resources",
-      "View upcoming events",
-    ],
-    cta: "Explore Free",
-    icon: <Compass className="w-6 h-6" />,
-  },
-  {
     name: "Creator",
     price: 15,
     period: "year",
     description: "Full access for individual creatives",
     features: [
-      "Everything in Free",
+      "Browse all creative spaces",
       "Save favorite locations",
       "Create member profile",
       "Portfolio showcase",
@@ -83,12 +68,6 @@ const Pricing = () => {
   }, []);
 
   const handleTierSelect = async (tier: PricingTier) => {
-    // Free tier - just navigate to map
-    if (tier.price === 0) {
-      navigate("/map");
-      return;
-    }
-
     // Paid tiers - require auth and payment
     if (!session) {
       toast({
@@ -134,8 +113,8 @@ const Pricing = () => {
         <PricingHero />
 
         {/* Pricing Cards */}
-        <section className="max-w-6xl mx-auto mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 lg:gap-6">
+        <section className="max-w-4xl mx-auto mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {pricingTiers.map((tier, index) => (
               <PricingCard
                 key={tier.name}
