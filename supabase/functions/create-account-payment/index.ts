@@ -12,6 +12,23 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-ACCOUNT-PAYMENT] ${step}${detailsStr}`);
 };
 
+const getSafeErrorMessage = (error: Error): string => {
+  const msg = error.message.toLowerCase();
+  if (msg.includes('not authenticated') || msg.includes('authorization') || msg.includes('email not available')) {
+    return 'Authentication required. Please log in.';
+  }
+  if (msg.includes('stripe') || msg.includes('payment') || msg.includes('price')) {
+    return 'Payment processing error. Please try again.';
+  }
+  if (msg.includes('already has')) {
+    return 'You already have this account type.';
+  }
+  if (msg.includes('invalid payment type')) {
+    return 'Invalid payment option selected.';
+  }
+  return 'An error occurred. Please try again later.';
+};
+
 // Price IDs for yearly subscriptions
 const PRICE_IDS = {
   basic_account: 'price_1Sh37nCxyWFCnV0cO69jutux', // $15 AUD/year
@@ -143,7 +160,7 @@ serve(async (req) => {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logStep("ERROR", { message: errorMessage });
-    return new Response(JSON.stringify({ error: errorMessage }), {
+    return new Response(JSON.stringify({ error: getSafeErrorMessage(error as Error) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
