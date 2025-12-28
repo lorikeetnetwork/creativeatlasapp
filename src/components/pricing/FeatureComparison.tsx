@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 
 interface Feature {
   name: string;
-  free: boolean | string;
   creator: boolean | string;
   business: boolean | string;
   category?: string;
@@ -12,37 +11,37 @@ interface Feature {
 
 const features: Feature[] = [
   // Map & Discovery
-  { name: "Browse all creative spaces", free: true, creator: true, business: true, category: "Map & Discovery" },
-  { name: "View location details", free: true, creator: true, business: true },
-  { name: "Save favorite locations", free: false, creator: true, business: true },
-  { name: "Advanced filters & search", free: false, creator: true, business: true },
+  { name: "Browse all creative spaces", creator: true, business: true, category: "Map & Discovery" },
+  { name: "View location details", creator: true, business: true },
+  { name: "Save favorite locations", creator: true, business: true },
+  { name: "Advanced filters & search", creator: true, business: true },
   
   // Community
-  { name: "Community member directory", free: false, creator: true, business: true, category: "Community" },
-  { name: "Create member profile", free: false, creator: true, business: true },
-  { name: "Portfolio showcase", free: false, creator: true, business: true },
-  { name: "Connect with creatives", free: false, creator: true, business: true },
+  { name: "Community member directory", creator: true, business: true, category: "Community" },
+  { name: "Create member profile", creator: true, business: true },
+  { name: "Portfolio showcase", creator: true, business: true },
+  { name: "Connect with creatives", creator: true, business: true },
   
   // Events & Opportunities
-  { name: "View upcoming events", free: true, creator: true, business: true, category: "Events & Opportunities" },
-  { name: "RSVP to events", free: false, creator: true, business: true },
-  { name: "Create & host events", free: false, creator: true, business: true },
-  { name: "Opportunities board access", free: false, creator: true, business: true },
-  { name: "Post opportunities", free: false, creator: true, business: true },
+  { name: "View upcoming events", creator: true, business: true, category: "Events & Opportunities" },
+  { name: "RSVP to events", creator: true, business: true },
+  { name: "Create & host events", creator: true, business: true },
+  { name: "Opportunities board access", creator: true, business: true },
+  { name: "Post opportunities", creator: true, business: true },
   
   // Content & Blog
-  { name: "Read articles & resources", free: true, creator: true, business: true, category: "Content & Blog" },
-  { name: "Publish blog articles", free: false, creator: true, business: true },
-  { name: "Comment & engage", free: false, creator: true, business: true },
+  { name: "Read articles & resources", creator: true, business: true, category: "Content & Blog" },
+  { name: "Publish blog articles", creator: true, business: true },
+  { name: "Comment & engage", creator: true, business: true },
   
   // Business Features
-  { name: "Business listing on map", free: false, creator: false, business: true, category: "Business Features" },
-  { name: "Full business profile page", free: false, creator: false, business: true },
-  { name: "Photo & offerings galleries", free: false, creator: false, business: true },
-  { name: "Videos & current projects", free: false, creator: false, business: true },
-  { name: "Contact forms & social links", free: false, creator: false, business: true },
-  { name: "Admin dashboard", free: false, creator: false, business: true },
-  { name: "Priority support", free: false, creator: false, business: true },
+  { name: "Business listing on map", creator: false, business: true, category: "Business Features" },
+  { name: "Full business profile page", creator: false, business: true },
+  { name: "Photo & offerings galleries", creator: false, business: true },
+  { name: "Videos & current projects", creator: false, business: true },
+  { name: "Contact forms & social links", creator: false, business: true },
+  { name: "Admin dashboard", creator: false, business: true },
+  { name: "Priority support", creator: false, business: true },
 ];
 
 const FeatureCell = ({ value }: { value: boolean | string }) => {
@@ -69,15 +68,11 @@ export const FeatureComparison = () => {
       transition={{ duration: 0.5 }}
       className="w-full overflow-x-auto"
     >
-      <div className="min-w-[600px]">
+      <div className="min-w-[400px]">
         {/* Header */}
-        <div className="grid grid-cols-4 gap-4 pb-4 border-b border-border mb-4">
+        <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border mb-4">
           <div className="text-left">
             <span className="text-sm font-medium text-muted-foreground">Features</span>
-          </div>
-          <div className="text-center">
-            <span className="text-sm font-semibold text-foreground">Free</span>
-            <p className="text-xs text-muted-foreground mt-0.5">$0</p>
           </div>
           <div className="text-center">
             <span className="text-sm font-semibold text-primary">Creator</span>
@@ -112,14 +107,11 @@ export const FeatureComparison = () => {
                 )}
                 <div 
                   className={cn(
-                    "grid grid-cols-4 gap-4 py-3 rounded-lg transition-colors",
+                    "grid grid-cols-3 gap-4 py-3 rounded-lg transition-colors",
                     "hover:bg-muted/50"
                   )}
                 >
                   <div className="text-sm text-foreground">{feature.name}</div>
-                  <div className="flex justify-center items-center">
-                    <FeatureCell value={feature.free} />
-                  </div>
                   <div className="flex justify-center items-center">
                     <FeatureCell value={feature.creator} />
                   </div>
