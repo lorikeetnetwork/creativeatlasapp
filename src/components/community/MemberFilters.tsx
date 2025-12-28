@@ -82,14 +82,14 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
         <Button onClick={handleSearch}>Search</Button>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3">
         <Select
           value={filters.discipline || 'all'}
           onValueChange={(value) =>
             onFiltersChange({ ...filters, discipline: value === 'all' ? undefined : value })
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Discipline" />
           </SelectTrigger>
           <SelectContent>
@@ -108,7 +108,7 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
             onFiltersChange({ ...filters, state: value === 'all' ? undefined : value })
           }
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
@@ -126,9 +126,10 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
           size="sm"
           onClick={() => toggleFilter('availableForHire')}
           className="gap-1.5"
+          title="Available for Hire"
         >
           <Briefcase className="h-3.5 w-3.5" />
-          Available for Hire
+          <span className="hidden sm:inline">Hire</span>
         </Button>
 
         <Button
@@ -136,9 +137,10 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
           size="sm"
           onClick={() => toggleFilter('availableForCollaboration')}
           className="gap-1.5"
+          title="Open to Collaborate"
         >
           <Users className="h-3.5 w-3.5" />
-          Open to Collaborate
+          <span className="hidden sm:inline">Collab</span>
         </Button>
 
         <Button
@@ -146,13 +148,14 @@ export function MemberFilters({ filters, onFiltersChange }: MemberFiltersProps) 
           size="sm"
           onClick={() => toggleFilter('isMentor')}
           className="gap-1.5"
+          title="Mentors"
         >
           <GraduationCap className="h-3.5 w-3.5" />
-          Mentors
+          <span className="hidden sm:inline">Mentors</span>
         </Button>
 
         {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-1.5">
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="col-span-2 sm:col-span-1 gap-1.5">
             <X className="h-3.5 w-3.5" />
             Clear
           </Button>

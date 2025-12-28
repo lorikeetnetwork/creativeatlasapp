@@ -139,9 +139,9 @@ const MobileLocationSheet = ({
 
           {/* Location List */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-[#111111]">
-              Creative Entities ({locations.length})
-            </h2>
+          <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-white">
+            Creative Entities ({locations.length})
+          </h2>
             <LocationList
               locations={locations}
               selectedLocation={selectedLocation}

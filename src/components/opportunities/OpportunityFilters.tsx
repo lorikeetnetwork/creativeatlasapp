@@ -66,7 +66,7 @@ const OpportunityFiltersComponent = ({
       </form>
 
       {/* Filter Row */}
-      <div className="flex flex-wrap gap-2 items-center">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 items-center">
         {/* Opportunity Type */}
         <Select
           value={filters.opportunityType || "all"}
@@ -77,7 +77,7 @@ const OpportunityFiltersComponent = ({
             })
           }
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -100,7 +100,7 @@ const OpportunityFiltersComponent = ({
             })
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -123,7 +123,7 @@ const OpportunityFiltersComponent = ({
             })
           }
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Pay" />
           </SelectTrigger>
           <SelectContent>
@@ -146,7 +146,7 @@ const OpportunityFiltersComponent = ({
             })
           }
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Level" />
           </SelectTrigger>
           <SelectContent>
@@ -160,7 +160,7 @@ const OpportunityFiltersComponent = ({
         </Select>
 
         {/* Remote Only */}
-        <div className="flex items-center gap-2 ml-2">
+        <div className="col-span-2 sm:col-span-1 flex items-center gap-2 sm:ml-2">
           <Checkbox
             id="remote-only"
             checked={filters.isRemote === true}
@@ -174,20 +174,20 @@ const OpportunityFiltersComponent = ({
           <Label htmlFor="remote-only" className="text-sm cursor-pointer">
             Remote only
           </Label>
-        </div>
 
-        {/* Clear Filters */}
-        {activeFilterCount > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearFilters}
-            className="text-muted-foreground"
-          >
-            <X className="h-4 w-4 mr-1" />
-            Clear ({activeFilterCount})
-          </Button>
-        )}
+          {/* Clear Filters */}
+          {activeFilterCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="ml-auto text-muted-foreground"
+            >
+              <X className="h-4 w-4 mr-1" />
+              Clear ({activeFilterCount})
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
