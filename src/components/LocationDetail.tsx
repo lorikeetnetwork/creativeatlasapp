@@ -2,20 +2,26 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Mail, Phone, Instagram, X, Users, Accessibility } from "lucide-react";
+import { MapPin, Globe, Mail, Phone, Instagram, X, Users, Accessibility, Lock } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { PhotoGallery } from "./PhotoGallery";
+import { useContactAccess } from "./ContactDetailsGate";
+import { useNavigate } from "react-router-dom";
+
 interface LocationDetailProps {
   location: Tables<"locations"> | null;
   onClose: () => void;
 }
+
 const LocationDetail = ({
   location,
   onClose
 }: LocationDetailProps) => {
   const [photos, setPhotos] = useState<any[]>([]);
+  const { hasAccess, isLoading: accessLoading } = useContactAccess();
+  const navigate = useNavigate();
   useEffect(() => {
     if (location?.id) {
       fetchPhotos();
@@ -115,18 +121,33 @@ const LocationDetail = ({
                     <Globe className="w-3 h-3" />
                     <span className="underline">Website</span>
                   </a>}
-                {location.email && <a href={`mailto:${location.email}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
-                    <Mail className="w-3 h-3" />
-                    <span>Email</span>
-                  </a>}
-                {location.phone && <a href={`tel:${location.phone}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
-                    <Phone className="w-3 h-3" />
-                    <span>Call</span>
-                  </a>}
                 {location.instagram && <a href={`https://instagram.com/${location.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
                     <Instagram className="w-3 h-3" />
                     <span>Instagram</span>
                   </a>}
+                {/* Gated email/phone */}
+                {(location.email || location.phone) && (
+                  hasAccess ? (
+                    <>
+                      {location.email && <a href={`mailto:${location.email}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                          <Mail className="w-3 h-3" />
+                          <span>Email</span>
+                        </a>}
+                      {location.phone && <a href={`tel:${location.phone}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                          <Phone className="w-3 h-3" />
+                          <span>Call</span>
+                        </a>}
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => navigate('/pricing')}
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <Lock className="w-3 h-3" />
+                      <span className="underline">Unlock Contact</span>
+                    </button>
+                  )
+                )}
               </div>
             </div>}
 

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Mail, Phone, Instagram, Users, Accessibility, ExternalLink } from "lucide-react";
+import { MapPin, Globe, Mail, Phone, Instagram, Users, Accessibility, ExternalLink, Lock } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
 import { PhotoGallery } from "./PhotoGallery";
 import { useNavigate } from "react-router-dom";
+import { useContactAccess } from "./ContactDetailsGate";
 
 interface MobileLocationDetailProps {
   location: Tables<"locations"> | null;
@@ -17,6 +18,7 @@ interface MobileLocationDetailProps {
 const MobileLocationDetail = ({ location, open, onOpenChange }: MobileLocationDetailProps) => {
   const [photos, setPhotos] = useState<any[]>([]);
   const navigate = useNavigate();
+  const { hasAccess } = useContactAccess();
 
   useEffect(() => {
     if (location?.id) {
@@ -135,24 +137,6 @@ const MobileLocationDetail = ({ location, open, onOpenChange }: MobileLocationDe
                     <span>Website</span>
                   </a>
                 )}
-                {location.email && (
-                  <a
-                    href={`mailto:${location.email}`}
-                    className="flex items-center gap-2 text-sm p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
-                  >
-                    <Mail className="w-4 h-4 text-primary" />
-                    <span>Email</span>
-                  </a>
-                )}
-                {location.phone && (
-                  <a
-                    href={`tel:${location.phone}`}
-                    className="flex items-center gap-2 text-sm p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
-                  >
-                    <Phone className="w-4 h-4 text-primary" />
-                    <span>Call</span>
-                  </a>
-                )}
                 {location.instagram && (
                   <a
                     href={`https://instagram.com/${location.instagram.replace('@', '')}`}
@@ -163,6 +147,37 @@ const MobileLocationDetail = ({ location, open, onOpenChange }: MobileLocationDe
                     <Instagram className="w-4 h-4 text-primary" />
                     <span>Instagram</span>
                   </a>
+                )}
+                {/* Gated email/phone */}
+                {hasAccess ? (
+                  <>
+                    {location.email && (
+                      <a
+                        href={`mailto:${location.email}`}
+                        className="flex items-center gap-2 text-sm p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+                      >
+                        <Mail className="w-4 h-4 text-primary" />
+                        <span>Email</span>
+                      </a>
+                    )}
+                    {location.phone && (
+                      <a
+                        href={`tel:${location.phone}`}
+                        className="flex items-center gap-2 text-sm p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+                      >
+                        <Phone className="w-4 h-4 text-primary" />
+                        <span>Call</span>
+                      </a>
+                    )}
+                  </>
+                ) : (location.email || location.phone) && (
+                  <button
+                    onClick={() => navigate('/pricing')}
+                    className="flex items-center gap-2 text-sm p-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors col-span-2"
+                  >
+                    <Lock className="w-4 h-4 text-primary" />
+                    <span>Unlock Email & Phone</span>
+                  </button>
                 )}
               </div>
             </div>
