@@ -329,18 +329,22 @@ const BusinessProfile = () => {
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="about" className="w-full">
-              {/* Scrollable Tabs for Mobile */}
-              <ScrollArea className="w-full">
-                <TabsList className="inline-flex w-auto min-w-full lg:grid lg:grid-cols-6 bg-[#1a1a1a] border border-[#333] p-1">
-                  <TabsTrigger value="about" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">About</TabsTrigger>
-                  <TabsTrigger value="gallery" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Gallery</TabsTrigger>
-                  <TabsTrigger value="offerings" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Offerings</TabsTrigger>
-                  <TabsTrigger value="videos" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Videos</TabsTrigger>
-                  <TabsTrigger value="project" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Project</TabsTrigger>
-                  <TabsTrigger value="contact" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Contact</TabsTrigger>
-                </TabsList>
-                <ScrollBar orientation="horizontal" className="invisible" />
-              </ScrollArea>
+              {/* Scrollable Tabs for Mobile with fade indicator */}
+              <div className="relative">
+                <ScrollArea className="w-full">
+                  <TabsList className="inline-flex w-auto min-w-full lg:grid lg:grid-cols-6 bg-[#1a1a1a] border border-[#333] p-1">
+                    <TabsTrigger value="about" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">About</TabsTrigger>
+                    <TabsTrigger value="gallery" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Gallery</TabsTrigger>
+                    <TabsTrigger value="offerings" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Offerings</TabsTrigger>
+                    <TabsTrigger value="videos" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Videos</TabsTrigger>
+                    <TabsTrigger value="project" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Project</TabsTrigger>
+                    <TabsTrigger value="contact" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4">Contact</TabsTrigger>
+                  </TabsList>
+                  <ScrollBar orientation="horizontal" className="invisible" />
+                </ScrollArea>
+                {/* Fade indicator for more tabs on mobile */}
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#121212] to-transparent pointer-events-none lg:hidden" />
+              </div>
 
               <TabsContent value="about" className="space-y-4 md:space-y-6 mt-4 md:mt-6">
                 <Card className="border-[#333] bg-[#1a1a1a]">

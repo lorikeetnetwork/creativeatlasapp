@@ -60,7 +60,7 @@ export const BentoPageHeader: React.FC<BentoPageHeaderProps> = ({
             )}
           </div>
         </div>
-        {actions && <div className="flex items-center gap-3">{actions}</div>}
+        {actions && <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">{actions}</div>}
       </div>
     </div>
   );

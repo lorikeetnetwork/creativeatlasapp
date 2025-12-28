@@ -70,7 +70,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
       </form>
 
       {/* Filter Row */}
-      <div className="flex flex-wrap gap-2 items-center">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 items-center">
         {/* Event Type */}
         <Select
           value={filters.eventType || "all"}
@@ -81,7 +81,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
             })
           }
         >
-          <SelectTrigger className="w-[150px]">
+          <SelectTrigger className="w-full sm:w-[150px]">
             <SelectValue placeholder="Event Type" />
           </SelectTrigger>
           <SelectContent>
@@ -104,7 +104,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
             })
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -120,13 +120,13 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
         {/* Date Range */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="min-w-[150px]">
+            <Button variant="outline" className="w-full sm:w-auto sm:min-w-[130px] justify-start">
               {filters.startDate
                 ? format(filters.startDate, "MMM d")
                 : "Start Date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0" align="center">
             <Calendar
               mode="single"
               selected={filters.startDate || undefined}
@@ -140,11 +140,11 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="min-w-[150px]">
+            <Button variant="outline" className="w-full sm:w-auto sm:min-w-[130px] justify-start">
               {filters.endDate ? format(filters.endDate, "MMM d") : "End Date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0" align="center">
             <Calendar
               mode="single"
               selected={filters.endDate || undefined}
@@ -157,7 +157,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
         </Popover>
 
         {/* Quick Filters */}
-        <div className="flex items-center gap-4 ml-2">
+        <div className="col-span-2 sm:col-span-1 flex items-center gap-4 sm:ml-2">
           <div className="flex items-center gap-2">
             <Checkbox
               id="free-only"
@@ -170,7 +170,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
               }
             />
             <Label htmlFor="free-only" className="text-sm cursor-pointer">
-              Free only
+              Free
             </Label>
           </div>
 
@@ -186,7 +186,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
               }
             />
             <Label htmlFor="online-only" className="text-sm cursor-pointer">
-              Online only
+              Online
             </Label>
           </div>
         </div>
@@ -197,7 +197,7 @@ const EventFiltersComponent = ({ filters, onFiltersChange }: EventFiltersProps) 
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="text-muted-foreground"
+            className="col-span-2 sm:col-span-1 text-muted-foreground"
           >
             <X className="h-4 w-4 mr-1" />
             Clear ({activeFilterCount})

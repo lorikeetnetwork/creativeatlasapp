@@ -134,6 +134,17 @@ const Topbar = ({
                 variant="ghost" 
                 className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
                 onClick={() => {
+                  navigate("/pricing");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <CreditCard className="h-5 w-5" />
+                Pricing
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
+                onClick={() => {
                   onOpenForm();
                   setMobileMenuOpen(false);
                 }}
