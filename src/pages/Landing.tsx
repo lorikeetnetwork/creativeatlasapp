@@ -5,61 +5,53 @@ import { Separator } from "@/components/ui/separator";
 import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-card";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
-import { Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, Star, Globe, Zap } from "lucide-react";
+import { 
+  Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
+  GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, 
+  Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, 
+  Star, Globe, Zap
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
+
 const Landing = () => {
   const navigate = useNavigate();
-  const categories = [{
-    name: "Music",
-    icon: Music
-  }, {
-    name: "Visual Arts",
-    icon: Palette
-  }, {
-    name: "Venues",
-    icon: Building2
-  }, {
-    name: "Festivals",
-    icon: Radio
-  }, {
-    name: "Studios",
-    icon: Camera
-  }, {
-    name: "Education",
-    icon: GraduationCap
-  }, {
-    name: "Creative Hubs",
-    icon: Sparkles
-  }, {
-    name: "Technology",
-    icon: Lightbulb
-  }, {
-    name: "Community",
-    icon: Heart
-  }, {
-    name: "Production",
-    icon: Mic2
-  }, {
-    name: "Innovation",
-    icon: FlaskConical
-  }, {
-    name: "Events",
-    icon: Calendar
-  }];
-  return <div className="min-h-screen bg-[#121212]">
+  
+  const categories = [
+    { name: "Music", icon: Music },
+    { name: "Visual Arts", icon: Palette },
+    { name: "Venues", icon: Building2 },
+    { name: "Festivals", icon: Radio },
+    { name: "Studios", icon: Camera },
+    { name: "Education", icon: GraduationCap },
+    { name: "Creative Hubs", icon: Sparkles },
+    { name: "Technology", icon: Lightbulb },
+    { name: "Community", icon: Heart },
+    { name: "Production", icon: Mic2 },
+    { name: "Innovation", icon: FlaskConical },
+    { name: "Events", icon: Calendar }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#121212]">
       <Navbar />
       <FuturisticAlienHero />
 
       {/* Main Bento Content */}
-      <section className="py-16 bg-[#c3c0b7] border-2 border-solid border-neutral-950 md:py-[15px]">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           
           {/* Hero Intro + Stats Row */}
           <BentoGrid className="lg:grid-cols-6 mb-4">
             {/* Main Intro Card - Large */}
-            <BentoCard className="md:col-span-2 lg:col-span-3 lg:row-span-2" title="Australia's Creative Community Platform">
-              <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">Creative Atlas is more than a map—it’s a gateway to discovering spaces, connecting with creatives, finding opportunities, and engaging with Australia’s thriving creative ecosystem, providing the tools to move seamlessly from discovery to collaboration and collective growth.</p>
+            <BentoCard 
+              className="md:col-span-2 lg:col-span-3 lg:row-span-2"
+              title="Australia's Creative Community Platform"
+            >
+              <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+                More than a map—Creative Atlas is your gateway to discovering spaces, connecting with creatives, 
+                finding opportunities, and engaging with Australia's thriving creative ecosystem.
+              </p>
               <div className="flex flex-wrap gap-3 mt-auto">
                 <Button onClick={() => navigate("/map")} className="gap-2">
                   <Map className="h-4 w-4" />
@@ -114,14 +106,17 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          
+          <BentoSectionFooter 
+            title="Everything You Need to Thrive Creatively"
+            description="From discovery to collaboration, Creative Atlas provides the tools to connect and grow."
+          />
         </div>
       </section>
 
       <Separator className="bg-[#333]" />
 
       {/* Core Platform Features */}
-      <section className="py-16 bg-[#0a0a0a] md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -130,7 +125,10 @@ const Landing = () => {
           </div>
           
           <BentoGrid className="lg:grid-cols-4 mb-4">
-            <BentoCard className="lg:col-span-2 lg:row-span-2" onClick={() => navigate("/map")}>
+            <BentoCard 
+              className="lg:col-span-2 lg:row-span-2"
+              onClick={() => navigate("/map")}
+            >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-primary/10">
                   <Map className="w-6 h-6 text-primary" />
@@ -190,14 +188,17 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          <BentoSectionFooter title="A Complete Creative Ecosystem" description="Engage with the community through events, discussions, opportunities, and more." />
+          <BentoSectionFooter 
+            title="A Complete Creative Ecosystem"
+            description="Engage with the community through events, discussions, opportunities, and more."
+          />
         </div>
       </section>
 
       <Separator className="bg-[#333]" />
 
       {/* Community Hub Grid */}
-      <section className="py-16 border-primary-foreground bg-[#c3c0b7] md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -206,7 +207,10 @@ const Landing = () => {
           </div>
           
           <BentoGrid className="lg:grid-cols-3 mb-4">
-            <BentoCard className="lg:row-span-2" onClick={() => navigate("/discussions")}>
+            <BentoCard 
+              className="lg:row-span-2"
+              onClick={() => navigate("/discussions")}
+            >
               <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-pink-500/10 mb-4">
                 <MessageSquare className="w-6 h-6 text-pink-400" />
               </div>
@@ -258,7 +262,7 @@ const Landing = () => {
       <Separator className="bg-[#333]" />
 
       {/* How It Works */}
-      <section className="py-16 bg-[#0a0a0a] md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -292,31 +296,40 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          <BentoSectionFooter title="Get Started in Three Simple Steps" description="Whether you're a creative professional or an organisation, Creative Atlas makes it easy to connect and grow." />
+          <BentoSectionFooter 
+            title="Get Started in Three Simple Steps"
+            description="Whether you're a creative professional or an organisation, Creative Atlas makes it easy to connect and grow."
+          />
         </div>
       </section>
 
       <Separator className="bg-[#333]" />
 
       {/* Categories */}
-      <section className="py-16 bg-[#c3c0b7] md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Categories
             </Badge>
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-primary-foreground text-primary">Explore by Category</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Explore by Category</h2>
           </div>
           
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 max-w-4xl mx-auto">
-            {categories.map((category, index) => <BentoCard key={index} className="p-3 md:p-4" onClick={() => navigate("/map")}>
+            {categories.map((category, index) => (
+              <BentoCard 
+                key={index}
+                className="p-3 md:p-4"
+                onClick={() => navigate("/map")}
+              >
                 <div className="flex flex-col items-center text-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-[#333] flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
                   </div>
-                  <span className="text-xs font-medium text-primary">{category.name}</span>
+                  <span className="text-xs font-medium text-white">{category.name}</span>
                 </div>
-              </BentoCard>)}
+              </BentoCard>
+            ))}
           </div>
         </div>
       </section>
@@ -324,13 +337,13 @@ const Landing = () => {
       <Separator className="bg-[#333]" />
 
       {/* Membership Benefits */}
-      <section className="py-16 bg-[#0a0a0a] border-destructive md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Membership
             </Badge>
-            
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Unlock the Full Experience</h2>
           </div>
           
           <BentoGrid className="lg:grid-cols-2 max-w-4xl mx-auto">
@@ -376,7 +389,7 @@ const Landing = () => {
       <Separator className="bg-[#333]" />
 
       {/* CTA Section */}
-      <section className="py-16 bg-[#c3c0b7] md:py-[15px]">
+      <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
           <BentoCard className="max-w-3xl mx-auto text-center py-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -406,7 +419,7 @@ const Landing = () => {
       <Separator className="bg-[#333]" />
 
       {/* Footer */}
-      <footer className="border-t md:py-12 bg-[#121212] py-[5px] px-0 border-destructive">
+      <footer className="border-t border-[#333] py-8 md:py-12 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -463,6 +476,8 @@ const Landing = () => {
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Landing;

@@ -1,18 +1,32 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-const PlusIcon = ({
-  className
-}: {
-  className?: string;
-}) => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={cn("w-4 h-4 text-gray-500", className)}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-  </svg>;
-const CornerPlusIcons = () => <>
+
+const PlusIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="1.5"
+    stroke="currentColor"
+    className={cn("w-4 h-4 text-gray-500", className)}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 4.5v15m7.5-7.5h-15"
+    />
+  </svg>
+);
+
+const CornerPlusIcons = () => (
+  <>
     <PlusIcon className="absolute top-2 left-2" />
     <PlusIcon className="absolute top-2 right-2" />
     <PlusIcon className="absolute bottom-2 left-2" />
     <PlusIcon className="absolute bottom-2 right-2" />
-  </>;
+  </>
+);
+
 export interface BentoCardProps {
   className?: string;
   title?: string;
@@ -20,47 +34,79 @@ export interface BentoCardProps {
   children?: React.ReactNode;
   onClick?: () => void;
 }
+
 export const BentoCard: React.FC<BentoCardProps> = ({
   className = "",
   title,
   description,
   children,
-  onClick
+  onClick,
 }) => {
-  return <div className={cn("relative p-6 rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden group transition-all duration-300 hover:border-primary/50 hover:shadow-lg", onClick && "cursor-pointer", className)} onClick={onClick}>
+  return (
+    <div
+      className={cn(
+        "relative p-6 rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden group transition-all duration-300 hover:border-primary/50 hover:shadow-lg",
+        onClick && "cursor-pointer",
+        className
+      )}
+      onClick={onClick}
+    >
       <CornerPlusIcons />
       {/* Content */}
-      
-    </div>;
+      <div className="relative z-10 flex flex-col h-full">
+        {title && (
+          <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+        )}
+        {description && (
+          <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+        )}
+        {children}
+      </div>
+    </div>
+  );
 };
+
 export interface BentoGridProps {
   className?: string;
   children: React.ReactNode;
 }
-export const BentoGrid: React.FC<BentoGridProps> = ({
-  className,
-  children
-}) => {
-  return <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", className)}>
+
+export const BentoGrid: React.FC<BentoGridProps> = ({ className, children }) => {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
+        className
+      )}
+    >
       {children}
-    </div>;
+    </div>
+  );
 };
+
 export interface BentoSectionFooterProps {
   title: string;
   description?: string;
   className?: string;
 }
+
 export const BentoSectionFooter: React.FC<BentoSectionFooterProps> = ({
   title,
   description,
-  className
+  className,
 }) => {
-  return <div className={cn("text-center mt-12 md:mt-16", className)}>
-      <h2 className="text-2xl md:text-3xl font-bold mb-4 text-secondary-foreground">
+  return (
+    <div className={cn("text-center mt-12 md:mt-16", className)}>
+      <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
         {title}
       </h2>
-      {description && <p className="text-gray-400 max-w-2xl mx-auto text-base">
+      {description && (
+        <p className="text-gray-400 max-w-2xl mx-auto text-base">
           {description}
-        </p>}
-    </div>;
+        </p>
+      )}
+    </div>
+  );
 };
