@@ -1,4 +1,4 @@
-import { LogOut, User, Menu, Shield, Plus, Calendar, Briefcase, Users, BookOpen } from "lucide-react";
+import { LogOut, User, Menu, Shield, Plus, Calendar, Briefcase, Users, BookOpen, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -86,8 +86,26 @@ const Topbar = ({
         ))}
       </nav>
 
-      {/* Right side: Menu */}
+      {/* Right side: Pricing + Sign In + Menu */}
       <div className="pr-5 flex items-center gap-2">
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate("/pricing")} 
+          className="hidden md:flex text-foreground hover:bg-transparent hover:text-foreground border border-transparent hover:border-orange-500 transition-colors gap-2"
+        >
+          <CreditCard className="h-4 w-4" />
+          Pricing
+        </Button>
+        {!session && (
+          <Button 
+            variant="ghost" 
+            onClick={onSignIn} 
+            className="hidden md:flex text-foreground hover:bg-transparent hover:text-foreground border border-transparent hover:border-orange-500 transition-colors gap-2"
+          >
+            <User className="h-4 w-4" />
+            Sign In
+          </Button>
+        )}
         {/* Mobile Nav Sheet */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild className="md:hidden">
