@@ -63,6 +63,7 @@ const profileSchema = z.object({
   is_available_for_collaboration: z.boolean(),
   is_mentor: z.boolean(),
   is_public: z.boolean(),
+  show_location: z.boolean(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -98,6 +99,7 @@ export default function EditMemberProfile() {
       is_available_for_collaboration: false,
       is_mentor: false,
       is_public: false,
+      show_location: true,
     },
   });
 
@@ -137,6 +139,7 @@ export default function EditMemberProfile() {
         is_available_for_collaboration: profile.is_available_for_collaboration || false,
         is_mentor: profile.is_mentor || false,
         is_public: profile.is_public || false,
+        show_location: profile.show_location ?? true,
       });
       setSkills(profile.skills || []);
       setAvatarUrl(profile.avatar_url);
@@ -623,6 +626,22 @@ export default function EditMemberProfile() {
                       <div>
                         <FormLabel>Public Profile</FormLabel>
                         <FormDescription>Make your profile visible in the community directory</FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="show_location"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between">
+                      <div>
+                        <FormLabel>Show Location</FormLabel>
+                        <FormDescription>Display your suburb and state on your public profile</FormDescription>
                       </div>
                       <FormControl>
                         <Switch checked={field.value} onCheckedChange={field.onChange} />

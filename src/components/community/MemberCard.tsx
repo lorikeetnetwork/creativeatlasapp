@@ -21,7 +21,7 @@ export function MemberCard({ member }: MemberCardProps) {
     .toUpperCase()
     .slice(0, 2) || '??';
 
-  const location = [member.suburb, member.state].filter(Boolean).join(', ');
+  const location = member.show_location !== false ? [member.suburb, member.state].filter(Boolean).join(', ') : '';
 
   return (
     <BentoCard

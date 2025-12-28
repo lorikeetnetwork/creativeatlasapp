@@ -911,6 +911,7 @@ export type Database = {
           primary_discipline:
             | Database["public"]["Enums"]["location_category"]
             | null
+          show_location: boolean | null
           skills: string[] | null
           state: string | null
           suburb: string | null
@@ -938,6 +939,7 @@ export type Database = {
           primary_discipline?:
             | Database["public"]["Enums"]["location_category"]
             | null
+          show_location?: boolean | null
           skills?: string[] | null
           state?: string | null
           suburb?: string | null
@@ -965,6 +967,7 @@ export type Database = {
           primary_discipline?:
             | Database["public"]["Enums"]["location_category"]
             | null
+          show_location?: boolean | null
           skills?: string[] | null
           state?: string | null
           suburb?: string | null
