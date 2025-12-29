@@ -6,6 +6,99 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// SSRF Protection: Check if hostname is a private/reserved IP
+function isPrivateOrReservedIP(hostname: string): boolean {
+  // IPv4 pattern
+  const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  const match = hostname.match(ipv4Regex);
+  
+  if (!match) return false;
+  
+  const parts = [parseInt(match[1]), parseInt(match[2]), parseInt(match[3]), parseInt(match[4])];
+  
+  // Validate each octet is within range
+  if (parts.some(p => p > 255)) return false;
+  
+  // 10.0.0.0/8 - Private
+  if (parts[0] === 10) return true;
+  
+  // 172.16.0.0/12 - Private
+  if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return true;
+  
+  // 192.168.0.0/16 - Private
+  if (parts[0] === 192 && parts[1] === 168) return true;
+  
+  // 127.0.0.0/8 - Loopback
+  if (parts[0] === 127) return true;
+  
+  // 169.254.0.0/16 - Link-local (includes cloud metadata)
+  if (parts[0] === 169 && parts[1] === 254) return true;
+  
+  // 0.0.0.0/8 - Current network
+  if (parts[0] === 0) return true;
+  
+  // 100.64.0.0/10 - Carrier-grade NAT
+  if (parts[0] === 100 && parts[1] >= 64 && parts[1] <= 127) return true;
+  
+  // 192.0.0.0/24 - IETF Protocol Assignments
+  if (parts[0] === 192 && parts[1] === 0 && parts[2] === 0) return true;
+  
+  // 192.0.2.0/24 - TEST-NET-1
+  if (parts[0] === 192 && parts[1] === 0 && parts[2] === 2) return true;
+  
+  // 198.51.100.0/24 - TEST-NET-2
+  if (parts[0] === 198 && parts[1] === 51 && parts[2] === 100) return true;
+  
+  // 203.0.113.0/24 - TEST-NET-3
+  if (parts[0] === 203 && parts[1] === 0 && parts[2] === 113) return true;
+  
+  return false;
+}
+
+// SSRF Protection: Validate URL before fetching
+function validateUrl(urlString: string): { valid: boolean; error?: string } {
+  try {
+    const parsed = new URL(urlString);
+    
+    // Only allow http and https protocols
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return { valid: false, error: 'Only HTTP and HTTPS protocols are allowed' };
+    }
+    
+    const hostname = parsed.hostname.toLowerCase();
+    
+    // Block localhost variants
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1') {
+      return { valid: false, error: 'Localhost URLs are not allowed' };
+    }
+    
+    // Block IPv6 localhost
+    if (hostname.startsWith('[::1]') || hostname.includes('::ffff:127')) {
+      return { valid: false, error: 'Localhost URLs are not allowed' };
+    }
+    
+    // Block private/reserved IPs
+    if (isPrivateOrReservedIP(hostname)) {
+      return { valid: false, error: 'Private IP addresses are not allowed' };
+    }
+    
+    // Block internal/local domains
+    const blockedSuffixes = ['.local', '.internal', '.localhost', '.localdomain'];
+    if (blockedSuffixes.some(suffix => hostname.endsWith(suffix))) {
+      return { valid: false, error: 'Internal domain names are not allowed' };
+    }
+    
+    // Block cloud metadata endpoints
+    if (hostname === '169.254.169.254' || hostname === 'metadata.google.internal') {
+      return { valid: false, error: 'Cloud metadata endpoints are not allowed' };
+    }
+    
+    return { valid: true };
+  } catch {
+    return { valid: false, error: 'Invalid URL format' };
+  }
+}
+
 function isValidImageUrl(url: string): boolean {
   // Filter out tracking pixels, analytics, and invalid images
   const invalidPatterns = [
@@ -129,13 +222,23 @@ serve(async (req) => {
       );
     }
 
-    console.log('Fetching OG data for URL:', url);
-
     // Normalize URL
     let normalizedUrl = url;
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       normalizedUrl = 'https://' + url;
     }
+
+    // SSRF Protection: Validate URL before fetching
+    const validation = validateUrl(normalizedUrl);
+    if (!validation.valid) {
+      console.warn('SSRF attempt blocked:', normalizedUrl, validation.error);
+      return new Response(
+        JSON.stringify({ error: 'Invalid or restricted URL', ogImage: null, ogDescription: null }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Fetching OG data for URL:', normalizedUrl);
 
     // Create AbortController for timeout
     const controller = new AbortController();
