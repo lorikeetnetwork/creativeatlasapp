@@ -10,12 +10,14 @@ import { MapPin, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { BentoPage, BentoContainer } from "@/components/ui/bento-page-layout";
 import { useOnboarding } from "@/components/onboarding/OnboardingContext";
+import { PasswordChangeModal } from "@/components/auth/PasswordChangeModal";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { checkOnboardingStatus } = useOnboarding();
@@ -66,7 +68,7 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -79,14 +81,34 @@ const Auth = () => {
         description: error.message,
         variant: "destructive",
       });
-    } else {
-      navigate("/map");
+    } else if (data.user) {
+      // Check if user needs to change password
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("must_change_password")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profile?.must_change_password) {
+        setShowPasswordChange(true);
+      } else {
+        navigate("/map");
+      }
     }
+  };
+
+  const handlePasswordChangeComplete = () => {
+    setShowPasswordChange(false);
+    navigate("/map");
   };
 
   return (
     <BentoPage>
       <Navbar />
+      <PasswordChangeModal 
+        open={showPasswordChange} 
+        onComplete={handlePasswordChangeComplete} 
+      />
       <div className="flex items-center justify-center p-4 py-12">
         <BentoContainer className="w-full max-w-md">
           <div className="space-y-3 text-center mb-6">

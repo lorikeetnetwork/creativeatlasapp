@@ -1412,6 +1412,9 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          invite_token: string | null
+          invite_token_expires_at: string | null
+          must_change_password: boolean | null
           onboarding_completed: boolean | null
           payment_date: string | null
           payment_verified: boolean | null
@@ -1428,6 +1431,9 @@ export type Database = {
           email: string
           full_name?: string | null
           id: string
+          invite_token?: string | null
+          invite_token_expires_at?: string | null
+          must_change_password?: boolean | null
           onboarding_completed?: boolean | null
           payment_date?: string | null
           payment_verified?: boolean | null
@@ -1444,6 +1450,9 @@ export type Database = {
           email?: string
           full_name?: string | null
           id?: string
+          invite_token?: string | null
+          invite_token_expires_at?: string | null
+          must_change_password?: boolean | null
           onboarding_completed?: boolean | null
           payment_date?: string | null
           payment_verified?: boolean | null

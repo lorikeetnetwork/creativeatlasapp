@@ -33,6 +33,7 @@ import MemberProfile from "./pages/MemberProfile";
 import EditMemberProfile from "./pages/EditMemberProfile";
 import NotFound from "./pages/NotFound";
 import Collaborate from "./pages/Collaborate";
+import InviteAccept from "./pages/InviteAccept";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/map" element={<Index />} />
             <Route path="/collaborate" element={<Collaborate />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/invite/:token" element={<InviteAccept />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/subscription" element={<Subscription />} />

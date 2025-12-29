@@ -40,8 +40,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Search, Shield, ShieldOff, Loader2, UserPlus, UserMinus, Crown, Copy, Check } from 'lucide-react';
+import { Search, Shield, ShieldOff, Loader2, UserPlus, UserMinus, Crown, Copy, Check, Mail, Link2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export function UserManagementTab() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,7 +50,9 @@ export function UserManagementTab() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteFullName, setInviteFullName] = useState('');
   const [inviteRole, setInviteRole] = useState('collaborator');
+  const [inviteMethod, setInviteMethod] = useState<'email' | 'magicLink'>('email');
   const [generatedPassword, setGeneratedPassword] = useState('');
+  const [inviteSuccess, setInviteSuccess] = useState(false);
   const [passwordCopied, setPasswordCopied] = useState(false);
   
   const { users, isLoading, grantCollaboratorRole, revokeCollaboratorRole, inviteUser } = useUserManagement();
@@ -68,9 +71,14 @@ export function UserManagementTab() {
         email: inviteEmail,
         fullName: inviteFullName,
         role: inviteRole,
+        inviteMethod,
       });
       
-      setGeneratedPassword(result.password);
+      if (result.inviteMethod === 'email' && result.password) {
+        setGeneratedPassword(result.password);
+      } else {
+        setInviteSuccess(true);
+      }
     } catch {
       // Error handled by mutation
     }
@@ -87,7 +95,9 @@ export function UserManagementTab() {
     setInviteEmail('');
     setInviteFullName('');
     setInviteRole('collaborator');
+    setInviteMethod('email');
     setGeneratedPassword('');
+    setInviteSuccess(false);
     setPasswordCopied(false);
   };
 
@@ -145,9 +155,12 @@ export function UserManagementTab() {
             {generatedPassword ? (
               <div className="space-y-4">
                 <div className="rounded-lg border border-border bg-muted/50 p-4">
-                  <p className="text-sm font-medium mb-2">User created successfully!</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Check className="h-5 w-5 text-green-500" />
+                    <p className="text-sm font-medium">User created successfully!</p>
+                  </div>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Share this temporary password with the user. They should change it after first login.
+                    A welcome email with login instructions has been sent. Share this temporary password with the user as backup:
                   </p>
                   <div className="flex items-center gap-2">
                     <Input 
@@ -167,6 +180,22 @@ export function UserManagementTab() {
                       )}
                     </Button>
                   </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleCloseInviteDialog}>Done</Button>
+                </DialogFooter>
+              </div>
+            ) : inviteSuccess ? (
+              <div className="space-y-4">
+                <div className="rounded-lg border border-border bg-muted/50 p-4 text-center">
+                  <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-3">
+                    <Mail className="h-6 w-6 text-green-500" />
+                  </div>
+                  <p className="text-sm font-medium mb-1">Magic link sent!</p>
+                  <p className="text-sm text-muted-foreground">
+                    An invitation email with a magic link has been sent to <strong>{inviteEmail}</strong>. 
+                    The link expires in 24 hours.
+                  </p>
                 </div>
                 <DialogFooter>
                   <Button onClick={handleCloseInviteDialog}>Done</Button>
@@ -205,6 +234,50 @@ export function UserManagementTab() {
                     </SelectContent>
                   </Select>
                 </div>
+                
+                <div className="space-y-3">
+                  <Label>Invite Method</Label>
+                  <RadioGroup 
+                    value={inviteMethod} 
+                    onValueChange={(value) => setInviteMethod(value as 'email' | 'magicLink')}
+                    className="grid grid-cols-2 gap-3"
+                  >
+                    <div className="relative">
+                      <RadioGroupItem 
+                        value="email" 
+                        id="method-email" 
+                        className="peer sr-only" 
+                      />
+                      <Label
+                        htmlFor="method-email"
+                        className="flex flex-col items-center justify-center rounded-lg border-2 border-border bg-background p-3 hover:bg-accent/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-colors"
+                      >
+                        <Mail className="h-5 w-5 mb-1" />
+                        <span className="text-xs font-medium">Email + Password</span>
+                      </Label>
+                    </div>
+                    <div className="relative">
+                      <RadioGroupItem 
+                        value="magicLink" 
+                        id="method-magic" 
+                        className="peer sr-only" 
+                      />
+                      <Label
+                        htmlFor="method-magic"
+                        className="flex flex-col items-center justify-center rounded-lg border-2 border-border bg-background p-3 hover:bg-accent/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-colors"
+                      >
+                        <Link2 className="h-5 w-5 mb-1" />
+                        <span className="text-xs font-medium">Magic Link</span>
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                  <p className="text-xs text-muted-foreground">
+                    {inviteMethod === 'email' 
+                      ? 'User receives an email with login credentials and must change password on first login.'
+                      : 'User receives a one-time magic link to set up their account (expires in 24h).'}
+                  </p>
+                </div>
+                
                 <DialogFooter>
                   <Button
                     variant="outline"
@@ -221,7 +294,7 @@ export function UserManagementTab() {
                     ) : (
                       <UserPlus className="h-4 w-4 mr-2" />
                     )}
-                    Create User
+                    Send Invitation
                   </Button>
                 </DialogFooter>
               </div>

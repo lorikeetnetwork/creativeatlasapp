@@ -15,6 +15,7 @@ interface InviteUserParams {
   email: string;
   fullName: string;
   role: string;
+  inviteMethod?: 'email' | 'magicLink';
 }
 
 interface InviteResult {
@@ -23,7 +24,10 @@ interface InviteResult {
   email: string;
   fullName: string;
   role: string;
-  password: string;
+  password?: string;
+  inviteMethod: 'email' | 'magicLink';
+  emailSent?: boolean;
+  message?: string;
   warning?: string;
 }
 
@@ -138,10 +142,17 @@ export function useUserManagement() {
           description: data.warning,
           variant: 'default',
         });
+      } else if (data.inviteMethod === 'magicLink') {
+        toast({
+          title: 'Invitation sent!',
+          description: `A magic link has been sent to ${data.email}.`,
+        });
       } else {
         toast({
           title: 'User invited successfully',
-          description: `${data.email} has been invited as a ${data.role}.`,
+          description: data.emailSent 
+            ? `Credentials have been emailed to ${data.email}.`
+            : `${data.email} has been invited as a ${data.role}.`,
         });
       }
     },
