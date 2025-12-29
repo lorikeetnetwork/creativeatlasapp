@@ -46,16 +46,15 @@ const Landing = () => {
             {/* Main Intro Card - Large */}
             <BentoCard 
               className="md:col-span-2 lg:col-span-3 lg:row-span-2"
-              title="Australia's Creative Community Platform"
+              title="A shared platform for Australia's creative community"
             >
               <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
-                More than a map—Creative Atlas is your gateway to discovering spaces, connecting with creatives, 
-                finding opportunities, and engaging with Australia's thriving creative ecosystem.
+                Creative Atlas is a practical place to discover spaces, meet people, and find opportunities across Australia's creative ecosystem. It brings together venues, projects, events, and creatives to support connection, collaboration, and ongoing creative work.
               </p>
               <div className="flex flex-wrap gap-3 mt-auto">
                 <Button onClick={() => navigate("/map")} className="gap-2">
                   <Map className="h-4 w-4" />
-                  Explore Map
+                  Explore the Map
                 </Button>
                 <Button variant="outline" onClick={() => navigate("/auth")} className="gap-2">
                   <Users className="h-4 w-4" />
@@ -69,7 +68,7 @@ const Landing = () => {
               <div className="flex flex-col items-center text-center h-full justify-center">
                 <Building2 className="w-8 h-8 text-primary mb-2" />
                 <div className="text-2xl font-bold text-white">500+</div>
-                <div className="text-xs text-gray-400">Creative Spaces</div>
+                <div className="text-xs text-gray-400">Creative spaces listed</div>
               </div>
             </BentoCard>
             
@@ -101,14 +100,14 @@ const Landing = () => {
               <div className="flex flex-col items-center text-center h-full justify-center">
                 <Globe className="w-8 h-8 text-primary mb-2" />
                 <div className="text-2xl font-bold text-white">All States</div>
-                <div className="text-xs text-gray-400">Nationwide Coverage</div>
+                <div className="text-xs text-gray-400">Nationwide participation</div>
               </div>
             </BentoCard>
           </BentoGrid>
 
           <BentoSectionFooter 
-            title="Everything You Need to Thrive Creatively"
-            description="From discovery to collaboration, Creative Atlas provides the tools to connect and grow."
+            title="Tools to support creative work"
+            description="From discovery through to collaboration, Creative Atlas helps people find what's happening, who's involved, and how to get connected."
           />
         </div>
       </section>
@@ -124,7 +123,7 @@ const Landing = () => {
             </Badge>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Interactive Map</h2>
             <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
-              Navigate Australia's creative ecosystem—venues, studios, festivals, and creative hubs, all mapped for easy discovery.
+              Browse creative spaces across Australia—venues, studios, festivals, hubs, and initiatives—mapped to make discovery simple and accessible.
             </p>
           </div>
           
@@ -152,7 +151,7 @@ const Landing = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-white">Events Calendar</h3>
-                <p className="text-gray-400 text-sm line-clamp-2">Workshops, exhibitions, concerts, festivals & networking events.</p>
+                <p className="text-gray-400 text-sm line-clamp-2">Workshops, exhibitions, concerts, festivals, and community gatherings.</p>
               </div>
               <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
@@ -163,7 +162,7 @@ const Landing = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-white">Opportunities Board</h3>
-                <p className="text-gray-400 text-sm line-clamp-2">Jobs, gigs, residencies, grants & collaborations.</p>
+                <p className="text-gray-400 text-sm line-clamp-2">Jobs, gigs, residencies, grants, and collaboration calls.</p>
               </div>
               <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
@@ -174,7 +173,7 @@ const Landing = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-white">Community Directory</h3>
-                <p className="text-gray-400 text-sm line-clamp-2">Connect with creatives, view portfolios & find collaborators.</p>
+                <p className="text-gray-400 text-sm line-clamp-2">Profiles for creatives and organisations, with space to share work and connect.</p>
               </div>
               <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
@@ -185,15 +184,15 @@ const Landing = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-white">Blog & Articles</h3>
-                <p className="text-gray-400 text-sm line-clamp-2">Insights, stories & updates from the creative community.</p>
+                <p className="text-gray-400 text-sm line-clamp-2">Stories, reflections, and updates from across the community.</p>
               </div>
               <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
           </BentoGrid>
 
           <BentoSectionFooter 
-            title="A Complete Creative Ecosystem"
-            description="Engage with the community through events, discussions, opportunities, and more."
+            title="A connected creative ecosystem"
+            description="Creative Atlas supports participation through events, shared knowledge, opportunities, and conversation—helping creative work happen in real contexts."
           />
         </div>
       </section>
@@ -218,7 +217,7 @@ const Landing = () => {
                 <MessageSquare className="w-6 h-6 text-pink-400" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Discussions</h3>
-              <p className="text-gray-400 text-sm mb-4">Join conversations, ask questions, share knowledge, and connect with creatives across Australia. From technical help to networking introductions.</p>
+              <p className="text-gray-400 text-sm mb-4">Ask questions, share experience, and connect with others across Australia. Topics range from practical advice to collaboration and introductions.</p>
               <ul className="space-y-2 text-sm text-gray-400 mt-auto">
                 <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> General discussions</li>
                 <li className="flex items-center gap-2"><Zap className="w-4 h-4 text-pink-400" /> Help & support</li>
@@ -232,7 +231,7 @@ const Landing = () => {
                 <Award className="w-5 h-5 text-yellow-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Showcase Gallery</h3>
-              <p className="text-gray-400 text-sm">Celebrate outstanding creative projects and get inspired by community work.</p>
+              <p className="text-gray-400 text-sm">A space to highlight creative projects and community work.</p>
             </BentoCard>
             
             <BentoCard onClick={() => navigate("/resources")}>
@@ -240,7 +239,7 @@ const Landing = () => {
                 <Lightbulb className="w-5 h-5 text-cyan-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Resources Library</h3>
-              <p className="text-gray-400 text-sm">Access guides, templates, tools, and tutorials for creative professionals.</p>
+              <p className="text-gray-400 text-sm">Guides, templates, tools, and learning resources for creative practice.</p>
             </BentoCard>
             
             <BentoCard onClick={() => navigate("/mentorship")}>
@@ -248,7 +247,7 @@ const Landing = () => {
                 <Users2 className="w-5 h-5 text-emerald-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Mentorship</h3>
-              <p className="text-gray-400 text-sm">Connect with experienced mentors or share your expertise with emerging creatives.</p>
+              <p className="text-gray-400 text-sm">Opportunities to learn from others or offer support to emerging creatives.</p>
             </BentoCard>
             
             <BentoCard onClick={() => navigate("/newsletter")}>
@@ -256,7 +255,7 @@ const Landing = () => {
                 <Sparkles className="w-5 h-5 text-rose-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Newsletter</h3>
-              <p className="text-gray-400 text-sm">Get weekly updates on events, opportunities, and community highlights.</p>
+              <p className="text-gray-400 text-sm">Weekly updates covering events, opportunities, and community highlights.</p>
             </BentoCard>
           </BentoGrid>
         </div>
@@ -279,7 +278,7 @@ const Landing = () => {
                 01
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Explore the Map</h3>
-              <p className="text-gray-400 text-sm">Use the interactive map to discover creative spaces, organisations, and initiatives across Australia.</p>
+              <p className="text-gray-400 text-sm">Find creative spaces, organisations, and initiatives across Australia.</p>
             </BentoCard>
             
             <BentoCard className="text-center">
@@ -287,7 +286,7 @@ const Landing = () => {
                 02
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Join the Community</h3>
-              <p className="text-gray-400 text-sm">Create your profile, connect with fellow creatives, and participate in discussions and events.</p>
+              <p className="text-gray-400 text-sm">Create a profile, connect with others, and take part in discussions and events.</p>
             </BentoCard>
             
             <BentoCard className="text-center">
@@ -295,13 +294,13 @@ const Landing = () => {
                 03
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Find Opportunities</h3>
-              <p className="text-gray-400 text-sm">Browse jobs, gigs, grants, and collaborations—or post your own to find the perfect creative partner.</p>
+              <p className="text-gray-400 text-sm">Browse or post jobs, gigs, grants, and collaborations.</p>
             </BentoCard>
           </BentoGrid>
 
           <BentoSectionFooter 
-            title="Get Started in Three Simple Steps"
-            description="Whether you're a creative professional or an organisation, Creative Atlas makes it easy to connect and grow."
+            title="Get started in a few simple steps"
+            description="Whether you're an individual creative or an organisation, Creative Atlas is designed to be easy to use and open to participation."
           />
         </div>
       </section>
@@ -346,7 +345,6 @@ const Landing = () => {
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Membership
             </Badge>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Unlock the Full Experience</h2>
           </div>
           
           <BentoGrid className="lg:grid-cols-3 max-w-5xl mx-auto">
@@ -356,12 +354,12 @@ const Landing = () => {
                 <h3 className="text-xl font-semibold text-white">For Creatives</h3>
               </div>
               <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Access the full interactive map</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Browse & RSVP to events</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Access the interactive map</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Browse and RSVP to events</li>
                 <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Apply for opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create your member profile</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a public profile</li>
                 <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Join community discussions</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Publish articles & stories</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Publish articles and stories</li>
               </ul>
               <Button className="w-full" onClick={() => navigate("/pricing")}>
                 View Pricing
@@ -374,12 +372,12 @@ const Landing = () => {
                 <h3 className="text-xl font-semibold text-white">For Creative Entities</h3>
               </div>
               <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> List your venue, studio, or org</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a rich business profile</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Post events & opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Showcase your work & offerings</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Receive inquiries from members</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Connect with the community</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> List a venue, studio, or organisation</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a detailed profile</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Post events and opportunities</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Share work and offerings</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Receive enquiries</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Connect with the wider community</li>
               </ul>
               <Button className="w-full" onClick={() => navigate("/pricing")}>
                 View Pricing
@@ -392,14 +390,13 @@ const Landing = () => {
                 <h3 className="text-xl font-semibold text-white">Become a Collaborator</h3>
               </div>
               <p className="text-gray-400 text-sm mb-4">
-                Help shape Australia's creative ecosystem. Collaborators help curate content, manage events, and grow the community.
+                Collaborators help maintain and grow the platform by contributing to content, events, and community care.
               </p>
               <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Manage platform content</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Curate events & opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Approve showcases & articles</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Add & manage locations</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Shape community growth</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Curate events and opportunities</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Manage listings and locations</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Support showcases and articles</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Help shape community direction</li>
               </ul>
               <Button className="w-full gap-2" onClick={() => navigate("/collaborate")}>
                 <Send className="w-4 h-4" />
@@ -420,11 +417,10 @@ const Landing = () => {
               Get Started
             </Badge>
             <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
-              Join Australia's Creative Community Today
+              Join Australia's creative community
             </h2>
             <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              Discover spaces, connect with creatives, find opportunities, and be part of a thriving ecosystem 
-              dedicated to collaboration and innovation.
+              Discover spaces, meet collaborators, find opportunities, and take part in a shared creative ecosystem built around participation and care.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" onClick={() => navigate("/auth")} className="gap-2">
@@ -445,57 +441,15 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t border-[#333] py-8 md:py-12 bg-[#121212]">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-semibold text-white mb-4">Explore</h4>
-              <ul className="space-y-2 text-sm">
-                <li><button onClick={() => navigate("/map")} className="text-gray-400 hover:text-white transition-colors">Map</button></li>
-                <li><button onClick={() => navigate("/events")} className="text-gray-400 hover:text-white transition-colors">Events</button></li>
-                <li><button onClick={() => navigate("/opportunities")} className="text-gray-400 hover:text-white transition-colors">Opportunities</button></li>
-                <li><button onClick={() => navigate("/community")} className="text-gray-400 hover:text-white transition-colors">Community</button></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Community</h4>
-              <ul className="space-y-2 text-sm">
-                <li><button onClick={() => navigate("/blog")} className="text-gray-400 hover:text-white transition-colors">Blog</button></li>
-                <li><button onClick={() => navigate("/discussions")} className="text-gray-400 hover:text-white transition-colors">Discussions</button></li>
-                <li><button onClick={() => navigate("/showcase")} className="text-gray-400 hover:text-white transition-colors">Showcase</button></li>
-                <li><button onClick={() => navigate("/resources")} className="text-gray-400 hover:text-white transition-colors">Resources</button></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Account</h4>
-              <ul className="space-y-2 text-sm">
-                <li><button onClick={() => navigate("/auth")} className="text-gray-400 hover:text-white transition-colors">Sign In</button></li>
-                <li><button onClick={() => navigate("/pricing")} className="text-gray-400 hover:text-white transition-colors">Pricing</button></li>
-                <li><button onClick={() => navigate("/dashboard")} className="text-gray-400 hover:text-white transition-colors">Dashboard</button></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">About</h4>
-              <ul className="space-y-2 text-sm">
-                <li><button onClick={() => navigate("/collaborate")} className="text-gray-400 hover:text-white transition-colors">Collaborate</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">About</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">Contact</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">Terms</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">Privacy</button></li>
-              </ul>
-            </div>
-          </div>
-          
-          <Separator className="my-6 md:my-8 bg-[#333]" />
-          
           <div className="flex flex-col items-center gap-3">
             <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
               <img src={lorikeetLogo} alt="Lorikeet Network" className="h-10 md:h-12 w-auto object-contain" />
             </a>
             <p className="text-xs md:text-sm text-gray-400 text-center max-w-md">
-              © 2025 Creative Atlas. A project of the{" "}
-              <a href="https://www.lorikeet.network" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors underline">
-                Lorikeet Network
-              </a>
-              {" "}— supporting Australia's creative and socially positive future.
+              Creative Atlas is a project of the Lorikeet Network, supporting Australia's creative and socially positive future.
+            </p>
+            <p className="text-xs text-gray-500">
+              © 2025 Creative Atlas.
             </p>
           </div>
         </div>
