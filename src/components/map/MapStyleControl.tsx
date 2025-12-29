@@ -46,7 +46,7 @@ export function MapStyleControl({
           <span className="hidden sm:inline">Map Style</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-56 p-3 bg-background border border-border z-50" sideOffset={8}>
+      <PopoverContent align="end" className="w-72 p-3 bg-background border border-border z-50" sideOffset={8}>
         <div className="space-y-4">
           {/* Map Style Section */}
           <div className="space-y-2">
@@ -80,7 +80,7 @@ export function MapStyleControl({
               <Palette className="w-3 h-3" />
               Marker Colors
             </div>
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-1">
               {COLOR_MODES.map((mode) => (
                 <Button
                   key={mode.id}
@@ -88,12 +88,12 @@ export function MapStyleControl({
                   size="sm"
                   onClick={() => onColorModeChange(mode.id)}
                   className={cn(
-                    "flex-1 flex items-center justify-center gap-2 h-9",
+                    "flex items-center justify-center gap-1.5 h-9 px-2",
                     colorMode === mode.id && "bg-primary/10 ring-1 ring-primary"
                   )}
                 >
-                  <div className={cn("w-3 h-3 rounded-full", mode.color)} />
-                  <span className="text-xs">{mode.label}</span>
+                  <div className={cn("w-3 h-3 rounded-full shrink-0", mode.color)} />
+                  <span className="text-xs truncate">{mode.label}</span>
                 </Button>
               ))}
             </div>
