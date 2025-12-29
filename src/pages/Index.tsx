@@ -17,6 +17,9 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocations } from "@/hooks/useLocations";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useFavoriteLists } from "@/hooks/useFavoriteLists";
+import { useMapPreferences } from "@/hooks/useMapPreferences";
 
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -35,8 +38,11 @@ const Index = () => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  // Use rate-limited locations hook
+  // Use hooks
   const { locations, loading: isLoading, error: locationsError } = useLocations();
+  const { favorites, favoriteIds, isFavorited, toggleFavorite } = useFavorites();
+  const { lists, createList, deleteList, addToList, removeFromList, getListItems, isInList } = useFavoriteLists();
+  const { preferences, updateMapStyle, updateMarkerColorMode, toggleShowFavoritesOnly } = useMapPreferences();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -50,7 +56,7 @@ const Index = () => {
 
   useEffect(() => {
     filterLocations();
-  }, [locations, searchQuery, selectedCategories, mapBounds]);
+  }, [locations, searchQuery, selectedCategories, mapBounds, preferences.show_favorites_only, favoriteIds]);
 
   useEffect(() => {
     if (locationsError) {
@@ -65,7 +71,12 @@ const Index = () => {
   const filterLocations = () => {
     let filtered = [...locations];
     
-    // Filter by map bounds first (shows only what's visible on map)
+    // Filter by favorites only
+    if (preferences.show_favorites_only) {
+      filtered = filtered.filter(loc => favoriteIds.has(loc.id));
+    }
+    
+    // Filter by map bounds
     if (mapBounds) {
       filtered = filtered.filter(loc => 
         loc.latitude >= mapBounds.south &&
@@ -85,7 +96,6 @@ const Index = () => {
     setFilteredLocations(filtered);
   };
 
-  // Debounced bounds change handler
   const handleBoundsChange = useCallback((bounds: MapBounds) => {
     setMapBounds(bounds);
   }, []);
@@ -117,18 +127,25 @@ const Index = () => {
 
   // Mobile Layout
   if (isMobile) {
-    return <div className="h-screen flex flex-col bg-background">
-        {/* Mobile Topbar */}
+    return (
+      <div className="h-screen flex flex-col bg-background">
         <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={true} onToggleSidebar={() => setMobileSheetOpen(true)} />
 
-        {/* Full Screen Map */}
         <div className="flex-1 relative">
-          <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onBoundsChange={handleBoundsChange} />
+          <MapView
+            locations={filteredLocations}
+            selectedLocation={selectedLocation}
+            onLocationSelect={handleLocationSelect}
+            onBoundsChange={handleBoundsChange}
+            favoriteIds={favoriteIds}
+            mapStyle={preferences.map_style}
+            colorMode={preferences.marker_color_mode}
+            onStyleChange={updateMapStyle}
+            onColorModeChange={updateMarkerColorMode}
+          />
 
-          {/* Auth Prompt Overlay for unauthenticated users */}
           {!session && <AuthPromptOverlay />}
 
-          {/* Floating Action Button for Search */}
           {session && (
             <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
               <Search className="w-5 h-5 mr-2" />
@@ -140,58 +157,91 @@ const Index = () => {
           )}
         </div>
 
-        {/* Mobile Search Sheet */}
         {session && <MobileLocationSheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />}
 
-        {/* Mobile Location Detail */}
         {session && <MobileLocationDetail location={selectedLocation} open={mobileDetailOpen} onOpenChange={setMobileDetailOpen} />}
 
-        {/* Location Submission Form Dialog */}
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogContent className="max-w-[95vw] max-h-[90vh] overflow-y-auto">
-            <LocationSubmissionForm session={session} onSuccess={() => {
-            setIsFormOpen(false);
-          }} onCancel={() => setIsFormOpen(false)} />
+            <LocationSubmissionForm session={session} onSuccess={() => setIsFormOpen(false)} onCancel={() => setIsFormOpen(false)} />
           </DialogContent>
         </Dialog>
-      </div>;
+      </div>
+    );
   }
 
   // Desktop Layout
-  return <div className="h-screen flex flex-col bg-background">
-      {/* Topbar */}
+  return (
+    <div className="h-screen flex flex-col bg-background">
       <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
 
-      {/* Fixed Layout without resize */}
       <div className="flex-1 flex">
-        {/* Fixed Width Sidebar */}
         {!isSidebarCollapsed && session && (
           <div className="w-[400px] flex-shrink-0 border-r border-black overflow-hidden">
-            <Sidebar session={session} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} />
+            <Sidebar
+              session={session}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+              region={region}
+              onRegionChange={setRegion}
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onSignOut={handleSignOut}
+              onSignIn={() => navigate("/auth")}
+              favorites={favorites}
+              lists={lists}
+              showFavoritesOnly={preferences.show_favorites_only}
+              onToggleShowFavorites={toggleShowFavoritesOnly}
+              onCreateList={createList}
+              onDeleteList={deleteList}
+              getListItems={getListItems}
+              favoriteIds={favoriteIds}
+            />
           </div>
         )}
 
-        {/* Map Panel */}
         <div className="flex-1 relative">
-          {showDetail && selectedLocation && session && <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
-              <LocationDetail location={selectedLocation} onClose={() => setShowDetail(false)} />
-            </div>}
-          <MapView locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} onBoundsChange={handleBoundsChange} />
+          {showDetail && selectedLocation && session && (
+            <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
+              <LocationDetail
+                location={selectedLocation}
+                onClose={() => setShowDetail(false)}
+                isFavorited={isFavorited(selectedLocation.id)}
+                onToggleFavorite={() => toggleFavorite(selectedLocation.id)}
+                lists={lists}
+                isInList={isInList}
+                onAddToList={addToList}
+                onRemoveFromList={removeFromList}
+                onCreateList={createList}
+              />
+            </div>
+          )}
+          <MapView
+            locations={filteredLocations}
+            selectedLocation={selectedLocation}
+            onLocationSelect={handleLocationSelect}
+            onBoundsChange={handleBoundsChange}
+            favoriteIds={favoriteIds}
+            mapStyle={preferences.map_style}
+            colorMode={preferences.marker_color_mode}
+            onStyleChange={updateMapStyle}
+            onColorModeChange={updateMarkerColorMode}
+          />
           
-          {/* Auth Prompt Overlay for unauthenticated users */}
           {!session && <AuthPromptOverlay />}
         </div>
       </div>
 
-      {/* Location Submission Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <LocationSubmissionForm session={session} onSuccess={() => {
-          setIsFormOpen(false);
-        }} onCancel={() => setIsFormOpen(false)} />
+          <LocationSubmissionForm session={session} onSuccess={() => setIsFormOpen(false)} onCancel={() => setIsFormOpen(false)} />
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 };
 
 export default Index;

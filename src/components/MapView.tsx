@@ -5,6 +5,8 @@ import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getCategoryColor } from "@/utils/categoryColors";
+import { MapStyleControl } from "./map/MapStyleControl";
+import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
 
 export interface MapBounds {
   north: number;
@@ -18,9 +20,35 @@ interface MapViewProps {
   selectedLocation: Tables<"locations"> | null;
   onLocationSelect: (location: Tables<"locations">) => void;
   onBoundsChange?: (bounds: MapBounds) => void;
+  favoriteIds?: Set<string>;
+  mapStyle?: MapStyle;
+  colorMode?: MarkerColorMode;
+  onStyleChange?: (style: MapStyle) => void;
+  onColorModeChange?: (mode: MarkerColorMode) => void;
 }
 
-const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange }: MapViewProps) => {
+const MAP_STYLE_URLS: Record<MapStyle, string> = {
+  dark: "mapbox://styles/mapbox/dark-v11",
+  light: "mapbox://styles/mapbox/light-v11",
+  satellite: "mapbox://styles/mapbox/satellite-streets-v12",
+  streets: "mapbox://styles/mapbox/streets-v12",
+  outdoors: "mapbox://styles/mapbox/outdoors-v12",
+};
+
+const MONO_COLOR = "#6366f1"; // Indigo
+const HIGH_CONTRAST_COLOR = "#ffffff";
+
+const MapView = ({
+  locations,
+  selectedLocation,
+  onLocationSelect,
+  onBoundsChange,
+  favoriteIds = new Set(),
+  mapStyle = "dark",
+  colorMode = "category",
+  onStyleChange,
+  onColorModeChange,
+}: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersMap = useRef<Map<string, { marker: mapboxgl.Marker; element: HTMLDivElement }>>(new Map());
@@ -48,6 +76,17 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     }
   };
 
+  const getMarkerColor = (location: Tables<"locations">): string => {
+    switch (colorMode) {
+      case "mono":
+        return MONO_COLOR;
+      case "highContrast":
+        return HIGH_CONTRAST_COLOR;
+      default:
+        return getCategoryColor(location.category);
+    }
+  };
+
   // Initialize map
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -63,7 +102,7 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/dark-v11",
+        style: MAP_STYLE_URLS[mapStyle],
         center: [153.4, -28.0], // Gold Coast / Northern Rivers area
         zoom: 8,
       });
@@ -113,6 +152,12 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     };
   }, [savedToken]);
 
+  // Handle style changes
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    map.current.setStyle(MAP_STYLE_URLS[mapStyle]);
+  }, [mapStyle, mapLoaded]);
+
   // Update markers when locations change - smart updates to prevent flickering
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
@@ -141,10 +186,24 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
       el.style.width = "24px";
       el.style.height = "24px";
       el.style.borderRadius = "50%";
-      el.style.backgroundColor = getCategoryColor(location.category);
-      el.style.border = "2px solid white";
+      el.style.backgroundColor = getMarkerColor(location);
+      el.style.border = colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
       el.style.cursor = "pointer";
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+      el.style.position = "relative";
+
+      // Add favorite indicator
+      if (favoriteIds.has(location.id)) {
+        const heart = document.createElement("div");
+        heart.innerHTML = "♥";
+        heart.style.position = "absolute";
+        heart.style.top = "-6px";
+        heart.style.right = "-6px";
+        heart.style.fontSize = "10px";
+        heart.style.color = "#ef4444";
+        heart.style.textShadow = "0 1px 2px rgba(0,0,0,0.5)";
+        el.appendChild(heart);
+      }
 
       el.addEventListener("mouseenter", () => {
         if (selectedLocation?.id !== location.id) {
@@ -168,7 +227,46 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
 
       markersMap.current.set(location.id, { marker, element: el });
     });
-  }, [locations, mapLoaded, onLocationSelect, selectedLocation]);
+  }, [locations, mapLoaded, onLocationSelect, selectedLocation, colorMode, favoriteIds]);
+
+  // Update marker colors when color mode changes
+  useEffect(() => {
+    if (!mapLoaded) return;
+
+    markersMap.current.forEach(({ element }, id) => {
+      const location = locations.find(l => l.id === id);
+      if (location) {
+        element.style.backgroundColor = getMarkerColor(location);
+        element.style.border = colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
+      }
+    });
+  }, [colorMode, locations, mapLoaded]);
+
+  // Update favorite indicators when favoriteIds change
+  useEffect(() => {
+    if (!mapLoaded) return;
+
+    markersMap.current.forEach(({ element }, id) => {
+      // Remove existing heart if any
+      const existingHeart = element.querySelector("div");
+      if (existingHeart) {
+        existingHeart.remove();
+      }
+
+      // Add heart if favorited
+      if (favoriteIds.has(id)) {
+        const heart = document.createElement("div");
+        heart.innerHTML = "♥";
+        heart.style.position = "absolute";
+        heart.style.top = "-6px";
+        heart.style.right = "-6px";
+        heart.style.fontSize = "10px";
+        heart.style.color = "#ef4444";
+        heart.style.textShadow = "0 1px 2px rgba(0,0,0,0.5)";
+        element.appendChild(heart);
+      }
+    });
+  }, [favoriteIds, mapLoaded]);
 
   // Fit bounds ONLY ONCE on initial load - separate effect to prevent re-triggering
   useEffect(() => {
@@ -235,7 +333,23 @@ const MapView = ({ locations, selectedLocation, onLocationSelect, onBoundsChange
     );
   }
 
-  return <div ref={mapContainer} className="w-full h-full" />;
+  return (
+    <div className="relative w-full h-full">
+      <div ref={mapContainer} className="w-full h-full" />
+
+      {/* Map Controls */}
+      {onStyleChange && onColorModeChange && (
+        <div className="absolute top-4 left-4 z-10">
+          <MapStyleControl
+            mapStyle={mapStyle}
+            colorMode={colorMode}
+            onStyleChange={onStyleChange}
+            onColorModeChange={onColorModeChange}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default MapView;
