@@ -39,14 +39,14 @@ export function MapStyleControl({
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="secondary"
-          size="icon"
-          className="h-10 w-10 bg-background/90 backdrop-blur-sm border border-border shadow-lg hover:bg-background"
+          variant="ghost"
+          className="h-10 px-3 text-foreground hover:bg-transparent hover:text-foreground border border-transparent hover:border-orange-500 transition-colors gap-2"
         >
-          <Layers className="w-5 h-5" />
+          <Layers className="w-4 h-4" />
+          <span className="hidden sm:inline">Map Style</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-56 p-3" sideOffset={8}>
+      <PopoverContent align="end" className="w-56 p-3 bg-background border border-border z-50" sideOffset={8}>
         <div className="space-y-4">
           {/* Map Style Section */}
           <div className="space-y-2">
