@@ -226,10 +226,8 @@ const MapView = ({
       }
     });
 
-    // Add markers for new locations only
+    // Add markers for new locations and update existing ones
     locations.forEach((location) => {
-      if (markersMap.current.has(location.id)) return; // Already exists
-
       const { lat, lng } = normalizeCoordinates({
         latitude: location.latitude as unknown as number,
         longitude: location.longitude as unknown as number,
@@ -244,6 +242,16 @@ const MapView = ({
           raw: { latitude: location.latitude, longitude: location.longitude },
           normalized: { lat, lng },
         });
+      }
+
+      const existing = markersMap.current.get(location.id);
+      if (existing) {
+        // Ensure existing markers stay pinned to their exact coordinates
+        existing.marker.setLngLat([lng, lat]);
+        existing.element.style.backgroundColor = getMarkerColor(location);
+        existing.element.style.border =
+          colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
+        return;
       }
 
       const el = document.createElement("div");
