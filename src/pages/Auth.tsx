@@ -54,12 +54,11 @@ const Auth = () => {
     } else {
       toast({
         title: "Account created!",
-        description: "Welcome! Let us show you around...",
+        description: "Redirecting to complete your subscription...",
       });
-      // Trigger onboarding for new users
-      setTimeout(async () => {
-        await checkOnboardingStatus();
-        navigate("/map");
+      // Redirect new users to pricing to complete payment
+      setTimeout(() => {
+        navigate("/pricing");
       }, 500);
     }
   };
