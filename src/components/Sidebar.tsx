@@ -2,8 +2,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CATEGORIES, CATEGORY_SHORT_NAMES } from "@/utils/categoryGroups";
 import LocationList from "./LocationList";
+import { FavoritesPanel } from "./favorites/FavoritesPanel";
 import type { Tables } from "@/integrations/supabase/types";
 import type { Session } from "@supabase/supabase-js";
+import type { FavoriteList } from "@/hooks/useFavoriteLists";
+import type { UserFavorite } from "@/hooks/useFavorites";
 
 // Comprehensive list of Australian cities and regions
 const REGIONS = [
@@ -85,6 +88,15 @@ interface SidebarProps {
   onLocationSelect: (location: Tables<"locations">) => void;
   onSignOut: () => void;
   onSignIn: () => void;
+  // Favorites props
+  favorites?: UserFavorite[];
+  lists?: FavoriteList[];
+  showFavoritesOnly?: boolean;
+  onToggleShowFavorites?: () => void;
+  onCreateList?: (name: string) => Promise<FavoriteList | null>;
+  onDeleteList?: (listId: string) => Promise<boolean>;
+  getListItems?: (listId: string) => string[];
+  favoriteIds?: Set<string>;
 }
 
 const Sidebar = ({
@@ -99,12 +111,34 @@ const Sidebar = ({
   selectedLocation,
   onLocationSelect,
   onSignOut,
-  onSignIn
+  onSignIn,
+  // Favorites
+  favorites = [],
+  lists = [],
+  showFavoritesOnly = false,
+  onToggleShowFavorites,
+  onCreateList,
+  onDeleteList,
+  getListItems,
+  favoriteIds = new Set(),
 }: SidebarProps) => {
   return (
     <div className="h-full flex flex-col bg-background border-r border-border shadow-sm overflow-hidden">
       <div className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
         <div className="p-4 space-y-4">
+          {/* FAVORITES Section */}
+          {session && onToggleShowFavorites && onCreateList && onDeleteList && getListItems && (
+            <FavoritesPanel
+              favorites={favorites}
+              lists={lists}
+              showFavoritesOnly={showFavoritesOnly}
+              onToggleShowFavorites={onToggleShowFavorites}
+              onCreateList={onCreateList}
+              onDeleteList={onDeleteList}
+              getListItems={getListItems}
+            />
+          )}
+
           {/* SEARCH Section */}
           <div>
             <h2 className="text-xs font-bold uppercase tracking-wider mb-3 text-foreground">
@@ -165,7 +199,8 @@ const Sidebar = ({
             <LocationList 
               locations={locations} 
               selectedLocation={selectedLocation} 
-              onLocationSelect={onLocationSelect} 
+              onLocationSelect={onLocationSelect}
+              favoriteIds={favoriteIds}
             />
           </div>
         </div>

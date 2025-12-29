@@ -776,6 +776,72 @@ export type Database = {
           },
         ]
       }
+      favorite_list_items: {
+        Row: {
+          added_at: string | null
+          id: string
+          list_id: string
+          location_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          id?: string
+          list_id: string
+          location_id: string
+        }
+        Update: {
+          added_at?: string | null
+          id?: string
+          list_id?: string
+          location_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "favorite_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_list_items_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorite_lists: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_default: boolean | null
+          name: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          name: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       location_photos: {
         Row: {
           caption: string | null
@@ -1677,6 +1743,68 @@ export type Database = {
           id?: string
           name?: string
           slug?: string
+        }
+        Relationships: []
+      }
+      user_favorites: {
+        Row: {
+          created_at: string | null
+          id: string
+          location_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          location_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          location_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_favorites_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_map_preferences: {
+        Row: {
+          default_center_lat: number | null
+          default_center_lng: number | null
+          default_zoom: number | null
+          map_style: string | null
+          marker_color_mode: string | null
+          show_favorites_only: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          default_center_lat?: number | null
+          default_center_lng?: number | null
+          default_zoom?: number | null
+          map_style?: string | null
+          marker_color_mode?: string | null
+          show_favorites_only?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          default_center_lat?: number | null
+          default_center_lng?: number | null
+          default_zoom?: number | null
+          map_style?: string | null
+          marker_color_mode?: string | null
+          show_favorites_only?: boolean | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
