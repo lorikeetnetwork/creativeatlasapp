@@ -115,8 +115,29 @@ const Landing = () => {
 
       <Separator className="bg-[#333]" />
 
-      {/* Core Platform Features */}
+      {/* Interactive Map - Full Width */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              Explore
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Interactive Map</h2>
+            <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+              Navigate Australia's creative ecosystem—venues, studios, festivals, and creative hubs, all mapped for easy discovery.
+            </p>
+          </div>
+          
+          <div className="rounded-lg overflow-hidden border border-[#333]">
+            <MapPreview />
+          </div>
+        </div>
+      </section>
+
+      <Separator className="bg-[#333]" />
+
+      {/* Core Platform Features */}
+      <section className="py-16 md:py-24 bg-[#121212]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
@@ -125,66 +146,48 @@ const Landing = () => {
           </div>
           
           <BentoGrid className="lg:grid-cols-4 mb-4">
-            <BentoCard 
-              className="lg:col-span-2 lg:row-span-2"
-              onClick={() => navigate("/map")}
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-primary/10">
-                  <Map className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">Interactive Map</h3>
-                  <p className="text-gray-400 text-sm">Navigate Australia's creative ecosystem—venues, studios, festivals, and creative hubs, all mapped for easy discovery.</p>
-                </div>
+            <BentoCard className="flex flex-row items-center gap-4" onClick={() => navigate("/events")}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-orange-500/10 shrink-0">
+                <Calendar className="w-6 h-6 text-orange-400" />
               </div>
-              <div className="rounded-lg overflow-hidden border border-[#333] mt-4 flex-1">
-                <MapPreview />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-white">Events Calendar</h3>
+                <p className="text-gray-400 text-sm line-clamp-2">Workshops, exhibitions, concerts, festivals & networking events.</p>
               </div>
+              <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
             
-            <BentoCard onClick={() => navigate("/events")}>
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-orange-500/10 mb-4">
-                <Calendar className="w-5 h-5 text-orange-400" />
+            <BentoCard className="flex flex-row items-center gap-4" onClick={() => navigate("/opportunities")}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-green-500/10 shrink-0">
+                <Briefcase className="w-6 h-6 text-green-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Events Calendar</h3>
-              <p className="text-gray-400 text-sm">Discover workshops, exhibitions, concerts, festivals, and networking events happening across the creative community.</p>
-              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                Browse Events <ArrowRight className="w-4 h-4 ml-1" />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-white">Opportunities Board</h3>
+                <p className="text-gray-400 text-sm line-clamp-2">Jobs, gigs, residencies, grants & collaborations.</p>
               </div>
+              <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
             
-            <BentoCard onClick={() => navigate("/opportunities")}>
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-green-500/10 mb-4">
-                <Briefcase className="w-5 h-5 text-green-400" />
+            <BentoCard className="flex flex-row items-center gap-4" onClick={() => navigate("/community")}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-500/10 shrink-0">
+                <Users className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Opportunities Board</h3>
-              <p className="text-gray-400 text-sm">Find jobs, gigs, residencies, grants, and collaborations tailored to creative professionals.</p>
-              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                Find Work <ArrowRight className="w-4 h-4 ml-1" />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-white">Community Directory</h3>
+                <p className="text-gray-400 text-sm line-clamp-2">Connect with creatives, view portfolios & find collaborators.</p>
               </div>
+              <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
             
-            <BentoCard onClick={() => navigate("/community")}>
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-500/10 mb-4">
-                <Users className="w-5 h-5 text-blue-400" />
+            <BentoCard className="flex flex-row items-center gap-4" onClick={() => navigate("/blog")}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-purple-500/10 shrink-0">
+                <FileText className="w-6 h-6 text-purple-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Community Directory</h3>
-              <p className="text-gray-400 text-sm">Connect with fellow creatives, view portfolios, and find collaborators or mentors in your discipline.</p>
-              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                Meet Creatives <ArrowRight className="w-4 h-4 ml-1" />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-white">Blog & Articles</h3>
+                <p className="text-gray-400 text-sm line-clamp-2">Insights, stories & updates from the creative community.</p>
               </div>
-            </BentoCard>
-            
-            <BentoCard onClick={() => navigate("/blog")}>
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-purple-500/10 mb-4">
-                <FileText className="w-5 h-5 text-purple-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Blog & Articles</h3>
-              <p className="text-gray-400 text-sm">Read and share insights, stories, and updates from the creative community.</p>
-              <div className="mt-4 flex items-center text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                Read Stories <ArrowRight className="w-4 h-4 ml-1" />
-              </div>
+              <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </BentoCard>
           </BentoGrid>
 
