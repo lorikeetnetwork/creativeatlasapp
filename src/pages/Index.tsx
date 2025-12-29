@@ -20,6 +20,7 @@ import { useLocations } from "@/hooks/useLocations";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useFavoriteLists } from "@/hooks/useFavoriteLists";
 import { useMapPreferences } from "@/hooks/useMapPreferences";
+import { normalizeCoordinates } from "@/utils/geo";
 
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -70,28 +71,41 @@ const Index = () => {
 
   const filterLocations = () => {
     let filtered = [...locations];
-    
+
     // Filter by favorites only
     if (preferences.show_favorites_only) {
-      filtered = filtered.filter(loc => favoriteIds.has(loc.id));
+      filtered = filtered.filter((loc) => favoriteIds.has(loc.id));
     }
-    
+
     // Filter by map bounds
     if (mapBounds) {
-      filtered = filtered.filter(loc => 
-        loc.latitude >= mapBounds.south &&
-        loc.latitude <= mapBounds.north &&
-        loc.longitude >= mapBounds.west &&
-        loc.longitude <= mapBounds.east
-      );
+      filtered = filtered.filter((loc) => {
+        const { lat, lng } = normalizeCoordinates({
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+        });
+
+        return (
+          lat >= mapBounds.south &&
+          lat <= mapBounds.north &&
+          lng >= mapBounds.west &&
+          lng <= mapBounds.east
+        );
+      });
     }
-    
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(loc => loc.name.toLowerCase().includes(query) || loc.suburb.toLowerCase().includes(query) || loc.state.toLowerCase().includes(query) || loc.description?.toLowerCase().includes(query));
+      filtered = filtered.filter(
+        (loc) =>
+          loc.name.toLowerCase().includes(query) ||
+          loc.suburb.toLowerCase().includes(query) ||
+          loc.state.toLowerCase().includes(query) ||
+          loc.description?.toLowerCase().includes(query)
+      );
     }
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter(loc => selectedCategories.includes(loc.category));
+      filtered = filtered.filter((loc) => selectedCategories.includes(loc.category));
     }
     setFilteredLocations(filtered);
   };
