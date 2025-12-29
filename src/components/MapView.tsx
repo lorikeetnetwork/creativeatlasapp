@@ -337,9 +337,9 @@ const MapView = ({
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
 
-      {/* Map Controls */}
+      {/* Map Controls - positioned bottom-left to avoid sidebar overlap */}
       {onStyleChange && onColorModeChange && (
-        <div className="absolute top-4 left-4 z-10">
+        <div className="absolute bottom-6 left-4 z-20">
           <MapStyleControl
             mapStyle={mapStyle}
             colorMode={colorMode}
