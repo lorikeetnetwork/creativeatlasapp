@@ -5,11 +5,12 @@ import { Separator } from "@/components/ui/separator";
 import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-card";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
+import { CollaboratorApplicationForm } from "@/components/collaborator/CollaboratorApplicationForm";
 import { 
   Handshake, Users, Building2, Music, Palette, Radio, GraduationCap, 
   Lightbulb, Heart, Globe, Zap, ArrowRight, Mail, Sparkles, 
   Target, TrendingUp, Share2, Award, Megaphone, Calendar, Code,
-  Database, BookOpen, Network
+  Database, BookOpen, Network, Shield
 } from "lucide-react";
 
 const Collaborate = () => {
@@ -251,19 +252,43 @@ const Collaborate = () => {
 
       <Separator className="bg-[#333]" />
 
+      {/* Application Form Section */}
+      <section id="apply" className="py-16 md:py-24 bg-[#121212]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4 px-4 py-1.5">
+              <Shield className="w-4 h-4 mr-2" />
+              Become a Collaborator
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Apply to Join Our Team</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Collaborators help curate content, manage events, verify locations, and shape the growth of Australia's creative community platform.
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <BentoCard>
+              <CollaboratorApplicationForm />
+            </BentoCard>
+          </div>
+        </div>
+      </section>
+
+      <Separator className="bg-[#333]" />
+
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-[#121212]">
+      <section className="py-16 md:py-24 bg-[#0a0a0a]">
         <div className="container mx-auto px-4">
           <BentoCard className="max-w-3xl mx-auto text-center py-12">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
               <Share2 className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Ready to Partner?
+              Organization Partnerships
             </h2>
             <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto mb-8">
-              We'd love to hear from you. Reach out to discuss how we can work together to 
-              support Australia's creative community.
+              Looking to partner as an organization? Reach out to discuss sponsorship, 
+              content partnerships, and collaboration opportunities.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="gap-2">
