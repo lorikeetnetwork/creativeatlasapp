@@ -10,6 +10,7 @@ import { OpportunitiesTab } from '@/components/collaborator/OpportunitiesTab';
 import { ArticlesTab } from '@/components/collaborator/ArticlesTab';
 import { CommunityTab } from '@/components/collaborator/CommunityTab';
 import { ShowcasesTab } from '@/components/collaborator/ShowcasesTab';
+import { ApplicationsTab } from '@/components/collaborator/ApplicationsTab';
 import { PendingLocationsTable } from '@/components/admin/PendingLocationsTable';
 import { BulkImport } from '@/components/admin/BulkImport';
 import { UserManagementTab } from '@/components/dashboard/UserManagementTab';
@@ -251,6 +252,12 @@ export default function CollaboratorDashboard() {
             <BulkImport />
           </BentoContentCard>
         );
+      case 'applications':
+        return (
+          <BentoContentCard title="Collaborator Applications">
+            <ApplicationsTab />
+          </BentoContentCard>
+        );
       case 'users':
         return (
           <BentoContentCard title="User Management">
@@ -273,6 +280,7 @@ export default function CollaboratorDashboard() {
       pending: 'Pending Locations',
       'all-locations': 'All Locations',
       'bulk-import': 'Bulk Import',
+      applications: 'Collaborator Applications',
       users: 'User Management',
     };
     return titles[activeTab] || 'Dashboard';

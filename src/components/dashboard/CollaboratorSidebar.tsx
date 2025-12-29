@@ -53,6 +53,7 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
   ];
 
   const adminItems = [
+    { id: 'applications', title: 'Applications', icon: Shield },
     { id: 'users', title: 'User Management', icon: UserCog },
   ];
 

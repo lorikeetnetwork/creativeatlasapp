@@ -362,6 +362,69 @@ export type Database = {
           },
         ]
       }
+      collaborator_applications: {
+        Row: {
+          contribution_areas: string[] | null
+          created_at: string
+          disciplines: string[] | null
+          email: string
+          experience_summary: string | null
+          full_name: string
+          hours_per_week: string | null
+          id: string
+          location: string | null
+          motivation: string
+          portfolio_url: string | null
+          references_info: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["collaborator_application_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contribution_areas?: string[] | null
+          created_at?: string
+          disciplines?: string[] | null
+          email: string
+          experience_summary?: string | null
+          full_name: string
+          hours_per_week?: string | null
+          id?: string
+          location?: string | null
+          motivation: string
+          portfolio_url?: string | null
+          references_info?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["collaborator_application_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contribution_areas?: string[] | null
+          created_at?: string
+          disciplines?: string[] | null
+          email?: string
+          experience_summary?: string | null
+          full_name?: string
+          hours_per_week?: string | null
+          id?: string
+          location?: string | null
+          motivation?: string
+          portfolio_url?: string | null
+          references_info?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["collaborator_application_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_form_submissions: {
         Row: {
           created_at: string | null
@@ -1654,6 +1717,7 @@ export type Database = {
         | "accepted"
       article_status: "draft" | "published" | "archived"
       article_type: "article" | "update" | "announcement" | "event"
+      collaborator_application_status: "pending" | "approved" | "rejected"
       compensation_type:
         | "paid"
         | "unpaid"
@@ -2048,6 +2112,7 @@ export const Constants = {
       ],
       article_status: ["draft", "published", "archived"],
       article_type: ["article", "update", "announcement", "event"],
+      collaborator_application_status: ["pending", "approved", "rejected"],
       compensation_type: [
         "paid",
         "unpaid",
