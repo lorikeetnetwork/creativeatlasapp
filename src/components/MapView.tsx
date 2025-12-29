@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { getCategoryColor } from "@/utils/categoryColors";
 import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
 import { normalizeCoordinates } from "@/utils/geo";
+import { useMapboxToken } from "@/hooks/useMapboxToken";
 
 export interface MapBounds {
   north: number;
@@ -64,18 +65,12 @@ const MapView = ({
   if (locations.length > 0 && initialLocationsRef.current.length === 0) {
     initialLocationsRef.current = locations;
   }
-  const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
-  const [savedToken, setSavedToken] = useState<string | null>(
-    import.meta.env.VITE_MAPBOX_TOKEN ||
-      localStorage.getItem("mapbox_token") ||
-      null
-  );
+  const { token: savedToken, loading: tokenLoading, error: tokenError, saveToken } = useMapboxToken();
 
   const handleSaveToken = () => {
     if (tokenInput.trim()) {
-      localStorage.setItem("mapbox_token", tokenInput.trim());
-      setSavedToken(tokenInput.trim());
+      saveToken(tokenInput.trim());
       mapboxgl.accessToken = tokenInput.trim();
       setTokenInput("");
       window.location.reload();
@@ -95,11 +90,10 @@ const MapView = ({
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current || map.current || tokenLoading) return;
 
     // Check if token is available
     if (!savedToken) {
-      setError("Mapbox token not configured");
       return;
     }
 
@@ -155,11 +149,9 @@ const MapView = ({
 
       map.current.on("error", (e) => {
         console.error("Map error:", e);
-        setError("Failed to load map");
       });
     } catch (err) {
       console.error("Failed to initialize map:", err);
-      setError("Failed to initialize map");
     }
 
     return () => {
@@ -167,7 +159,7 @@ const MapView = ({
       markersMap.current.clear();
       map.current?.remove();
     };
-  }, [savedToken]);
+  }, [savedToken, tokenLoading]);
 
   // Keep Mapbox rendering in sync with layout changes (sidebar open/close, responsive, etc.)
   useEffect(() => {
@@ -387,11 +379,19 @@ const MapView = ({
     });
   }, [selectedLocation]);
 
-  if (error) {
+  if (tokenLoading) {
+    return (
+      <div className="w-full h-full bg-card border border-border flex items-center justify-center">
+        <div className="text-muted-foreground">Loading map...</div>
+      </div>
+    );
+  }
+
+  if (tokenError || !savedToken) {
     return (
       <div className="w-full h-full bg-card border border-border flex items-center justify-center p-8">
         <div className="text-center max-w-md space-y-4">
-          <p className="text-foreground font-medium mb-2">{error}</p>
+          <p className="text-foreground font-medium mb-2">{tokenError || "Mapbox token not configured"}</p>
           <p className="text-sm text-muted-foreground mb-4">
             Enter your Mapbox public token (starts with pk.) to load the map.
           </p>

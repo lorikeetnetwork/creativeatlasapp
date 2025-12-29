@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Input } from "@/components/ui/input";
+import { useMapboxToken } from "@/hooks/useMapboxToken";
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: ParsedAddress) => void;
@@ -28,21 +29,18 @@ export default function AddressAutocomplete({
   const geocoderInstance = useRef<MapboxGeocoder | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
-  const [savedToken, setSavedToken] = useState<string | null>(
-    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token") || null
-  );
+  const { token: savedToken, loading: tokenLoading, saveToken } = useMapboxToken();
 
   const handleSaveToken = () => {
     if (tokenInput.trim()) {
-      localStorage.setItem("mapbox_token", tokenInput.trim());
-      setSavedToken(tokenInput.trim());
+      saveToken(tokenInput.trim());
       setTokenInput("");
       window.location.reload();
     }
   };
 
   useEffect(() => {
-    if (!geocoderContainer.current || geocoderInstance.current) return;
+    if (!geocoderContainer.current || geocoderInstance.current || tokenLoading) return;
 
     if (!savedToken) {
       setError("Mapbox token not configured");
@@ -85,7 +83,7 @@ export default function AddressAutocomplete({
         geocoderInstance.current.clear();
       }
     };
-  }, [savedToken, placeholder, onAddressSelect, defaultValue]);
+  }, [savedToken, tokenLoading, placeholder, onAddressSelect, defaultValue]);
 
   const parseMapboxAddress = (feature: any): ParsedAddress => {
     const context = feature.context || [];

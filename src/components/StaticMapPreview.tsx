@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useMapboxToken } from "@/hooks/useMapboxToken";
 
 interface StaticMapPreviewProps {
   latitude: number;
@@ -11,17 +12,12 @@ interface StaticMapPreviewProps {
 export default function StaticMapPreview({ latitude, longitude, name }: StaticMapPreviewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  const { token, loading } = useMapboxToken();
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current || map.current || loading || !token) return;
 
-    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem('mapbox_token');
-    
-    if (!mapboxToken) {
-      return;
-    }
-
-    mapboxgl.accessToken = mapboxToken;
+    mapboxgl.accessToken = token;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -42,7 +38,15 @@ export default function StaticMapPreview({ latitude, longitude, name }: StaticMa
         map.current = null;
       }
     };
-  }, [latitude, longitude, name]);
+  }, [latitude, longitude, name, token, loading]);
+
+  if (loading) {
+    return <div className="w-full h-full bg-muted animate-pulse" />;
+  }
+
+  if (!token) {
+    return <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground text-sm">Map unavailable</div>;
+  }
 
   return <div ref={mapContainer} className="w-full h-full" />;
 }
