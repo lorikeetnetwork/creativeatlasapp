@@ -1708,7 +1708,7 @@ export type Database = {
     }
     Enums: {
       account_type: "free" | "basic_paid" | "creative_entity"
-      app_role: "public" | "owner" | "admin" | "collaborator"
+      app_role: "public" | "owner" | "admin" | "collaborator" | "master"
       application_status:
         | "submitted"
         | "reviewed"
@@ -2102,7 +2102,7 @@ export const Constants = {
   public: {
     Enums: {
       account_type: ["free", "basic_paid", "creative_entity"],
-      app_role: ["public", "owner", "admin", "collaborator"],
+      app_role: ["public", "owner", "admin", "collaborator", "master"],
       application_status: [
         "submitted",
         "reviewed",
