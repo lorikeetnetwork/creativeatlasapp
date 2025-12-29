@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.get-locations]
 verify_jwt = false
+
+[functions.invite-user]
+verify_jwt = true

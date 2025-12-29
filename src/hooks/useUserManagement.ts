@@ -8,6 +8,23 @@ interface UserWithRole {
   full_name: string | null;
   created_at: string;
   isCollaborator: boolean;
+  isMaster: boolean;
+}
+
+interface InviteUserParams {
+  email: string;
+  fullName: string;
+  role: string;
+}
+
+interface InviteResult {
+  success: boolean;
+  userId: string;
+  email: string;
+  fullName: string;
+  role: string;
+  password: string;
+  warning?: string;
 }
 
 export function useUserManagement() {
@@ -25,15 +42,19 @@ export function useUserManagement() {
 
       if (profilesError) throw profilesError;
 
-      // Fetch all collaborator roles
+      // Fetch all user roles
       const { data: roles, error: rolesError } = await supabase
         .from('user_roles')
-        .select('user_id, role')
-        .eq('role', 'collaborator');
+        .select('user_id, role');
 
       if (rolesError) throw rolesError;
 
-      const collaboratorUserIds = new Set(roles?.map(r => r.user_id) || []);
+      const collaboratorUserIds = new Set(
+        roles?.filter(r => r.role === 'collaborator').map(r => r.user_id) || []
+      );
+      const masterUserIds = new Set(
+        roles?.filter(r => r.role === 'master').map(r => r.user_id) || []
+      );
 
       const usersWithRoles: UserWithRole[] = (profiles || []).map(profile => ({
         id: profile.id,
@@ -41,6 +62,7 @@ export function useUserManagement() {
         full_name: profile.full_name,
         created_at: profile.created_at,
         isCollaborator: collaboratorUserIds.has(profile.id),
+        isMaster: masterUserIds.has(profile.id),
       }));
 
       return usersWithRoles;
@@ -97,10 +119,46 @@ export function useUserManagement() {
     },
   });
 
+  const inviteUser = useMutation({
+    mutationFn: async (params: InviteUserParams): Promise<InviteResult> => {
+      const { data, error } = await supabase.functions.invoke('invite-user', {
+        body: params,
+      });
+
+      if (error) throw error;
+      if (data.error) throw new Error(data.error);
+      
+      return data as InviteResult;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
+      if (data.warning) {
+        toast({
+          title: 'User created with warning',
+          description: data.warning,
+          variant: 'default',
+        });
+      } else {
+        toast({
+          title: 'User invited successfully',
+          description: `${data.email} has been invited as a ${data.role}.`,
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to invite user',
+        variant: 'destructive',
+      });
+    },
+  });
+
   return {
     users,
     isLoading,
     grantCollaboratorRole,
     revokeCollaboratorRole,
+    inviteUser,
   };
 }
