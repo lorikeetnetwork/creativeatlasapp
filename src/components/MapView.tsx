@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { getCategoryColor } from "@/utils/categoryColors";
 import { MapStyleControl } from "./map/MapStyleControl";
 import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
+import { normalizeCoordinates } from "@/utils/geo";
 
 export interface MapBounds {
   north: number;
@@ -51,7 +52,9 @@ const MapView = ({
 }: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const markersMap = useRef<Map<string, { marker: mapboxgl.Marker; element: HTMLDivElement }>>(new Map());
+  const markersMap = useRef<
+    Map<string, { marker: mapboxgl.Marker; element: HTMLDivElement }>
+  >(new Map());
   const hasInitiallyFitBounds = useRef(false);
   const initialLocationsRef = useRef<Tables<"locations">[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -64,7 +67,9 @@ const MapView = ({
   const [error, setError] = useState<string | null>(null);
   const [tokenInput, setTokenInput] = useState("");
   const [savedToken, setSavedToken] = useState<string | null>(
-    import.meta.env.VITE_MAPBOX_TOKEN || localStorage.getItem("mapbox_token") || "pk.eyJ1IjoibG9yaWtlZXRuZXR3b3JrIiwiYSI6ImNtaThya2R6bDBmNnQyaXBydDV6dGdocjgifQ.iGQZTbQ3tP_hHIQQcae9Qw"
+    import.meta.env.VITE_MAPBOX_TOKEN ||
+      localStorage.getItem("mapbox_token") ||
+      "pk.eyJ1IjoibG9yaWtlZXRuZXR3b3JrIiwiYSI6ImNtaThya2R6bDBmNnQyaXBydDV6dGdocjgifQ.iGQZTbQ3tP_hHIQQcae9Qw"
   );
 
   const handleSaveToken = () => {
@@ -124,7 +129,7 @@ const MapView = ({
           });
         }
       });
-      
+
       // Handle style changes - markers need to be re-added after style loads
       map.current.on("style.load", () => {
         setStyleReady(true);
@@ -174,11 +179,11 @@ const MapView = ({
     if (!map.current || !mapLoaded || !styleReady) return;
 
     const currentMap = map.current;
-    const currentLocationIds = new Set(locations.map(l => l.id));
+    const currentLocationIds = new Set(locations.map((l) => l.id));
     const existingIds = new Set(markersMap.current.keys());
 
     // Remove markers that are no longer in locations
-    existingIds.forEach(id => {
+    existingIds.forEach((id) => {
       if (!currentLocationIds.has(id)) {
         const entry = markersMap.current.get(id);
         if (entry) {
@@ -192,13 +197,19 @@ const MapView = ({
     locations.forEach((location) => {
       if (markersMap.current.has(location.id)) return; // Already exists
 
+      const { lat, lng } = normalizeCoordinates({
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+
       const el = document.createElement("div");
       el.className = "custom-marker";
       el.style.width = "24px";
       el.style.height = "24px";
       el.style.borderRadius = "50%";
       el.style.backgroundColor = getMarkerColor(location);
-      el.style.border = colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
+      el.style.border =
+        colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
       el.style.cursor = "pointer";
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
       el.style.position = "relative";
@@ -218,7 +229,8 @@ const MapView = ({
 
       el.addEventListener("mouseenter", () => {
         if (selectedLocation?.id !== location.id) {
-          el.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.4)";
+          el.style.boxShadow =
+            "0 0 0 4px rgba(255,255,255,0.5), 0 2px 12px rgba(0,0,0,0.4)";
         }
       });
 
@@ -228,9 +240,7 @@ const MapView = ({
         }
       });
 
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([location.longitude, location.latitude])
-        .addTo(currentMap);
+      const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(currentMap);
 
       el.addEventListener("click", () => {
         onLocationSelect(location);
@@ -238,17 +248,26 @@ const MapView = ({
 
       markersMap.current.set(location.id, { marker, element: el });
     });
-  }, [locations, mapLoaded, styleReady, onLocationSelect, selectedLocation, colorMode, favoriteIds]);
+  }, [
+    locations,
+    mapLoaded,
+    styleReady,
+    onLocationSelect,
+    selectedLocation,
+    colorMode,
+    favoriteIds,
+  ]);
 
   // Update marker colors when color mode changes
   useEffect(() => {
     if (!mapLoaded) return;
 
     markersMap.current.forEach(({ element }, id) => {
-      const location = locations.find(l => l.id === id);
+      const location = locations.find((l) => l.id === id);
       if (location) {
         element.style.backgroundColor = getMarkerColor(location);
-        element.style.border = colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
+        element.style.border =
+          colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
       }
     });
   }, [colorMode, locations, mapLoaded]);
@@ -286,7 +305,11 @@ const MapView = ({
 
     const bounds = new mapboxgl.LngLatBounds();
     initialLocationsRef.current.forEach((loc) => {
-      bounds.extend([loc.longitude, loc.latitude]);
+      const { lat, lng } = normalizeCoordinates({
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+      });
+      bounds.extend([lng, lat]);
     });
     map.current.fitBounds(bounds, { padding: 50, maxZoom: 12 });
     hasInitiallyFitBounds.current = true;
@@ -299,7 +322,8 @@ const MapView = ({
     // Update all marker styles based on selection
     markersMap.current.forEach(({ element }, id) => {
       if (selectedLocation?.id === id) {
-        element.style.boxShadow = "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
+        element.style.boxShadow =
+          "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
         element.style.zIndex = "1000";
       } else {
         element.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
@@ -348,9 +372,9 @@ const MapView = ({
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
 
-      {/* Map Controls - positioned bottom-left to avoid sidebar overlap */}
+      {/* Map Controls - top-right under zoom controls so it's always obvious */}
       {onStyleChange && onColorModeChange && (
-        <div className="absolute bottom-6 left-4 z-20">
+        <div className="absolute top-24 right-4 z-30">
           <MapStyleControl
             mapStyle={mapStyle}
             colorMode={colorMode}
@@ -364,3 +388,4 @@ const MapView = ({
 };
 
 export default MapView;
+
