@@ -19,8 +19,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocations } from "@/hooks/useLocations";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useFavoriteLists } from "@/hooks/useFavoriteLists";
-import { useMapPreferences } from "@/hooks/useMapPreferences";
+import { useMapPreferences, type MapStyle, type MarkerColorMode } from "@/hooks/useMapPreferences";
 import { normalizeCoordinates } from "@/utils/geo";
+import { MapStyleControl } from "@/components/map/MapStyleControl";
 
 const Index = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -44,6 +45,9 @@ const Index = () => {
   const { favorites, favoriteIds, isFavorited, toggleFavorite } = useFavorites();
   const { lists, createList, deleteList, addToList, removeFromList, getListItems, isInList } = useFavoriteLists();
   const { preferences, updateMapStyle, updateMarkerColorMode, toggleShowFavoritesOnly } = useMapPreferences();
+
+  const mapStyle = (preferences.map_style || "dark") as MapStyle;
+  const markerColorMode = (preferences.marker_color_mode || "category") as MarkerColorMode;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -143,7 +147,22 @@ const Index = () => {
   if (isMobile) {
     return (
       <div className="h-screen flex flex-col bg-background">
-        <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={true} onToggleSidebar={() => setMobileSheetOpen(true)} />
+        <Topbar
+          session={session}
+          onSignOut={handleSignOut}
+          onSignIn={() => navigate("/auth")}
+          onOpenForm={handleOpenForm}
+          isSidebarCollapsed={true}
+          onToggleSidebar={() => setMobileSheetOpen(true)}
+          rightAddon={
+            <MapStyleControl
+              mapStyle={mapStyle}
+              colorMode={markerColorMode}
+              onStyleChange={updateMapStyle}
+              onColorModeChange={updateMarkerColorMode}
+            />
+          }
+        />
 
         <div className="flex-1 relative">
           <MapView
@@ -152,10 +171,8 @@ const Index = () => {
             onLocationSelect={handleLocationSelect}
             onBoundsChange={handleBoundsChange}
             favoriteIds={favoriteIds}
-            mapStyle={preferences.map_style}
-            colorMode={preferences.marker_color_mode}
-            onStyleChange={updateMapStyle}
-            onColorModeChange={updateMarkerColorMode}
+            mapStyle={mapStyle}
+            colorMode={markerColorMode}
           />
           {session && (
             <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
@@ -184,7 +201,22 @@ const Index = () => {
   // Desktop Layout
   return (
     <div className="h-screen flex flex-col bg-background">
-      <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
+      <Topbar
+        session={session}
+        onSignOut={handleSignOut}
+        onSignIn={() => navigate("/auth")}
+        onOpenForm={handleOpenForm}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        rightAddon={
+          <MapStyleControl
+            mapStyle={mapStyle}
+            colorMode={markerColorMode}
+            onStyleChange={updateMapStyle}
+            onColorModeChange={updateMarkerColorMode}
+          />
+        }
+      />
 
       <div className="flex-1 flex">
         {!isSidebarCollapsed && (
@@ -236,10 +268,8 @@ const Index = () => {
             onLocationSelect={handleLocationSelect}
             onBoundsChange={handleBoundsChange}
             favoriteIds={favoriteIds}
-            mapStyle={preferences.map_style}
-            colorMode={preferences.marker_color_mode}
-            onStyleChange={updateMapStyle}
-            onColorModeChange={updateMarkerColorMode}
+            mapStyle={mapStyle}
+            colorMode={markerColorMode}
           />
 
         </div>

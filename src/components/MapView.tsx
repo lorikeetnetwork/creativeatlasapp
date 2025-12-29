@@ -5,7 +5,6 @@ import type { Tables } from "@/integrations/supabase/types";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getCategoryColor } from "@/utils/categoryColors";
-import { MapStyleControl } from "./map/MapStyleControl";
 import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
 import { normalizeCoordinates } from "@/utils/geo";
 
@@ -128,6 +127,11 @@ const MapView = ({
             west: bounds.getWest(),
           });
         }
+      });
+
+      // Mark style as ready whenever the map becomes idle (covers style changes too)
+      map.current.on("idle", () => {
+        setStyleReady(true);
       });
 
       // Handle style changes - markers need to be re-added after style loads
@@ -371,18 +375,6 @@ const MapView = ({
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
-
-      {/* Map Controls - top-right under zoom controls so it's always obvious */}
-      {onStyleChange && onColorModeChange && (
-        <div className="absolute top-24 right-4 z-30">
-          <MapStyleControl
-            mapStyle={mapStyle}
-            colorMode={colorMode}
-            onStyleChange={onStyleChange}
-            onColorModeChange={onColorModeChange}
-          />
-        </div>
-      )}
     </div>
   );
 };

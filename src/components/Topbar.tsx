@@ -1,7 +1,7 @@
 import { LogOut, User, Menu, Shield, Plus, Calendar, Briefcase, Users, BookOpen, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import logoImage from "@/assets/creative-atlas-logo.png";
@@ -15,6 +15,7 @@ interface TopbarProps {
   onOpenForm: () => void;
   isSidebarCollapsed: boolean;
   onToggleSidebar: () => void;
+  rightAddon?: ReactNode;
   className?: string;
 }
 
@@ -25,6 +26,7 @@ const Topbar = ({
   onOpenForm,
   isSidebarCollapsed,
   onToggleSidebar,
+  rightAddon,
   className
 }: TopbarProps) => {
   const navigate = useNavigate();
@@ -86,8 +88,9 @@ const Topbar = ({
         ))}
       </nav>
 
-      {/* Right side: Pricing + Sign In + Menu */}
+      {/* Right side: Map controls + Pricing + Sign In + Menu */}
       <div className="pr-5 flex items-center gap-2">
+        {rightAddon}
         <Button 
           variant="ghost" 
           onClick={() => navigate("/pricing")} 
