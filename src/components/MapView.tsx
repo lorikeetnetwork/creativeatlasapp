@@ -293,9 +293,9 @@ const MapView = ({
       });
 
       // Guard against map being removed during async operations
-      if (!map.current) return;
+      if (!currentMap) return;
 
-      const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(map.current);
+      const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(currentMap);
 
       el.addEventListener("click", () => {
         onLocationSelect(location);
