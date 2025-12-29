@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useCollaboratorRole } from '@/hooks/useCollaboratorRole';
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +26,7 @@ import {
   ArrowLeft,
   Shield,
   UserCog,
+  Crown,
 } from 'lucide-react';
 
 interface CollaboratorSidebarProps {
@@ -35,6 +37,7 @@ interface CollaboratorSidebarProps {
 export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSidebarProps) {
   const navigate = useNavigate();
   const { state } = useSidebar();
+  const { isMaster } = useCollaboratorRole();
   const isCollapsed = state === 'collapsed';
 
   const contentItems = [
@@ -52,6 +55,7 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
     { id: 'bulk-import', title: 'Bulk Import', icon: Upload },
   ];
 
+  // Master-only admin items
   const adminItems = [
     { id: 'applications', title: 'Applications', icon: Shield },
     { id: 'users', title: 'User Management', icon: UserCog },
@@ -61,9 +65,15 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-2 px-2 py-2">
-          <Shield className="h-6 w-6 text-primary shrink-0" />
+          {isMaster ? (
+            <Crown className="h-6 w-6 text-amber-500 shrink-0" />
+          ) : (
+            <Shield className="h-6 w-6 text-primary shrink-0" />
+          )}
           {!isCollapsed && (
-            <span className="font-semibold text-lg">Collaborator</span>
+            <span className="font-semibold text-lg">
+              {isMaster ? 'Master' : 'Collaborator'}
+            </span>
           )}
         </div>
       </SidebarHeader>
@@ -109,25 +119,28 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {adminItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    isActive={activeTab === item.id}
-                    onClick={() => onTabChange(item.id)}
-                    tooltip={item.title}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Only show Admin section to master account */}
+        {isMaster && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Master Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminItems.map((item) => (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      isActive={activeTab === item.id}
+                      onClick={() => onTabChange(item.id)}
+                      tooltip={item.title}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
