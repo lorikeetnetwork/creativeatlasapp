@@ -9,9 +9,8 @@ import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Admin from "./pages/Admin";
 import CollaboratorDashboard from "./pages/CollaboratorDashboard";
-import ManageDashboard from "./pages/ManageDashboard";
+import EntityDashboard from "./pages/EntityDashboard";
 import Pricing from "./pages/Pricing";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Dashboard from "./pages/Dashboard";
@@ -56,10 +55,9 @@ const App = () => (
             <Route path="/subscription" element={<Subscription />} />
             <Route path="/business/:locationId" element={<BusinessProfile />} />
             
-            {/* Admin & Collaborator - role-based access, not subscription-based */}
-            <Route path="/admin" element={<Admin />} />
+            {/* Dashboards */}
             <Route path="/collaborator" element={<CollaboratorDashboard />} />
-            <Route path="/manage" element={<ManageDashboard />} />
+            <Route path="/entity-dashboard" element={<EntityDashboard />} />
             <Route path="/dashboard" element={<SubscriptionGate featureName="Dashboard"><Dashboard /></SubscriptionGate>} />
             
             {/* Blog - protected */}

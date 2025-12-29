@@ -1,47 +1,156 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import {
-  BentoPage,
-  BentoMain,
-  BentoPageHeader,
-  BentoContentCard,
-} from '@/components/ui/bento-page-layout';
-import { useCollaboratorRole } from '@/hooks/useCollaboratorRole';
+import { supabase } from '@/integrations/supabase/client';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
+import { BentoContentCard } from '@/components/ui/bento-page-layout';
+import { CollaboratorSidebar } from '@/components/dashboard/CollaboratorSidebar';
 import { CollaboratorStats } from '@/components/collaborator/CollaboratorStats';
 import { EventsTab } from '@/components/collaborator/EventsTab';
 import { OpportunitiesTab } from '@/components/collaborator/OpportunitiesTab';
 import { ArticlesTab } from '@/components/collaborator/ArticlesTab';
 import { CommunityTab } from '@/components/collaborator/CommunityTab';
 import { ShowcasesTab } from '@/components/collaborator/ShowcasesTab';
+import { PendingLocationsTable } from '@/components/admin/PendingLocationsTable';
+import { BulkImport } from '@/components/admin/BulkImport';
+import { UserManagementTab } from '@/components/dashboard/UserManagementTab';
+import { AdminStats } from '@/components/admin/AdminStats';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ArrowLeft, Palette, Calendar, Briefcase, FileText, Users, Award } from 'lucide-react';
+import { Loader2, Calendar, Briefcase, FileText, Image } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function CollaboratorDashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { hasAccess, loading, isAdmin } = useCollaboratorRole();
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [fetchingOgImages, setFetchingOgImages] = useState(false);
+  const [ogProgress, setOgProgress] = useState({ current: 0, total: 0 });
 
   useEffect(() => {
-    if (!loading && !hasAccess) {
+    checkAccess();
+  }, []);
+
+  const checkAccess = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: 'Access Denied',
+          description: 'You must be logged in to access this page.',
+          variant: 'destructive',
+        });
+        navigate('/');
+        return;
+      }
+
+      // Check for collaborator role
+      const { data: collaboratorData } = await supabase
+        .rpc('has_role', { _user_id: user.id, _role: 'collaborator' });
+
+      // Check for admin role (also has access)
+      const { data: adminData } = await supabase
+        .rpc('has_role', { _user_id: user.id, _role: 'admin' });
+
+      if (!collaboratorData && !adminData) {
+        toast({
+          title: 'Access Denied',
+          description: "You don't have permission to access the collaborator dashboard.",
+          variant: 'destructive',
+        });
+        navigate('/');
+        return;
+      }
+
+      setHasAccess(true);
+    } catch (error) {
+      console.error('Error checking access:', error);
       toast({
-        title: 'Access Denied',
-        description: "You don't have permission to access the collaborator dashboard.",
+        title: 'Error',
+        description: 'Failed to verify access.',
         variant: 'destructive',
       });
       navigate('/');
+    } finally {
+      setLoading(false);
     }
-  }, [loading, hasAccess, navigate, toast]);
+  };
+
+  const handleFetchOgImages = async () => {
+    setFetchingOgImages(true);
+    try {
+      const { data: locations, error } = await supabase
+        .from('locations')
+        .select('id, website')
+        .not('website', 'is', null)
+        .is('og_image_url', null);
+
+      if (error) throw error;
+
+      if (!locations || locations.length === 0) {
+        toast({
+          title: 'No websites to process',
+          description: 'All locations with websites already have OG images.',
+        });
+        setFetchingOgImages(false);
+        return;
+      }
+
+      setOgProgress({ current: 0, total: locations.length });
+
+      for (let i = 0; i < locations.length; i++) {
+        const location = locations[i];
+        setOgProgress({ current: i + 1, total: locations.length });
+
+        try {
+          const { data: ogData, error: fetchError } = await supabase.functions.invoke('fetch-og-image', {
+            body: { url: location.website }
+          });
+
+          if (fetchError) {
+            console.error(`Error fetching OG for ${location.id}:`, fetchError);
+            continue;
+          }
+
+          if (ogData?.ogImage) {
+            await supabase
+              .from('locations')
+              .update({ 
+                og_image_url: ogData.ogImage,
+                og_description: ogData.ogDescription 
+              })
+              .eq('id', location.id);
+          }
+        } catch (err) {
+          console.error(`Error processing location ${location.id}:`, err);
+        }
+      }
+
+      toast({
+        title: 'OG Images fetched',
+        description: `Processed ${locations.length} locations.`,
+      });
+      queryClient.invalidateQueries({ queryKey: ['locations'] });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setFetchingOgImages(false);
+      setOgProgress({ current: 0, total: 0 });
+    }
+  };
 
   if (loading) {
     return (
-      <BentoPage>
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </BentoPage>
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
     );
   }
 
@@ -49,72 +158,13 @@ export default function CollaboratorDashboard() {
     return null;
   }
 
-  return (
-    <BentoPage>
-      <BentoMain className="container mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/')}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
-        </div>
-
-        <BentoPageHeader
-          icon={<Palette className="h-8 w-8" />}
-          title="Collaborator Dashboard"
-          description="Manage events, opportunities, articles, and community content"
-          actions={
-            isAdmin && (
-              <Button variant="outline" onClick={() => navigate('/admin')}>
-                Admin Dashboard
-              </Button>
-            )
-          }
-        />
-
-        <Tabs defaultValue="overview" className="space-y-6">
-          <div className="relative">
-            <ScrollArea className="w-full">
-              <TabsList className="inline-flex w-auto min-w-full bg-[#1a1a1a] border border-[#333] p-1">
-                <TabsTrigger value="overview" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <Palette className="h-4 w-4" />
-                  <span className="hidden sm:inline">Overview</span>
-                </TabsTrigger>
-                <TabsTrigger value="events" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span className="hidden sm:inline">Events</span>
-                </TabsTrigger>
-                <TabsTrigger value="opportunities" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <Briefcase className="h-4 w-4" />
-                  <span className="hidden sm:inline">Opportunities</span>
-                </TabsTrigger>
-                <TabsTrigger value="articles" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span className="hidden sm:inline">Blog</span>
-                </TabsTrigger>
-                <TabsTrigger value="community" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <Users className="h-4 w-4" />
-                  <span className="hidden sm:inline">Community</span>
-                </TabsTrigger>
-                <TabsTrigger value="showcases" className="data-[state=active]:bg-[#333] data-[state=active]:text-white text-gray-400 whitespace-nowrap px-4 text-sm gap-2">
-                  <Award className="h-4 w-4" />
-                  <span className="hidden sm:inline">Showcases</span>
-                </TabsTrigger>
-              </TabsList>
-              <ScrollBar orientation="horizontal" className="invisible" />
-            </ScrollArea>
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none lg:hidden" />
-          </div>
-
-          <TabsContent value="overview" className="space-y-6">
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <div className="space-y-6">
+            <AdminStats />
             <CollaboratorStats />
-            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <BentoContentCard title="Quick Actions" className="p-4">
                 <div className="space-y-2">
@@ -132,40 +182,119 @@ export default function CollaboratorDashboard() {
                   </Button>
                 </div>
               </BentoContentCard>
+
+              <BentoContentCard title="Fetch OG Images" className="p-4">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Fetch Open Graph images for locations that have websites but no OG image.
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={handleFetchOgImages}
+                  disabled={fetchingOgImages}
+                  className="w-full justify-start"
+                >
+                  <Image className="h-4 w-4 mr-2" />
+                  {fetchingOgImages 
+                    ? `Processing ${ogProgress.current}/${ogProgress.total}...`
+                    : 'Fetch OG Images'
+                  }
+                </Button>
+              </BentoContentCard>
             </div>
-          </TabsContent>
+          </div>
+        );
+      case 'events':
+        return (
+          <BentoContentCard>
+            <EventsTab />
+          </BentoContentCard>
+        );
+      case 'opportunities':
+        return (
+          <BentoContentCard>
+            <OpportunitiesTab />
+          </BentoContentCard>
+        );
+      case 'articles':
+        return (
+          <BentoContentCard>
+            <ArticlesTab />
+          </BentoContentCard>
+        );
+      case 'community':
+        return (
+          <BentoContentCard>
+            <CommunityTab />
+          </BentoContentCard>
+        );
+      case 'showcases':
+        return (
+          <BentoContentCard>
+            <ShowcasesTab />
+          </BentoContentCard>
+        );
+      case 'pending':
+        return (
+          <BentoContentCard>
+            <PendingLocationsTable status="Pending" />
+          </BentoContentCard>
+        );
+      case 'all-locations':
+        return (
+          <BentoContentCard>
+            <PendingLocationsTable status="all" />
+          </BentoContentCard>
+        );
+      case 'bulk-import':
+        return (
+          <BentoContentCard>
+            <BulkImport />
+          </BentoContentCard>
+        );
+      case 'users':
+        return (
+          <BentoContentCard title="User Management">
+            <UserManagementTab />
+          </BentoContentCard>
+        );
+      default:
+        return null;
+    }
+  };
 
-          <TabsContent value="events">
-            <BentoContentCard>
-              <EventsTab />
-            </BentoContentCard>
-          </TabsContent>
+  const getTabTitle = () => {
+    const titles: Record<string, string> = {
+      overview: 'Overview',
+      events: 'Events',
+      opportunities: 'Opportunities',
+      articles: 'Blog Articles',
+      community: 'Community',
+      showcases: 'Showcases',
+      pending: 'Pending Locations',
+      'all-locations': 'All Locations',
+      'bulk-import': 'Bulk Import',
+      users: 'User Management',
+    };
+    return titles[activeTab] || 'Dashboard';
+  };
 
-          <TabsContent value="opportunities">
-            <BentoContentCard>
-              <OpportunitiesTab />
-            </BentoContentCard>
-          </TabsContent>
-
-          <TabsContent value="articles">
-            <BentoContentCard>
-              <ArticlesTab />
-            </BentoContentCard>
-          </TabsContent>
-
-          <TabsContent value="community">
-            <BentoContentCard>
-              <CommunityTab />
-            </BentoContentCard>
-          </TabsContent>
-
-          <TabsContent value="showcases">
-            <BentoContentCard>
-              <ShowcasesTab />
-            </BentoContentCard>
-          </TabsContent>
-        </Tabs>
-      </BentoMain>
-    </BentoPage>
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <CollaboratorSidebar 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+        />
+        <SidebarInset>
+          <header className="flex h-14 items-center gap-4 border-b border-border px-6">
+            <SidebarTrigger />
+            <h1 className="text-lg font-semibold">{getTabTitle()}</h1>
+          </header>
+          <main className="flex-1 p-6">
+            {renderContent()}
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 }

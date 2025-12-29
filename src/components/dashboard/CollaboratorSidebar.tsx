@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +12,6 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
 import {
   LayoutDashboard,
   Calendar,
@@ -25,20 +24,20 @@ import {
   Clock,
   ArrowLeft,
   Shield,
+  UserCog,
 } from 'lucide-react';
 
-interface DashboardSidebarProps {
-  isAdmin: boolean;
+interface CollaboratorSidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-export function DashboardSidebar({ isAdmin, activeTab, onTabChange }: DashboardSidebarProps) {
+export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSidebarProps) {
   const navigate = useNavigate();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
-  const collaboratorItems = [
+  const contentItems = [
     { id: 'overview', title: 'Overview', icon: LayoutDashboard },
     { id: 'events', title: 'Events', icon: Calendar },
     { id: 'opportunities', title: 'Opportunities', icon: Briefcase },
@@ -47,10 +46,14 @@ export function DashboardSidebar({ isAdmin, activeTab, onTabChange }: DashboardS
     { id: 'showcases', title: 'Showcases', icon: Award },
   ];
 
-  const adminItems = [
+  const locationItems = [
     { id: 'pending', title: 'Pending Locations', icon: Clock },
     { id: 'all-locations', title: 'All Locations', icon: MapPin },
     { id: 'bulk-import', title: 'Bulk Import', icon: Upload },
+  ];
+
+  const adminItems = [
+    { id: 'users', title: 'User Management', icon: UserCog },
   ];
 
   return (
@@ -59,7 +62,7 @@ export function DashboardSidebar({ isAdmin, activeTab, onTabChange }: DashboardS
         <div className="flex items-center gap-2 px-2 py-2">
           <Shield className="h-6 w-6 text-primary shrink-0" />
           {!isCollapsed && (
-            <span className="font-semibold text-lg">Dashboard</span>
+            <span className="font-semibold text-lg">Collaborator</span>
           )}
         </div>
       </SidebarHeader>
@@ -69,7 +72,7 @@ export function DashboardSidebar({ isAdmin, activeTab, onTabChange }: DashboardS
           <SidebarGroupLabel>Content</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {collaboratorItems.map((item) => (
+              {contentItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     isActive={activeTab === item.id}
@@ -85,27 +88,45 @@ export function DashboardSidebar({ isAdmin, activeTab, onTabChange }: DashboardS
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {isAdmin && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Admin</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {adminItems.map((item) => (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      isActive={activeTab === item.id}
-                      onClick={() => onTabChange(item.id)}
-                      tooltip={item.title}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+        <SidebarGroup>
+          <SidebarGroupLabel>Locations</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {locationItems.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    isActive={activeTab === item.id}
+                    onClick={() => onTabChange(item.id)}
+                    tooltip={item.title}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adminItems.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    isActive={activeTab === item.id}
+                    onClick={() => onTabChange(item.id)}
+                    tooltip={item.title}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
