@@ -54,6 +54,7 @@ const MapView = ({
   const markersMap = useRef<
     Map<string, { marker: mapboxgl.Marker; element: HTMLDivElement }>
   >(new Map());
+  const markerDebugLoggedIds = useRef<Set<string>>(new Set());
   const hasInitiallyFitBounds = useRef(false);
   const initialLocationsRef = useRef<Tables<"locations">[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -202,9 +203,20 @@ const MapView = ({
       if (markersMap.current.has(location.id)) return; // Already exists
 
       const { lat, lng } = normalizeCoordinates({
-        latitude: location.latitude,
-        longitude: location.longitude,
+        latitude: location.latitude as unknown as number,
+        longitude: location.longitude as unknown as number,
       });
+
+      if (import.meta.env.DEV && !markerDebugLoggedIds.current.has(location.id)) {
+        markerDebugLoggedIds.current.add(location.id);
+        // eslint-disable-next-line no-console
+        console.debug("[MapView] marker coords", {
+          id: location.id,
+          name: location.name,
+          raw: { latitude: location.latitude, longitude: location.longitude },
+          normalized: { lat, lng },
+        });
+      }
 
       const el = document.createElement("div");
       el.className = "custom-marker";
