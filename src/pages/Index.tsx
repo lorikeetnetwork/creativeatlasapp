@@ -22,8 +22,9 @@ import { useFavoriteLists } from "@/hooks/useFavoriteLists";
 import { useMapPreferences, type MapStyle, type MarkerColorMode } from "@/hooks/useMapPreferences";
 import { normalizeCoordinates } from "@/utils/geo";
 import { MapStyleControl } from "@/components/map/MapStyleControl";
+import { SubscriptionGate } from "@/components/SubscriptionGate";
 
-const Index = () => {
+const IndexContent = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [filteredLocations, setFilteredLocations] = useState<Tables<"locations">[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Tables<"locations"> | null>(null);
@@ -281,6 +282,14 @@ const Index = () => {
         </DialogContent>
       </Dialog>
     </div>
+  );
+};
+
+const Index = () => {
+  return (
+    <SubscriptionGate featureName="the Creative Atlas map">
+      <IndexContent />
+    </SubscriptionGate>
   );
 };
 
