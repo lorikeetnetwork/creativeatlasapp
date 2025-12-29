@@ -143,9 +143,6 @@ const Index = () => {
             onStyleChange={updateMapStyle}
             onColorModeChange={updateMarkerColorMode}
           />
-
-          {!session && <AuthPromptOverlay />}
-
           {session && (
             <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
               <Search className="w-5 h-5 mr-2" />
@@ -176,7 +173,7 @@ const Index = () => {
       <Topbar session={session} onSignOut={handleSignOut} onSignIn={() => navigate("/auth")} onOpenForm={handleOpenForm} isSidebarCollapsed={isSidebarCollapsed} onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
 
       <div className="flex-1 flex">
-        {!isSidebarCollapsed && session && (
+        {!isSidebarCollapsed && (
           <div className="w-[400px] flex-shrink-0 border-r border-black overflow-hidden">
             <Sidebar
               session={session}
@@ -194,9 +191,9 @@ const Index = () => {
               favorites={favorites}
               lists={lists}
               showFavoritesOnly={preferences.show_favorites_only}
-              onToggleShowFavorites={toggleShowFavoritesOnly}
-              onCreateList={createList}
-              onDeleteList={deleteList}
+              onToggleShowFavorites={session ? toggleShowFavoritesOnly : undefined}
+              onCreateList={session ? createList : undefined}
+              onDeleteList={session ? deleteList : undefined}
               getListItems={getListItems}
               favoriteIds={favoriteIds}
             />
@@ -204,18 +201,18 @@ const Index = () => {
         )}
 
         <div className="flex-1 relative">
-          {showDetail && selectedLocation && session && (
+          {showDetail && selectedLocation && (
             <div className="absolute top-4 right-4 z-10 w-80 max-h-[calc(100%-2rem)]">
               <LocationDetail
                 location={selectedLocation}
                 onClose={() => setShowDetail(false)}
-                isFavorited={isFavorited(selectedLocation.id)}
-                onToggleFavorite={() => toggleFavorite(selectedLocation.id)}
-                lists={lists}
-                isInList={isInList}
-                onAddToList={addToList}
-                onRemoveFromList={removeFromList}
-                onCreateList={createList}
+                isFavorited={session ? isFavorited(selectedLocation.id) : false}
+                onToggleFavorite={session ? () => toggleFavorite(selectedLocation.id) : undefined}
+                lists={session ? lists : []}
+                isInList={session ? isInList : undefined}
+                onAddToList={session ? addToList : undefined}
+                onRemoveFromList={session ? removeFromList : undefined}
+                onCreateList={session ? createList : undefined}
               />
             </div>
           )}
@@ -230,8 +227,7 @@ const Index = () => {
             onStyleChange={updateMapStyle}
             onColorModeChange={updateMarkerColorMode}
           />
-          
-          {!session && <AuthPromptOverlay />}
+
         </div>
       </div>
 
