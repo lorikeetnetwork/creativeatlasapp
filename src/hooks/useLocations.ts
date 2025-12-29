@@ -50,7 +50,18 @@ export const useLocations = () => {
           setRateLimitInfo(data.rateLimitInfo);
         }
 
-        setLocations(data.locations || []);
+        const nextLocations = data.locations || [];
+        if (import.meta.env.DEV) {
+          // eslint-disable-next-line no-console
+          console.debug("[useLocations] sample coords", nextLocations.slice(0, 5).map((l: any) => ({
+            id: l.id,
+            name: l.name,
+            latitude: l.latitude,
+            longitude: l.longitude,
+          })));
+        }
+
+        setLocations(nextLocations);
         setIsSubscriber(data.isSubscriber || false);
         setError(null);
       } catch (err) {
