@@ -9,7 +9,7 @@ import {
   Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
   GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, 
   Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, 
-  Star, Globe, Zap
+  Star, Globe, Zap, Shield, Send
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
@@ -349,7 +349,7 @@ const Landing = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Unlock the Full Experience</h2>
           </div>
           
-          <BentoGrid className="lg:grid-cols-2 max-w-4xl mx-auto">
+          <BentoGrid className="lg:grid-cols-3 max-w-5xl mx-auto">
             <BentoCard>
               <div className="flex items-center gap-3 mb-4">
                 <Users className="w-6 h-6 text-primary" />
@@ -383,6 +383,27 @@ const Landing = () => {
               </ul>
               <Button className="w-full" onClick={() => navigate("/pricing")}>
                 View Pricing
+              </Button>
+            </BentoCard>
+
+            <BentoCard className="border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
+              <div className="flex items-center gap-3 mb-4">
+                <Shield className="w-6 h-6 text-primary" />
+                <h3 className="text-xl font-semibold text-white">Become a Collaborator</h3>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">
+                Help shape Australia's creative ecosystem. Collaborators help curate content, manage events, and grow the community.
+              </p>
+              <ul className="space-y-3 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Manage platform content</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Curate events & opportunities</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Approve showcases & articles</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Add & manage locations</li>
+                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Shape community growth</li>
+              </ul>
+              <Button className="w-full gap-2" onClick={() => navigate("/collaborate")}>
+                <Send className="w-4 h-4" />
+                Apply to Collaborate
               </Button>
             </BentoCard>
           </BentoGrid>
