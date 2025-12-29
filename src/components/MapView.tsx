@@ -292,7 +292,10 @@ const MapView = ({
         }
       });
 
-      const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(currentMap);
+      // Guard against map being removed during async operations
+      if (!map.current) return;
+
+      const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(map.current);
 
       el.addEventListener("click", () => {
         onLocationSelect(location);
