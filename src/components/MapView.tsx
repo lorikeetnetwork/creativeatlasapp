@@ -55,6 +55,7 @@ const MapView = ({
   const hasInitiallyFitBounds = useRef(false);
   const initialLocationsRef = useRef<Tables<"locations">[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [styleReady, setStyleReady] = useState(false);
 
   // Store first non-empty locations for initial bounds fit
   if (locations.length > 0 && initialLocationsRef.current.length === 0) {
@@ -111,6 +112,7 @@ const MapView = ({
 
       map.current.on("load", () => {
         setMapLoaded(true);
+        setStyleReady(true);
         // Emit initial bounds
         if (map.current && onBoundsChange) {
           const bounds = map.current.getBounds();
@@ -121,6 +123,11 @@ const MapView = ({
             west: bounds.getWest(),
           });
         }
+      });
+      
+      // Handle style changes - markers need to be re-added after style loads
+      map.current.on("style.load", () => {
+        setStyleReady(true);
       });
 
       // Listen for map movement to update bounds
@@ -152,15 +159,19 @@ const MapView = ({
     };
   }, [savedToken]);
 
-  // Handle style changes
+  // Handle style changes - set styleReady to false during transition
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
+    setStyleReady(false);
+    // Clear existing markers before style change
+    markersMap.current.forEach(({ marker }) => marker.remove());
+    markersMap.current.clear();
     map.current.setStyle(MAP_STYLE_URLS[mapStyle]);
   }, [mapStyle, mapLoaded]);
 
   // Update markers when locations change - smart updates to prevent flickering
   useEffect(() => {
-    if (!map.current || !mapLoaded) return;
+    if (!map.current || !mapLoaded || !styleReady) return;
 
     const currentMap = map.current;
     const currentLocationIds = new Set(locations.map(l => l.id));
@@ -227,7 +238,7 @@ const MapView = ({
 
       markersMap.current.set(location.id, { marker, element: el });
     });
-  }, [locations, mapLoaded, onLocationSelect, selectedLocation, colorMode, favoriteIds]);
+  }, [locations, mapLoaded, styleReady, onLocationSelect, selectedLocation, colorMode, favoriteIds]);
 
   // Update marker colors when color mode changes
   useEffect(() => {
