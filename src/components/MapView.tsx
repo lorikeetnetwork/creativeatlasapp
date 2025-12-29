@@ -264,7 +264,7 @@ const MapView = ({
         colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
       el.style.cursor = "pointer";
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-      el.style.position = "relative";
+      
 
       // Add favorite indicator
       if (favoriteIds.has(location.id)) {
