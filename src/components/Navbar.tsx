@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, Palette } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import type { Session } from "@supabase/supabase-js";
@@ -15,32 +15,56 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(propSession ?? null);
+  const [hasCollaboratorAccess, setHasCollaboratorAccess] = useState(false);
 
   useEffect(() => {
     // If session is passed as prop, use it
     if (propSession !== undefined) {
       setSession(propSession);
-      return;
+    } else {
+      // Otherwise, fetch session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session);
+      });
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session);
+      });
+
+      return () => subscription.unsubscribe();
     }
-
-    // Otherwise, fetch session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
   }, [propSession]);
+
+  // Check for collaborator/admin access when session changes
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!session?.user) {
+        setHasCollaboratorAccess(false);
+        return;
+      }
+
+      try {
+        const [collaboratorResult, adminResult] = await Promise.all([
+          supabase.rpc('has_role', { _user_id: session.user.id, _role: 'collaborator' }),
+          supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' })
+        ]);
+
+        setHasCollaboratorAccess(collaboratorResult.data || adminResult.data || false);
+      } catch (error) {
+        console.error('Error checking access:', error);
+        setHasCollaboratorAccess(false);
+      }
+    };
+
+    checkAccess();
+  }, [session]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
 
-  const navItems = session
+  const baseNavItems = session
     ? [
         { label: "Explore Map", onClick: () => navigate("/map") },
         { label: "Events", onClick: () => navigate("/events") },
@@ -49,7 +73,6 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Collaborate", onClick: () => navigate("/collaborate") },
         { label: "Dashboard", onClick: () => navigate("/dashboard") },
-        { label: "Sign Out", onClick: handleSignOut },
       ]
     : [
         { label: "Explore Map", onClick: () => navigate("/map") },
@@ -59,8 +82,16 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Blog", onClick: () => navigate("/blog") },
         { label: "Collaborate", onClick: () => navigate("/collaborate") },
         { label: "Pricing", onClick: () => navigate("/pricing") },
-        { label: "Sign In", onClick: () => navigate("/auth") },
       ];
+
+  // Add collaborator link if user has access
+  const navItems = [
+    ...baseNavItems,
+    ...(hasCollaboratorAccess ? [{ label: "Collaborator", onClick: () => navigate("/collaborator"), icon: Palette }] : []),
+    session
+      ? { label: "Sign Out", onClick: handleSignOut }
+      : { label: "Sign In", onClick: () => navigate("/auth") },
+  ];
 
   return (
     <header className="border-b border-border bg-[#121212] sticky top-0 z-50">
@@ -83,8 +114,11 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
               key={item.label} 
               variant="ghost" 
               onClick={item.onClick} 
-              className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors"
+              className={`text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors ${
+                'icon' in item ? 'gap-1.5' : ''
+              }`}
             >
+              {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
               {item.label}
             </Button>
           ))}
@@ -103,12 +137,13 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
                 <Button 
                   key={item.label} 
                   variant="ghost" 
-                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors" 
+                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-2" 
                   onClick={() => {
                     item.onClick();
                     setMobileMenuOpen(false);
                   }}
                 >
+                  {'icon' in item && item.icon && <item.icon className="h-5 w-5" />}
                   {item.label}
                 </Button>
               ))}
