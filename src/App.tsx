@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import CollaboratorDashboard from "./pages/CollaboratorDashboard";
+import ManageDashboard from "./pages/ManageDashboard";
 import Pricing from "./pages/Pricing";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Dashboard from "./pages/Dashboard";
@@ -58,6 +59,7 @@ const App = () => (
             {/* Admin & Collaborator - role-based access, not subscription-based */}
             <Route path="/admin" element={<Admin />} />
             <Route path="/collaborator" element={<CollaboratorDashboard />} />
+            <Route path="/manage" element={<ManageDashboard />} />
             <Route path="/dashboard" element={<SubscriptionGate featureName="Dashboard"><Dashboard /></SubscriptionGate>} />
             
             {/* Blog - protected */}

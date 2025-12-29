@@ -84,10 +84,10 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         { label: "Pricing", onClick: () => navigate("/pricing") },
       ];
 
-  // Add collaborator link if user has access
+  // Add manage link if user has collaborator/admin access
   const navItems = [
     ...baseNavItems,
-    ...(hasCollaboratorAccess ? [{ label: "Collaborator", onClick: () => navigate("/collaborator"), icon: Palette }] : []),
+    ...(hasCollaboratorAccess ? [{ label: "Manage", onClick: () => navigate("/manage"), icon: Palette }] : []),
     session
       ? { label: "Sign Out", onClick: handleSignOut }
       : { label: "Sign In", onClick: () => navigate("/auth") },
