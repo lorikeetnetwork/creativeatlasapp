@@ -169,6 +169,34 @@ const MapView = ({
     };
   }, [savedToken]);
 
+  // Keep Mapbox rendering in sync with layout changes (sidebar open/close, responsive, etc.)
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    const container = mapContainer.current;
+    if (!container) return;
+
+    let raf = 0;
+    const scheduleResize = () => {
+      if (!map.current) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        map.current?.resize();
+      });
+    };
+
+    scheduleResize();
+
+    const ro = new ResizeObserver(() => scheduleResize());
+    ro.observe(container);
+    window.addEventListener("resize", scheduleResize);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("resize", scheduleResize);
+    };
+  }, [mapLoaded]);
+
   // Handle style changes - set styleReady to false during transition
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
