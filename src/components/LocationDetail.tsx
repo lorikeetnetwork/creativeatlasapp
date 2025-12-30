@@ -59,7 +59,7 @@ const LocationDetail = ({
   };
   if (!location) return null;
   return <Card className="flex flex-col shadow-lg border-border/50 max-h-full overflow-hidden bg-secondary-foreground bg-[sidebar-primary-foreground]">
-      <CardHeader className="flex-shrink-0 border-b p-3">
+      <CardHeader className="flex-shrink-0 border-b p-3 bg-secondary-foreground">
         <div className="flex items-start justify-between gap-2">
           <div className="space-y-1 flex-1 min-w-0">
             <CardTitle className="text-base leading-tight truncate">{location.name}</CardTitle>
