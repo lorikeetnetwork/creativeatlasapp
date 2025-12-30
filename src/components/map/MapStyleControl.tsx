@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Layers, Moon, Sun, Satellite, Map, Mountain, Palette, Ruler } from "lucide-react";
+import { Layers, Moon, Sun, Satellite, Map, Mountain, Palette, Ruler, Box } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
 
@@ -22,6 +22,7 @@ const MAP_STYLES: { id: MapStyle; label: string; icon: React.ReactNode }[] = [
   { id: "streets", label: "Streets", icon: <Map className="w-4 h-4" /> },
   { id: "outdoors", label: "Outdoors", icon: <Mountain className="w-4 h-4" /> },
   { id: "blueprint", label: "Blueprint", icon: <Ruler className="w-4 h-4" /> },
+  { id: "3d", label: "3D", icon: <Box className="w-4 h-4" /> },
 ];
 
 const COLOR_MODES: { id: MarkerColorMode; label: string; color: string }[] = [

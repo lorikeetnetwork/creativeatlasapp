@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export type MapStyle = "dark" | "light" | "satellite" | "streets" | "outdoors" | "blueprint";
+export type MapStyle = "dark" | "light" | "satellite" | "streets" | "outdoors" | "blueprint" | "3d";
 export type MarkerColorMode = "category" | "mono" | "highContrast";
 
 export interface MapPreferences {
