@@ -45,6 +45,7 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
     { id: 'events', title: 'Events', icon: Calendar },
     { id: 'opportunities', title: 'Opportunities', icon: Briefcase },
     { id: 'articles', title: 'Blog', icon: FileText },
+    { id: 'resources', title: 'Resources', icon: Upload },
     { id: 'community', title: 'Community', icon: Users },
     { id: 'showcases', title: 'Showcases', icon: Award },
   ];
