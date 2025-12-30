@@ -58,6 +58,45 @@ const apply3DStyle = (map: mapboxgl.Map) => {
       // Enable terrain with exaggeration
       map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
       
+      // Add 3D building extrusions
+      if (!map.getLayer('3d-buildings')) {
+        // Find a good label layer to insert before
+        const layers = map.getStyle()?.layers || [];
+        let labelLayerId: string | undefined;
+        for (const layer of layers) {
+          if (layer.type === 'symbol' && layer.layout?.['text-field']) {
+            labelLayerId = layer.id;
+            break;
+          }
+        }
+        
+        map.addLayer(
+          {
+            id: '3d-buildings',
+            source: 'composite',
+            'source-layer': 'building',
+            filter: ['==', 'extrude', 'true'],
+            type: 'fill-extrusion',
+            minzoom: 15,
+            paint: {
+              'fill-extrusion-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'height'],
+                0, '#ddd',
+                50, '#ccc',
+                100, '#bbb',
+                200, '#aaa'
+              ],
+              'fill-extrusion-height': ['get', 'height'],
+              'fill-extrusion-base': ['get', 'min_height'],
+              'fill-extrusion-opacity': 0.8
+            }
+          },
+          labelLayerId
+        );
+      }
+      
       // Add sky layer for atmosphere
       if (!map.getLayer('sky')) {
         map.addLayer({
@@ -86,6 +125,9 @@ const remove3DStyle = (map: mapboxgl.Map) => {
     map.setTerrain(null);
     if (map.getLayer('sky')) {
       map.removeLayer('sky');
+    }
+    if (map.getLayer('3d-buildings')) {
+      map.removeLayer('3d-buildings');
     }
     map.easeTo({ pitch: 0, bearing: 0, duration: 500 });
   } catch {
