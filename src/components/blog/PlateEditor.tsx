@@ -171,11 +171,11 @@ export const PlateEditor = ({
   }
 
   return (
-    <div className="border border-border rounded-lg overflow-hidden bg-card">
+    <div className="border border-border rounded-lg overflow-hidden bg-card w-full">
       <Plate editor={editor} onChange={handleChange}>
         <EditorToolbar />
         <PlateContent 
-          className="min-h-[300px] p-4 outline-none focus:outline-none text-base leading-relaxed"
+          className="min-h-[60vh] p-4 outline-none focus:outline-none text-base leading-relaxed"
           placeholder={placeholder}
         />
       </Plate>

@@ -223,11 +223,13 @@ const BlogEditor = () => {
     return null;
   }
 
+  const NONE_LOCATION = "__none__";
+
   if (articleLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="container mx-auto px-4 py-8 max-w-4xl">
+        <main className="w-full px-4 py-8 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
@@ -240,7 +242,7 @@ const BlogEditor = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="w-full px-4 py-8 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Button
@@ -303,9 +305,7 @@ const BlogEditor = () => {
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
-                /blog/{slug || "your-article-slug"}
-              </p>
+              <p className="text-xs text-muted-foreground">/blog/{slug || "your-article-slug"}</p>
             </div>
 
             {/* Excerpt */}
@@ -406,14 +406,16 @@ const BlogEditor = () => {
                   <div className="space-y-2">
                     <Label>Link to Location</Label>
                     <Select
-                      value={linkedLocationId}
-                      onValueChange={setLinkedLocationId}
+                      value={linkedLocationId || NONE_LOCATION}
+                      onValueChange={(v) =>
+                        setLinkedLocationId(v === NONE_LOCATION ? "" : v)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="None" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None</SelectItem>
+                        <SelectItem value={NONE_LOCATION}>None</SelectItem>
                         {userLocations.map((loc) => (
                           <SelectItem key={loc.id} value={loc.id}>
                             {loc.name}
