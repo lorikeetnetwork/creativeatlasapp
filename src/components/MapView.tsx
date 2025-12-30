@@ -35,6 +35,61 @@ const MAP_STYLE_URLS: Record<MapStyle, string> = {
   streets: "mapbox://styles/mapbox/streets-v12",
   outdoors: "mapbox://styles/mapbox/outdoors-v12",
   blueprint: "mapbox://styles/mapbox/dark-v11", // Base style, we'll customize it
+  "3d": "mapbox://styles/mapbox/standard", // Standard style with 3D support
+};
+
+// Apply 3D terrain and buildings
+const apply3DStyle = (map: mapboxgl.Map) => {
+  setTimeout(() => {
+    if (!map.isStyleLoaded()) return;
+    
+    try {
+      // Add terrain source if not exists
+      if (!map.getSource('mapbox-dem')) {
+        map.addSource('mapbox-dem', {
+          type: 'raster-dem',
+          url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+          tileSize: 512,
+          maxzoom: 14
+        });
+      }
+      
+      // Enable terrain with exaggeration
+      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+      
+      // Add sky layer for atmosphere
+      if (!map.getLayer('sky')) {
+        map.addLayer({
+          id: 'sky',
+          type: 'sky',
+          paint: {
+            'sky-type': 'atmosphere',
+            'sky-atmosphere-sun': [0.0, 90.0],
+            'sky-atmosphere-sun-intensity': 15
+          }
+        });
+      }
+      
+      // Set pitch for 3D view
+      map.easeTo({ pitch: 60, bearing: -17.6, duration: 1000 });
+      
+    } catch (e) {
+      console.warn("Could not apply 3D styling:", e);
+    }
+  }, 200);
+};
+
+// Remove 3D effects when switching away
+const remove3DStyle = (map: mapboxgl.Map) => {
+  try {
+    map.setTerrain(null);
+    if (map.getLayer('sky')) {
+      map.removeLayer('sky');
+    }
+    map.easeTo({ pitch: 0, bearing: 0, duration: 500 });
+  } catch {
+    // Ignore errors when removing
+  }
 };
 
 // Blueprint style layer customizations
@@ -263,13 +318,25 @@ const MapView = ({
     // Clear existing markers before style change
     markersMap.current.forEach(({ marker }) => marker.remove());
     markersMap.current.clear();
+    
+    // Remove 3D effects before changing style (if not going to 3D)
+    if (mapStyle !== "3d") {
+      remove3DStyle(map.current);
+    }
+    
     map.current.setStyle(MAP_STYLE_URLS[mapStyle]);
     
-    // Apply blueprint customizations after style fully loads
+    // Apply style-specific customizations after style fully loads
     if (mapStyle === "blueprint") {
       map.current.once("idle", () => {
         if (map.current) {
           applyBlueprintStyle(map.current);
+        }
+      });
+    } else if (mapStyle === "3d") {
+      map.current.once("idle", () => {
+        if (map.current) {
+          apply3DStyle(map.current);
         }
       });
     }
