@@ -1597,6 +1597,7 @@ export type Database = {
           created_at: string
           description: string | null
           external_url: string | null
+          file_url: string | null
           id: string
           is_featured: boolean | null
           resource_type: Database["public"]["Enums"]["resource_type"]
@@ -1614,6 +1615,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           external_url?: string | null
+          file_url?: string | null
           id?: string
           is_featured?: boolean | null
           resource_type: Database["public"]["Enums"]["resource_type"]
@@ -1631,6 +1633,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           external_url?: string | null
+          file_url?: string | null
           id?: string
           is_featured?: boolean | null
           resource_type?: Database["public"]["Enums"]["resource_type"]

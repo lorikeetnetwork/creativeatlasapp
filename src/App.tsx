@@ -31,6 +31,14 @@ import MyOpportunities from "./pages/MyOpportunities";
 import Community from "./pages/Community";
 import MemberProfile from "./pages/MemberProfile";
 import EditMemberProfile from "./pages/EditMemberProfile";
+import Resources from "./pages/Resources";
+import ResourceDetail from "./pages/ResourceDetail";
+import ResourceEditor from "./pages/ResourceEditor";
+import MyResources from "./pages/MyResources";
+import Showcases from "./pages/Showcases";
+import ShowcaseDetail from "./pages/ShowcaseDetail";
+import ShowcaseEditor from "./pages/ShowcaseEditor";
+import MyShowcases from "./pages/MyShowcases";
 import NotFound from "./pages/NotFound";
 import Collaborate from "./pages/Collaborate";
 import InviteAccept from "./pages/InviteAccept";
@@ -82,6 +90,20 @@ const App = () => (
             <Route path="/opportunities/edit/:id" element={<SubscriptionGate featureName="Opportunity Editor"><OpportunityEditor /></SubscriptionGate>} />
             <Route path="/opportunities/my-opportunities" element={<SubscriptionGate featureName="My Opportunities"><MyOpportunities /></SubscriptionGate>} />
             <Route path="/opportunities/:slug" element={<SubscriptionGate featureName="Opportunity Details"><OpportunityDetail /></SubscriptionGate>} />
+            
+            {/* Resources - protected */}
+            <Route path="/resources" element={<SubscriptionGate featureName="Resources"><Resources /></SubscriptionGate>} />
+            <Route path="/resources/new" element={<SubscriptionGate featureName="Resource Editor"><ResourceEditor /></SubscriptionGate>} />
+            <Route path="/resources/edit/:id" element={<SubscriptionGate featureName="Resource Editor"><ResourceEditor /></SubscriptionGate>} />
+            <Route path="/resources/my-resources" element={<SubscriptionGate featureName="My Resources"><MyResources /></SubscriptionGate>} />
+            <Route path="/resources/:slug" element={<SubscriptionGate featureName="Resource Details"><ResourceDetail /></SubscriptionGate>} />
+            
+            {/* Showcases - protected */}
+            <Route path="/showcases" element={<SubscriptionGate featureName="Showcases"><Showcases /></SubscriptionGate>} />
+            <Route path="/showcases/new" element={<SubscriptionGate featureName="Showcase Editor"><ShowcaseEditor /></SubscriptionGate>} />
+            <Route path="/showcases/edit/:id" element={<SubscriptionGate featureName="Showcase Editor"><ShowcaseEditor /></SubscriptionGate>} />
+            <Route path="/showcases/my-showcases" element={<SubscriptionGate featureName="My Showcases"><MyShowcases /></SubscriptionGate>} />
+            <Route path="/showcases/:slug" element={<SubscriptionGate featureName="Showcase Details"><ShowcaseDetail /></SubscriptionGate>} />
             
             {/* Community - protected */}
             <Route path="/community" element={<SubscriptionGate featureName="Community Directory"><Community /></SubscriptionGate>} />
