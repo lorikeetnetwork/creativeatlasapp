@@ -1,32 +1,36 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
-const PlusIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth="1.5"
-    stroke="currentColor"
-    className={cn("w-3 h-3 text-gray-600", className)}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 4.5v15m7.5-7.5h-15"
+// Brutalist corner marker
+const BrutalistCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) => {
+  const positionClasses = {
+    tl: "top-0 left-0 border-t-2 border-l-2",
+    tr: "top-0 right-0 border-t-2 border-r-2",
+    bl: "bottom-0 left-0 border-b-2 border-l-2",
+    br: "bottom-0 right-0 border-b-2 border-r-2",
+  };
+
+  return (
+    <div
+      className={cn(
+        "absolute w-3 h-3 border-neutral-600 pointer-events-none z-20",
+        positionClasses[position]
+      )}
     />
-  </svg>
-);
+  );
+};
 
-const CornerPlusIcons = () => (
+const CornerMarkers = () => (
   <>
-    <PlusIcon className="absolute top-1.5 left-1.5" />
-    <PlusIcon className="absolute top-1.5 right-1.5" />
-    <PlusIcon className="absolute bottom-1.5 left-1.5" />
-    <PlusIcon className="absolute bottom-1.5 right-1.5" />
+    <BrutalistCorner position="tl" />
+    <BrutalistCorner position="tr" />
+    <BrutalistCorner position="bl" />
+    <BrutalistCorner position="br" />
   </>
 );
 
+// Stat Card
 export interface BentoStatCardProps {
   label: string;
   value: string | number;
@@ -48,28 +52,37 @@ export const BentoStatCard: React.FC<BentoStatCardProps> = ({
   return (
     <div
       className={cn(
-        "relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] overflow-hidden",
+        "relative p-5 border-2 border-neutral-800 bg-card",
+        "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]",
         className
       )}
     >
-      <CornerPlusIcons />
+      <CornerMarkers />
       <div className="relative z-10">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-400">{label}</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            {label}
+          </span>
           {icon && <div className="text-primary">{icon}</div>}
         </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-white">{value}</span>
+        <div className="flex items-end justify-between">
+          <span className="text-2xl font-bold text-foreground tracking-tight">
+            {value}
+          </span>
           {trend && (
-            <span
+            <div
               className={cn(
-                "text-sm",
+                "flex items-center gap-1 text-xs font-medium",
                 trend.isPositive ? "text-green-400" : "text-red-400"
               )}
             >
-              {trend.isPositive ? "+" : ""}
+              {trend.isPositive ? (
+                <TrendingUp className="w-3 h-3" />
+              ) : (
+                <TrendingDown className="w-3 h-3" />
+              )}
               {trend.value}%
-            </span>
+            </div>
           )}
         </div>
       </div>
@@ -77,10 +90,11 @@ export const BentoStatCard: React.FC<BentoStatCardProps> = ({
   );
 };
 
+// Info Item
 export interface BentoInfoItemProps {
   icon: React.ReactNode;
   label?: string;
-  value: React.ReactNode;
+  value: string | React.ReactNode;
   className?: string;
 }
 
@@ -91,16 +105,23 @@ export const BentoInfoItem: React.FC<BentoInfoItemProps> = ({
   className,
 }) => {
   return (
-    <div className={cn("flex items-start gap-3", className)}>
-      <div className="text-gray-400 mt-0.5">{icon}</div>
-      <div>
-        {label && <p className="text-sm text-gray-500">{label}</p>}
-        <p className="font-medium text-white">{value}</p>
+    <div className={cn("flex items-center gap-3", className)}>
+      <div className="w-8 h-8 border-2 border-neutral-700 flex items-center justify-center text-muted-foreground">
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        {label && (
+          <span className="text-xs text-muted-foreground uppercase tracking-wider block">
+            {label}
+          </span>
+        )}
+        <span className="text-sm text-foreground truncate block">{value}</span>
       </div>
     </div>
   );
 };
 
+// Detail Grid
 export interface BentoDetailGridProps {
   children: React.ReactNode;
   columns?: 1 | 2 | 3 | 4;
@@ -112,20 +133,21 @@ export const BentoDetailGrid: React.FC<BentoDetailGridProps> = ({
   columns = 2,
   className,
 }) => {
-  const colClasses = {
+  const columnClasses = {
     1: "grid-cols-1",
-    2: "grid-cols-1 md:grid-cols-2",
-    3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-    4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
+    2: "grid-cols-1 sm:grid-cols-2",
+    3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+    4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
   };
 
   return (
-    <div className={cn("grid gap-4", colClasses[columns], className)}>
+    <div className={cn("grid gap-4", columnClasses[columns], className)}>
       {children}
     </div>
   );
 };
 
+// Detail Card
 export interface BentoDetailCardProps {
   icon: React.ReactNode;
   label: string;
@@ -142,14 +164,21 @@ export const BentoDetailCard: React.FC<BentoDetailCardProps> = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 p-4 rounded-lg bg-[#222] border border-[#333]",
+        "relative p-4 border-2 border-neutral-800 bg-card",
+        "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]",
         className
       )}
     >
-      <div className="text-gray-400">{icon}</div>
-      <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="font-medium text-white">{value}</p>
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 border-2 border-neutral-700 flex items-center justify-center text-primary shrink-0">
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider block mb-1">
+            {label}
+          </span>
+          <span className="text-sm text-foreground">{value}</span>
+        </div>
       </div>
     </div>
   );

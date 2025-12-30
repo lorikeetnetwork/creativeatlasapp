@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-// Brutalist corner marker
+// Brutalist corner marker component
 const BrutalistCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) => {
   const positionClasses = {
     tl: "top-0 left-0 border-t-2 border-l-2",
@@ -13,14 +13,15 @@ const BrutalistCorner = ({ position }: { position: "tl" | "tr" | "bl" | "br" }) 
   return (
     <div
       className={cn(
-        "absolute w-3 h-3 border-neutral-600 pointer-events-none z-20",
+        "absolute w-3 h-3 border-neutral-600 pointer-events-none",
         positionClasses[position]
       )}
     />
   );
 };
 
-const CornerMarkers = () => (
+// Corner markers for brutalist cards
+export const BrutalistCorners = () => (
   <>
     <BrutalistCorner position="tl" />
     <BrutalistCorner position="tr" />
@@ -29,18 +30,15 @@ const CornerMarkers = () => (
   </>
 );
 
-export interface BentoCardProps {
+export interface BrutalistBentoItemProps {
   className?: string;
-  title?: string;
-  description?: string;
-  children?: React.ReactNode;
+  children: React.ReactNode;
   onClick?: () => void;
 }
 
-export const BentoCard: React.FC<BentoCardProps> = ({
+// Main brutalist bento item component
+export const BrutalistBentoItem: React.FC<BrutalistBentoItemProps> = ({
   className = "",
-  title,
-  description,
   children,
   onClick,
 }) => {
@@ -55,48 +53,46 @@ export const BentoCard: React.FC<BentoCardProps> = ({
       )}
       onClick={onClick}
     >
-      <CornerMarkers />
-      {/* Content */}
-      <div className="relative z-10 flex flex-col h-full">
-        {title && (
-          <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight">
-            {title}
-          </h3>
-        )}
-        {description && (
-          <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
-        )}
-        {children}
-      </div>
+      <BrutalistCorners />
+      <div className="relative z-10">{children}</div>
     </div>
   );
 };
 
-export interface BentoGridProps {
+export interface BrutalistBentoGridProps {
   className?: string;
   children: React.ReactNode;
+  columns?: 1 | 2 | 3 | 4 | 6;
 }
 
-export const BentoGrid: React.FC<BentoGridProps> = ({ className, children }) => {
+// Grid wrapper for brutalist bento items
+export const BrutalistBentoGrid: React.FC<BrutalistBentoGridProps> = ({
+  className,
+  children,
+  columns = 4,
+}) => {
+  const columnClasses = {
+    1: "grid-cols-1",
+    2: "grid-cols-1 md:grid-cols-2",
+    3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+    4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
+    6: "grid-cols-2 md:grid-cols-3 lg:grid-cols-6",
+  };
+
   return (
-    <div
-      className={cn(
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
-        className
-      )}
-    >
+    <div className={cn("grid gap-4", columnClasses[columns], className)}>
       {children}
     </div>
   );
 };
 
-export interface BentoSectionFooterProps {
+export interface BrutalistSectionHeaderProps {
   title: string;
   description?: string;
   className?: string;
 }
 
-export const BentoSectionFooter: React.FC<BentoSectionFooterProps> = ({
+export const BrutalistSectionHeader: React.FC<BrutalistSectionHeaderProps> = ({
   title,
   description,
   className,
@@ -114,3 +110,5 @@ export const BentoSectionFooter: React.FC<BentoSectionFooterProps> = ({
     </div>
   );
 };
+
+export default BrutalistBentoItem;
