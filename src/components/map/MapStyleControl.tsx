@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Layers, Moon, Sun, Satellite, Map, Mountain, Palette } from "lucide-react";
+import { Layers, Moon, Sun, Satellite, Map, Mountain, Palette, Ruler } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MapStyle, MarkerColorMode } from "@/hooks/useMapPreferences";
 
@@ -21,6 +21,7 @@ const MAP_STYLES: { id: MapStyle; label: string; icon: React.ReactNode }[] = [
   { id: "satellite", label: "Satellite", icon: <Satellite className="w-4 h-4" /> },
   { id: "streets", label: "Streets", icon: <Map className="w-4 h-4" /> },
   { id: "outdoors", label: "Outdoors", icon: <Mountain className="w-4 h-4" /> },
+  { id: "blueprint", label: "Blueprint", icon: <Ruler className="w-4 h-4" /> },
 ];
 
 const COLOR_MODES: { id: MarkerColorMode; label: string; color: string }[] = [
@@ -54,7 +55,7 @@ export function MapStyleControl({
               <Map className="w-3 h-3" />
               Map Style
             </div>
-            <div className="grid grid-cols-5 gap-1">
+            <div className="grid grid-cols-6 gap-1">
               {MAP_STYLES.map((style) => (
                 <Button
                   key={style.id}
