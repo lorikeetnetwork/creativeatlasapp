@@ -48,7 +48,7 @@ export function MapStyleControl({
           <span className="hidden sm:inline">Map Style</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 p-3 bg-background/95 backdrop-blur-sm border border-border shadow-lg z-50" sideOffset={8}>
+      <PopoverContent align="end" className="w-80 p-3 bg-popover border border-border shadow-lg z-50" sideOffset={8}>
         <div className="space-y-4">
           {/* Map Style Section */}
           <div className="space-y-2">
