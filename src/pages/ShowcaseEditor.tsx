@@ -12,6 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { ArrowLeft, Save, Upload, X, Loader2, Plus } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+
+type LocationCategory = Database["public"]["Enums"]["location_category"];
 
 const categories = [
   { value: "Music Industry", label: "Music Industry" },
@@ -118,7 +121,7 @@ const ShowcaseEditor = () => {
         gallery_images: galleryImages.length ? galleryImages : null,
         video_url: videoUrl || null,
         project_url: projectUrl || null,
-        category: category || null,
+        category: (category || null) as LocationCategory | null,
         tags: tags ? tags.split(",").map(t => t.trim()).filter(Boolean) : null,
         collaborators: collaborators || null,
         submitted_by: session.user.id,
