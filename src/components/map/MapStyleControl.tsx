@@ -47,7 +47,7 @@ export function MapStyleControl({
           <span className="hidden sm:inline">Map Style</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-72 p-3 bg-background border border-border z-50" sideOffset={8}>
+      <PopoverContent align="end" className="w-80 p-3 bg-background border border-border z-50" sideOffset={8}>
         <div className="space-y-4">
           {/* Map Style Section */}
           <div className="space-y-2">
@@ -55,7 +55,7 @@ export function MapStyleControl({
               <Map className="w-3 h-3" />
               Map Style
             </div>
-            <div className="grid grid-cols-6 gap-1">
+            <div className="grid grid-cols-3 gap-2">
               {MAP_STYLES.map((style) => (
                 <Button
                   key={style.id}
