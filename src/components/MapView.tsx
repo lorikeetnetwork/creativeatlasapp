@@ -34,6 +34,84 @@ const MAP_STYLE_URLS: Record<MapStyle, string> = {
   satellite: "mapbox://styles/mapbox/satellite-streets-v12",
   streets: "mapbox://styles/mapbox/streets-v12",
   outdoors: "mapbox://styles/mapbox/outdoors-v12",
+  blueprint: "mapbox://styles/mapbox/dark-v11", // Base style, we'll customize it
+};
+
+// Blueprint style layer customizations
+const BLUEPRINT_COLORS = {
+  background: "#0a192f",
+  water: "#0d2847",
+  land: "#0a192f",
+  roads: "#00d4ff",
+  buildings: "#1e3a5f",
+  labels: "#00d4ff",
+  borders: "#00d4ff",
+};
+
+const applyBlueprintStyle = (map: mapboxgl.Map) => {
+  // Wait for style to be loaded
+  if (!map.isStyleLoaded()) return;
+  
+  try {
+    // Background
+    if (map.getLayer("background")) {
+      map.setPaintProperty("background", "background-color", BLUEPRINT_COLORS.background);
+    }
+    
+    // Water
+    if (map.getLayer("water")) {
+      map.setPaintProperty("water", "fill-color", BLUEPRINT_COLORS.water);
+    }
+    
+    // Land/landuse
+    const landLayers = ["land", "landuse", "landcover"];
+    landLayers.forEach(layer => {
+      if (map.getLayer(layer)) {
+        map.setPaintProperty(layer, "fill-color", BLUEPRINT_COLORS.land);
+      }
+    });
+    
+    // Roads - make them cyan/blueprint style
+    const roadLayers = map.getStyle()?.layers?.filter(l => 
+      l.id.includes("road") || l.id.includes("street") || l.id.includes("highway")
+    ) || [];
+    roadLayers.forEach(layer => {
+      if (layer.type === "line") {
+        map.setPaintProperty(layer.id, "line-color", BLUEPRINT_COLORS.roads);
+        map.setPaintProperty(layer.id, "line-opacity", 0.7);
+      }
+    });
+    
+    // Buildings
+    if (map.getLayer("building")) {
+      map.setPaintProperty("building", "fill-color", BLUEPRINT_COLORS.buildings);
+      map.setPaintProperty("building", "fill-outline-color", BLUEPRINT_COLORS.roads);
+    }
+    
+    // Labels
+    const labelLayers = map.getStyle()?.layers?.filter(l => 
+      l.id.includes("label") || l.id.includes("place") || l.id.includes("poi")
+    ) || [];
+    labelLayers.forEach(layer => {
+      if (layer.type === "symbol") {
+        map.setPaintProperty(layer.id, "text-color", BLUEPRINT_COLORS.labels);
+        map.setPaintProperty(layer.id, "text-halo-color", BLUEPRINT_COLORS.background);
+      }
+    });
+    
+    // Borders/boundaries
+    const borderLayers = map.getStyle()?.layers?.filter(l => 
+      l.id.includes("boundary") || l.id.includes("border") || l.id.includes("admin")
+    ) || [];
+    borderLayers.forEach(layer => {
+      if (layer.type === "line") {
+        map.setPaintProperty(layer.id, "line-color", BLUEPRINT_COLORS.borders);
+        map.setPaintProperty(layer.id, "line-opacity", 0.5);
+      }
+    });
+  } catch (e) {
+    console.warn("Could not apply blueprint styling:", e);
+  }
 };
 
 const MONO_COLOR = "#6366f1"; // Indigo
@@ -132,6 +210,10 @@ const MapView = ({
       // Handle style changes - markers need to be re-added after style loads
       map.current.on("style.load", () => {
         setStyleReady(true);
+        // Apply blueprint customizations if blueprint style is selected
+        if (mapStyle === "blueprint" && map.current) {
+          applyBlueprintStyle(map.current);
+        }
       });
 
       // Listen for map movement to update bounds
@@ -197,6 +279,15 @@ const MapView = ({
     markersMap.current.forEach(({ marker }) => marker.remove());
     markersMap.current.clear();
     map.current.setStyle(MAP_STYLE_URLS[mapStyle]);
+    
+    // Apply blueprint customizations after style loads
+    if (mapStyle === "blueprint") {
+      map.current.once("style.load", () => {
+        if (map.current) {
+          applyBlueprintStyle(map.current);
+        }
+      });
+    }
   }, [mapStyle, mapLoaded]);
 
   // Update markers when locations change - smart updates to prevent flickering
