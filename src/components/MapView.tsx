@@ -471,7 +471,7 @@ const MapView = ({
       });
 
       // Guard against map being removed during async operations
-      if (!currentMap) return;
+      if (!currentMap || !currentMap.getContainer()) return;
 
       const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(currentMap);
 
