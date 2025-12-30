@@ -35,6 +35,7 @@ const MAP_STYLE_URLS: Record<MapStyle, string> = {
   streets: "mapbox://styles/mapbox/streets-v12",
   outdoors: "mapbox://styles/mapbox/outdoors-v12",
   blueprint: "mapbox://styles/mapbox/dark-v11", // Base style, we'll customize it
+  "satellite-3d": "mapbox://styles/mapbox/satellite-streets-v12", // Satellite with 3D terrain
   "3d": "mapbox://styles/mapbox/standard", // Standard style with 3D support
 };
 
@@ -319,8 +320,8 @@ const MapView = ({
     markersMap.current.forEach(({ marker }) => marker.remove());
     markersMap.current.clear();
     
-    // Remove 3D effects before changing style (if not going to 3D)
-    if (mapStyle !== "3d") {
+    // Remove 3D effects before changing style (if not going to a 3D style)
+    if (mapStyle !== "3d" && mapStyle !== "satellite-3d") {
       remove3DStyle(map.current);
     }
     
@@ -333,7 +334,7 @@ const MapView = ({
           applyBlueprintStyle(map.current);
         }
       });
-    } else if (mapStyle === "3d") {
+    } else if (mapStyle === "3d" || mapStyle === "satellite-3d") {
       map.current.once("idle", () => {
         if (map.current) {
           apply3DStyle(map.current);
