@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Award, Plus, Star } from "lucide-react";
+import { Award, Plus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,7 +14,6 @@ import {
   BentoPageHeader,
   BentoFilterCard,
   BentoEmptyState,
-  BentoContentCard,
 } from "@/components/ui/bento-page-layout";
 
 const Showcases = () => {
@@ -60,9 +59,9 @@ const Showcases = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="relative rounded-xl border border-border bg-card overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="relative border-2 border-neutral-800 bg-card overflow-hidden">
                 <Skeleton className="aspect-[4/3]" />
                 <div className="p-4 space-y-2">
                   <Skeleton className="h-4 w-3/4" />
@@ -75,24 +74,34 @@ const Showcases = () => {
 
         {/* Featured Showcases */}
         {featuredShowcases && featuredShowcases.length > 0 && (
-          <BentoContentCard title="★ Featured Work" className="mb-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredShowcases.slice(0, 6).map((showcase) => (
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/50 to-transparent" />
+              <h2 className="text-sm font-semibold text-primary uppercase tracking-widest">★ Featured Work</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-primary/50 to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {featuredShowcases.slice(0, 8).map((showcase) => (
                 <ShowcaseCard key={showcase.id} showcase={showcase} />
               ))}
             </div>
-          </BentoContentCard>
+          </section>
         )}
 
         {/* All Showcases Gallery */}
         {regularShowcases && regularShowcases.length > 0 && (
-          <BentoContentCard title="Gallery">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-neutral-700 to-transparent" />
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Gallery</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-neutral-700 to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
               {regularShowcases.map((showcase) => (
                 <ShowcaseCard key={showcase.id} showcase={showcase} />
               ))}
             </div>
-          </BentoContentCard>
+          </section>
         )}
 
         {/* Empty State */}
