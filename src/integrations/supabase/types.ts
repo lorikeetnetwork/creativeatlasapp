@@ -1834,7 +1834,65 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      payments_secure: {
+        Row: {
+          account_type_granted:
+            | Database["public"]["Enums"]["account_type"]
+            | null
+          amount: number | null
+          created_at: string | null
+          currency: string | null
+          id: string | null
+          location_id: string | null
+          payment_type: string | null
+          status: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          account_type_granted?:
+            | Database["public"]["Enums"]["account_type"]
+            | null
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string | null
+          location_id?: string | null
+          payment_type?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: never
+          stripe_session_id?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          account_type_granted?:
+            | Database["public"]["Enums"]["account_type"]
+            | null
+          amount?: number | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string | null
+          location_id?: string | null
+          payment_type?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: never
+          stripe_session_id?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
