@@ -18,6 +18,9 @@ verify_jwt = true
 [functions.get-locations]
 verify_jwt = false
 
+[functions.get-mapbox-token]
+verify_jwt = true
+
 [functions.invite-user]
 verify_jwt = true
 
