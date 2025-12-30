@@ -434,6 +434,7 @@ const MapView = ({
 
       const el = document.createElement("div");
       el.className = "custom-marker";
+      el.style.position = "relative";
       el.style.width = "24px";
       el.style.height = "24px";
       el.style.borderRadius = "50%";
@@ -442,6 +443,7 @@ const MapView = ({
         colorMode === "highContrast" ? "2px solid #000" : "2px solid white";
       el.style.cursor = "pointer";
       el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+      el.style.transition = "transform 0.2s ease, box-shadow 0.2s ease";
       
 
       // Add favorite indicator
@@ -554,11 +556,35 @@ const MapView = ({
 
     // Update all marker styles based on selection
     markersMap.current.forEach(({ element }, id) => {
+      // Remove existing orange ring if any
+      const existingRing = element.querySelector(".selection-ring");
+      if (existingRing) {
+        existingRing.remove();
+      }
+
       if (selectedLocation?.id === id) {
+        // Add orange ring around selected marker
+        const ring = document.createElement("div");
+        ring.className = "selection-ring";
+        ring.style.position = "absolute";
+        ring.style.top = "-6px";
+        ring.style.left = "-6px";
+        ring.style.width = "calc(100% + 12px)";
+        ring.style.height = "calc(100% + 12px)";
+        ring.style.borderRadius = "50%";
+        ring.style.border = "3px solid #f97316"; // Orange-500
+        ring.style.pointerEvents = "none";
+        ring.style.animation = "pulse-ring 1.5s ease-in-out infinite";
+        element.appendChild(ring);
+
+        // Enlarge and highlight the marker
+        element.style.transform = "scale(1.4)";
         element.style.boxShadow =
-          "0 0 0 4px rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.5)";
+          "0 0 0 4px rgba(249, 115, 22, 0.4), 0 4px 16px rgba(0,0,0,0.5)";
         element.style.zIndex = "1000";
       } else {
+        // Reset to normal state
+        element.style.transform = "scale(1)";
         element.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
         element.style.zIndex = "1";
       }
