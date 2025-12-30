@@ -47,12 +47,12 @@ const Events = () => {
           actions={
             <div className="flex items-center gap-3">
               <Tabs value={view} onValueChange={(v) => setView(v as "list" | "calendar")}>
-                <TabsList className="bg-[#222] border border-[#333]">
-                  <TabsTrigger value="list" className="gap-2 data-[state=active]:bg-[#333] data-[state=active]:text-white">
+                <TabsList className="bg-card border border-neutral-800">
+                  <TabsTrigger value="list" className="gap-2 data-[state=active]:bg-neutral-800 data-[state=active]:text-foreground">
                     <List className="h-4 w-4" />
                     List
                   </TabsTrigger>
-                  <TabsTrigger value="calendar" className="gap-2 data-[state=active]:bg-[#333] data-[state=active]:text-white">
+                  <TabsTrigger value="calendar" className="gap-2 data-[state=active]:bg-neutral-800 data-[state=active]:text-foreground">
                     <Calendar className="h-4 w-4" />
                     Calendar
                   </TabsTrigger>
@@ -75,19 +75,21 @@ const Events = () => {
 
         {/* Content */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-3">
-                <Skeleton className="aspect-video rounded-lg bg-[#333]" />
-                <Skeleton className="h-6 w-3/4 bg-[#333]" />
-                <Skeleton className="h-4 w-1/2 bg-[#333]" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="relative border-2 border-neutral-800 bg-card overflow-hidden">
+                <Skeleton className="aspect-video" />
+                <div className="p-4 space-y-3">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
               </div>
             ))}
           </div>
         ) : view === "list" ? (
           <>
             {events && events.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {events.map((event) => (
                   <EventCard key={event.id} event={event} />
                 ))}

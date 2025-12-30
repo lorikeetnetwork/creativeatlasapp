@@ -71,18 +71,20 @@ export default function Community() {
 
         <div className="mt-2">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-4">
-                  <Skeleton className="h-24 w-full bg-[#333]" />
-                  <Skeleton className="h-16 w-16 rounded-full bg-[#333]" />
-                  <Skeleton className="h-4 w-3/4 bg-[#333]" />
-                  <Skeleton className="h-4 w-1/2 bg-[#333]" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="relative border-2 border-neutral-800 bg-card overflow-hidden">
+                  <Skeleton className="h-24 w-full" />
+                  <div className="p-4 space-y-3">
+                    <Skeleton className="h-16 w-16 rounded-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
                 </div>
               ))}
             </div>
           ) : members && members.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {members.map((member) => (
                 <MemberCard key={member.id} member={member} />
               ))}

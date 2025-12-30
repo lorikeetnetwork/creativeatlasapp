@@ -251,7 +251,7 @@ export interface BentoPageProps {
 
 export const BentoPage: React.FC<BentoPageProps> = ({ children, className }) => {
   return (
-    <div className={cn("min-h-screen bg-background", className)}>
+    <div className={cn("min-h-screen bg-background w-full", className)}>
       {children}
     </div>
   );
@@ -261,11 +261,16 @@ export const BentoPage: React.FC<BentoPageProps> = ({ children, className }) => 
 export interface BentoMainProps {
   children: React.ReactNode;
   className?: string;
+  fullWidth?: boolean;
 }
 
-export const BentoMain: React.FC<BentoMainProps> = ({ children, className }) => {
+export const BentoMain: React.FC<BentoMainProps> = ({ children, className, fullWidth = true }) => {
   return (
-    <main className={cn("container mx-auto px-4 py-8", className)}>
+    <main className={cn(
+      "w-full px-4 md:px-6 lg:px-8 xl:px-12 py-6 space-y-6",
+      !fullWidth && "container mx-auto",
+      className
+    )}>
       {children}
     </main>
   );

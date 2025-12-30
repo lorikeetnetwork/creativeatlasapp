@@ -21,7 +21,6 @@ import {
   BentoPageHeader,
   BentoFilterCard,
   BentoEmptyState,
-  BentoContentCard,
 } from "@/components/ui/bento-page-layout";
 
 const Blog = () => {
@@ -127,19 +126,19 @@ const Blog = () => {
         <BentoFilterCard>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-[#222] border-[#333] text-white placeholder:text-gray-500"
+                className="pl-10 bg-background border-neutral-800 text-foreground placeholder:text-muted-foreground"
               />
             </div>
             <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger className="w-full md:w-[180px] bg-[#222] border-[#333] text-white">
+              <SelectTrigger className="w-full md:w-[180px] bg-background border-neutral-800 text-foreground">
                 <SelectValue placeholder="Article Type" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1a] border-[#333]">
+              <SelectContent className="bg-card border-neutral-800">
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="article">Articles</SelectItem>
                 <SelectItem value="update">Updates</SelectItem>
@@ -148,10 +147,10 @@ const Blog = () => {
               </SelectContent>
             </Select>
             <Select value={selectedTag} onValueChange={setSelectedTag}>
-              <SelectTrigger className="w-full md:w-[180px] bg-[#222] border-[#333] text-white">
+              <SelectTrigger className="w-full md:w-[180px] bg-background border-neutral-800 text-foreground">
                 <SelectValue placeholder="Filter by Tag" />
               </SelectTrigger>
-              <SelectContent className="bg-[#1a1a1a] border-[#333]">
+              <SelectContent className="bg-card border-neutral-800">
                 <SelectItem value="all">All Tags</SelectItem>
                 {tags?.map((tag) => (
                   <SelectItem key={tag.id} value={tag.id}>
@@ -165,12 +164,19 @@ const Blog = () => {
 
         {/* Loading State */}
         {articlesLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="relative p-4 rounded-xl border border-[#333] bg-[#1a1a1a] space-y-4">
-                <Skeleton className="h-48 w-full rounded-lg bg-[#333]" />
-                <Skeleton className="h-4 w-3/4 bg-[#333]" />
-                <Skeleton className="h-4 w-1/2 bg-[#333]" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="relative border-2 border-neutral-800 bg-card overflow-hidden">
+                <Skeleton className="aspect-video w-full" />
+                <div className="p-5 space-y-3">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <div className="flex justify-between pt-4 border-t border-neutral-800">
+                    <Skeleton className="h-7 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -178,8 +184,13 @@ const Blog = () => {
 
         {/* Featured Articles */}
         {featuredArticles && featuredArticles.length > 0 && (
-          <BentoContentCard title="★ Featured" className="mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/50 to-transparent" />
+              <h2 className="text-sm font-semibold text-primary uppercase tracking-widest">★ Featured</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-primary/50 to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {featuredArticles.slice(0, 2).map((article) => (
                 <ArticleCard
                   key={article.id}
@@ -191,13 +202,18 @@ const Blog = () => {
                 />
               ))}
             </div>
-          </BentoContentCard>
+          </section>
         )}
 
         {/* Regular Articles Grid */}
         {regularArticles && regularArticles.length > 0 && (
-          <BentoContentCard title="Latest Articles">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <section className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-neutral-700 to-transparent" />
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Latest Articles</h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-neutral-700 to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {regularArticles.map((article) => (
                 <ArticleCard
                   key={article.id}
@@ -208,7 +224,7 @@ const Blog = () => {
                 />
               ))}
             </div>
-          </BentoContentCard>
+          </section>
         )}
 
         {/* Empty State */}
@@ -220,7 +236,7 @@ const Blog = () => {
             action={
               <Button
                 variant="outline"
-                className="border-[#333] text-white hover:bg-[#222]"
+                className="border-neutral-700 text-foreground hover:bg-card"
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedType("all");
