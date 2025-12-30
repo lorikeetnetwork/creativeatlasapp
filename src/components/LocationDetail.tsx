@@ -11,7 +11,6 @@ import { useContactAccess } from "./ContactDetailsGate";
 import { useNavigate } from "react-router-dom";
 import { FavoriteButton } from "./favorites/FavoriteButton";
 import { AddToListPopover } from "./favorites/AddToListPopover";
-
 interface LocationDetailProps {
   location: Tables<"locations"> | null;
   onClose: () => void;
@@ -23,7 +22,6 @@ interface LocationDetailProps {
   onRemoveFromList?: (listId: string, locationId: string) => Promise<boolean>;
   onCreateList?: (name: string) => Promise<any>;
 }
-
 const LocationDetail = ({
   location,
   onClose,
@@ -33,37 +31,34 @@ const LocationDetail = ({
   isInList,
   onAddToList,
   onRemoveFromList,
-  onCreateList,
+  onCreateList
 }: LocationDetailProps) => {
   const [photos, setPhotos] = useState<any[]>([]);
-  const { hasAccess, isLoading: accessLoading } = useContactAccess();
+  const {
+    hasAccess,
+    isLoading: accessLoading
+  } = useContactAccess();
   const navigate = useNavigate();
-  
   useEffect(() => {
     if (location?.id) {
       fetchPhotos();
     }
   }, [location?.id]);
-  
   const fetchPhotos = async () => {
     if (!location) return;
     try {
-      const { data, error } = await supabase
-        .from('location_photos')
-        .select('*')
-        .eq('location_id', location.id)
-        .order('display_order');
+      const {
+        data,
+        error
+      } = await supabase.from('location_photos').select('*').eq('location_id', location.id).order('display_order');
       if (error) throw error;
       setPhotos(data || []);
     } catch (error) {
       console.error("Error fetching photos:", error);
     }
   };
-  
   if (!location) return null;
-  
-  return (
-    <Card className="flex flex-col shadow-lg border-border/50 bg-card max-h-full overflow-hidden">
+  return <Card className="flex flex-col shadow-lg border-border/50 max-h-full overflow-hidden bg-secondary-foreground bg-[sidebar-primary-foreground]">
       <CardHeader className="flex-shrink-0 border-b p-3">
         <div className="flex items-start justify-between gap-2">
           <div className="space-y-1 flex-1 min-w-0">
@@ -74,23 +69,8 @@ const LocationDetail = ({
             </div>
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
-            {onToggleFavorite && (
-              <FavoriteButton
-                isFavorited={isFavorited}
-                onToggle={onToggleFavorite}
-                size="sm"
-              />
-            )}
-            {isInList && onAddToList && onRemoveFromList && onCreateList && (
-              <AddToListPopover
-                lists={lists}
-                locationId={location.id}
-                isInList={isInList}
-                onAddToList={onAddToList}
-                onRemoveFromList={onRemoveFromList}
-                onCreateList={onCreateList}
-              />
-            )}
+            {onToggleFavorite && <FavoriteButton isFavorited={isFavorited} onToggle={onToggleFavorite} size="sm" />}
+            {isInList && onAddToList && onRemoveFromList && onCreateList && <AddToListPopover lists={lists} locationId={location.id} isInList={isInList} onAddToList={onAddToList} onRemoveFromList={onRemoveFromList} onCreateList={onCreateList} />}
             <Button variant="ghost" size="icon" onClick={onClose} className="h-7 w-7">
               <X className="w-4 h-4" />
             </Button>
@@ -99,20 +79,13 @@ const LocationDetail = ({
       </CardHeader>
 
       <ScrollArea className="flex-1">
-        <CardContent className="p-3 space-y-3 bg-[#e3e3e3]">
+        <CardContent className="p-3 space-y-3 bg-secondary-foreground">
           {/* Header Image - OG Image or Logo or First Photo */}
-          {(location.og_image_url || location.logo_url || photos[0]?.photo_url) && (
-            <div className="w-full h-32 rounded-lg overflow-hidden">
-              <img
-                src={location.og_image_url || location.logo_url || photos[0]?.photo_url}
-                alt={location.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </div>
-          )}
+          {(location.og_image_url || location.logo_url || photos[0]?.photo_url) && <div className="w-full h-32 rounded-lg overflow-hidden">
+              <img src={location.og_image_url || location.logo_url || photos[0]?.photo_url} alt={location.name} className="w-full h-full object-cover" onError={e => {
+            e.currentTarget.style.display = "none";
+          }} />
+            </div>}
 
           {/* Photo Gallery */}
           {photos.length > 0 && <PhotoGallery photos={photos} />}
@@ -129,101 +102,68 @@ const LocationDetail = ({
           </div>
 
           {/* Description */}
-          {location.description && (
-            <div className="space-y-1">
+          {location.description && <div className="space-y-1">
               <h4 className="text-xs font-semibold">About</h4>
               <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                 {location.description}
               </p>
-            </div>
-          )}
+            </div>}
 
           {/* Best For */}
-          {location.best_for && (
-            <div className="space-y-1">
+          {location.best_for && <div className="space-y-1">
               <h4 className="text-xs font-semibold">Best For</h4>
               <p className="text-xs text-muted-foreground">{location.best_for}</p>
-            </div>
-          )}
+            </div>}
 
           {/* Capacity & Accessibility Row */}
-          {(location.capacity || location.accessibility_notes) && (
-            <div className="flex flex-wrap gap-3 text-xs">
-              {location.capacity && (
-                <div className="flex items-center gap-1.5">
+          {(location.capacity || location.accessibility_notes) && <div className="flex flex-wrap gap-3 text-xs">
+              {location.capacity && <div className="flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-primary" />
                   <span className="text-muted-foreground">{location.capacity} people</span>
-                </div>
-              )}
-              {location.accessibility_notes && (
-                <div className="flex items-center gap-1.5">
+                </div>}
+              {location.accessibility_notes && <div className="flex items-center gap-1.5">
                   <Accessibility className="w-3.5 h-3.5 text-primary" />
                   <span className="text-muted-foreground truncate max-w-[150px]">{location.accessibility_notes}</span>
-                </div>
-              )}
-            </div>
-          )}
+                </div>}
+            </div>}
 
           {/* Contact & Social */}
-          {(location.website || location.email || location.phone || location.instagram) && (
-            <div className="space-y-1.5">
+          {(location.website || location.email || location.phone || location.instagram) && <div className="space-y-1.5">
               <h4 className="text-xs font-semibold">Contact</h4>
               <div className="flex flex-wrap gap-2">
-                {location.website && (
-                  <a href={location.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                {location.website && <a href={location.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
                     <Globe className="w-3 h-3" />
                     <span className="underline">Website</span>
-                  </a>
-                )}
-                {location.instagram && (
-                  <a href={`https://instagram.com/${location.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                  </a>}
+                {location.instagram && <a href={`https://instagram.com/${location.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
                     <Instagram className="w-3 h-3" />
                     <span>Instagram</span>
-                  </a>
-                )}
+                  </a>}
                 {/* Gated email/phone */}
-                {(location.email || location.phone) && (
-                  hasAccess ? (
-                    <>
-                      {location.email && (
-                        <a href={`mailto:${location.email}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                {(location.email || location.phone) && (hasAccess ? <>
+                      {location.email && <a href={`mailto:${location.email}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
                           <Mail className="w-3 h-3" />
                           <span>Email</span>
-                        </a>
-                      )}
-                      {location.phone && (
-                        <a href={`tel:${location.phone}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
+                        </a>}
+                      {location.phone && <a href={`tel:${location.phone}`} className="flex items-center gap-1 text-xs hover:text-primary transition-colors">
                           <Phone className="w-3 h-3" />
                           <span>Call</span>
-                        </a>
-                      )}
-                    </>
-                  ) : (
-                    <button 
-                      onClick={() => navigate('/pricing')}
-                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
-                    >
+                        </a>}
+                    </> : <button onClick={() => navigate('/pricing')} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
                       <Lock className="w-3 h-3" />
                       <span className="underline">Unlock Contact</span>
-                    </button>
-                  )
-                )}
+                    </button>)}
               </div>
-            </div>
-          )}
+            </div>}
 
           {/* Source Attribution */}
-          {location.source === "UserSubmitted" && (
-            <div className="pt-2 border-t">
+          {location.source === "UserSubmitted" && <div className="pt-2 border-t">
               <p className="text-[10px] text-muted-foreground italic">
                 Listing provided by the business/artist
               </p>
-            </div>
-          )}
+            </div>}
         </CardContent>
       </ScrollArea>
-    </Card>
-  );
+    </Card>;
 };
-
 export default LocationDetail;
