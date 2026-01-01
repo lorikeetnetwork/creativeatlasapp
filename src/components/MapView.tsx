@@ -266,6 +266,7 @@ const MapView = ({
         style: MAP_STYLE_URLS[mapStyle],
         center: [153.4, -28.0], // Gold Coast / Northern Rivers area
         zoom: 8,
+        renderWorldCopies: false,
       });
 
       map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
