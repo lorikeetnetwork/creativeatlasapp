@@ -15,6 +15,7 @@ import { PendingLocationsTable } from '@/components/admin/PendingLocationsTable'
 import { BulkImport } from '@/components/admin/BulkImport';
 import { UserManagementTab } from '@/components/dashboard/UserManagementTab';
 import { AdminStats } from '@/components/admin/AdminStats';
+import { AccountTab } from '@/components/dashboard/AccountTab';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Calendar, Briefcase, FileText, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ export default function CollaboratorDashboard() {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('account');
   const [fetchingOgImages, setFetchingOgImages] = useState(false);
   const [ogProgress, setOgProgress] = useState({ current: 0, total: 0 });
 
@@ -161,6 +162,8 @@ export default function CollaboratorDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'account':
+        return <AccountTab />;
       case 'overview':
         return (
           <div className="space-y-6">
@@ -271,6 +274,7 @@ export default function CollaboratorDashboard() {
 
   const getTabTitle = () => {
     const titles: Record<string, string> = {
+      account: 'My Account',
       overview: 'Overview',
       events: 'Events',
       opportunities: 'Opportunities',

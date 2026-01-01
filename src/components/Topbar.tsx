@@ -1,4 +1,4 @@
-import { LogOut, User, Menu, Shield, Plus, Calendar, Briefcase, Users, BookOpen, CreditCard } from "lucide-react";
+import { LogOut, User, Menu, Shield, Plus, Calendar, Briefcase, Users, BookOpen, CreditCard, Compass, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, type ReactNode } from "react";
@@ -31,37 +31,42 @@ const Topbar = ({
 }: TopbarProps) => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [hasCollaboratorAccess, setHasCollaboratorAccess] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    checkAdminStatus();
+    checkRoles();
   }, [session]);
 
-  const checkAdminStatus = async () => {
+  const checkRoles = async () => {
     if (!session?.user) {
       setIsAdmin(false);
+      setHasCollaboratorAccess(false);
       return;
     }
     try {
-      const { data, error } = await supabase.rpc('has_role', {
-        _user_id: session.user.id,
-        _role: 'admin'
-      });
-      if (!error && data) {
-        setIsAdmin(true);
-      }
+      const [adminResult, collaboratorResult] = await Promise.all([
+        supabase.rpc('has_role', { _user_id: session.user.id, _role: 'admin' }),
+        supabase.rpc('has_role', { _user_id: session.user.id, _role: 'collaborator' })
+      ]);
+      
+      setIsAdmin(adminResult.data || false);
+      setHasCollaboratorAccess(adminResult.data || collaboratorResult.data || false);
     } catch (error) {
-      console.error("Error checking admin status:", error);
+      console.error("Error checking roles:", error);
     }
   };
 
+  // Get dashboard destination based on role
+  const getDashboardPath = () => hasCollaboratorAccess ? '/collaborator' : '/dashboard';
+
   const navItems = [
+    { label: "Discover", icon: Compass, onClick: () => navigate("/discover") },
     { label: "Events", icon: Calendar, onClick: () => navigate("/events") },
     { label: "Opportunities", icon: Briefcase, onClick: () => navigate("/opportunities") },
     { label: "Community", icon: Users, onClick: () => navigate("/community") },
     { label: "Blog", icon: BookOpen, onClick: () => navigate("/blog") },
   ];
-
   return (
     <header className={`h-14 flex-shrink-0 border-b-2 border-black bg-background flex items-center justify-between w-full p-0 m-0 ${className || ''}`}>
       <div className="flex items-center h-full pl-5">
@@ -155,30 +160,17 @@ const Topbar = ({
                 <Plus className="h-5 w-5" />
                 Submit Entity
               </Button>
-              {session ? (
+                {session ? (
                 <>
-                  {isAdmin && (
-                    <Button 
-                      variant="ghost" 
-                      className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
-                      onClick={() => {
-                        navigate('/admin');
-                        setMobileMenuOpen(false);
-                      }}
-                    >
-                      <Shield className="h-5 w-5" />
-                      Admin Dashboard
-                    </Button>
-                  )}
                   <Button 
                     variant="ghost" 
                     className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
                     onClick={() => {
-                      navigate('/dashboard');
+                      navigate(getDashboardPath());
                       setMobileMenuOpen(false);
                     }}
                   >
-                    <User className="h-5 w-5" />
+                    <LayoutDashboard className="h-5 w-5" />
                     Dashboard
                   </Button>
                   <Button 
@@ -225,22 +217,15 @@ const Topbar = ({
             <DropdownMenuSeparator />
             {session ? (
               <>
-                {isAdmin && (
-                  <>
-                    <DropdownMenuItem onClick={() => navigate('/admin')}>
-                      <Shield className="w-4 h-4 mr-2" />
-                      Admin Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                  <User className="w-4 h-4 mr-2" />
+                <DropdownMenuItem onClick={() => navigate(getDashboardPath())}>
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/pricing')}>
+                  <CreditCard className="w-4 h-4 mr-2" />
                   Pricing
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onSignOut}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out

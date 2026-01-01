@@ -27,6 +27,7 @@ import {
   Shield,
   UserCog,
   Crown,
+  User,
 } from 'lucide-react';
 
 interface CollaboratorSidebarProps {
@@ -39,6 +40,11 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
   const { state } = useSidebar();
   const { isMaster } = useCollaboratorRole();
   const isCollapsed = state === 'collapsed';
+
+  // Account item - visible to all
+  const accountItems = [
+    { id: 'account', title: 'My Account', icon: User },
+  ];
 
   const contentItems = [
     { id: 'overview', title: 'Overview', icon: LayoutDashboard },
@@ -61,7 +67,6 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
     { id: 'applications', title: 'Applications', icon: Shield },
     { id: 'users', title: 'User Management', icon: UserCog },
   ];
-
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
@@ -80,6 +85,27 @@ export function CollaboratorSidebar({ activeTab, onTabChange }: CollaboratorSide
       </SidebarHeader>
 
       <SidebarContent>
+        {/* Account section - always visible */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Account</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {accountItems.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    isActive={activeTab === item.id}
+                    onClick={() => onTabChange(item.id)}
+                    tooltip={item.title}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         <SidebarGroup>
           <SidebarGroupLabel>Content</SidebarGroupLabel>
           <SidebarGroupContent>
