@@ -74,16 +74,18 @@ export const useSubscription = () => {
       
       if (error) {
         console.error('Error checking subscription:', error);
-        // Fallback to profile data
+        // Fallback to profile data - be strict, only active subscription status counts
         const { data: profile } = await supabase
           .from('profiles')
           .select('account_type, subscription_status, subscription_end_date')
           .eq('id', session.user.id)
           .single();
 
-        const isSubscribed = profile?.subscription_status === 'active' || 
-                            profile?.account_type === 'basic_paid' || 
-                            profile?.account_type === 'creative_entity';
+        // Only consider subscribed if subscription_status is explicitly 'active'
+        // AND there's a valid subscription end date in the future
+        const now = new Date();
+        const endDate = profile?.subscription_end_date ? new Date(profile.subscription_end_date) : null;
+        const isSubscribed = profile?.subscription_status === 'active' && endDate && endDate > now;
 
         setState({
           isLoading: false,
