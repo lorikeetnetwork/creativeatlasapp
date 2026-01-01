@@ -222,6 +222,30 @@ const MapView = ({
   const [mapLoaded, setMapLoaded] = useState(false);
   const [styleReady, setStyleReady] = useState(false);
 
+  const [debugEnabled] = useState(() => {
+    try {
+      const url = new URL(window.location.href);
+      return (
+        url.searchParams.get("mapDebug") === "1" ||
+        localStorage.getItem("mapDebug") === "1"
+      );
+    } catch {
+      return false;
+    }
+  });
+  const [debugInfo, setDebugInfo] = useState<
+    | {
+        id: string;
+        name: string;
+        lat: number;
+        lng: number;
+        zoom: number;
+        dx: number;
+        dy: number;
+      }
+    | null
+  >(null);
+
   // Store first non-empty locations for initial bounds fit
   if (locations.length > 0 && initialLocationsRef.current.length === 0) {
     initialLocationsRef.current = locations;
@@ -355,6 +379,58 @@ const MapView = ({
     };
   }, [mapLoaded]);
 
+  // Debug: measure pixel offset between Mapbox projection and marker DOM position.
+  // Enable by adding ?mapDebug=1 to the URL (or localStorage.setItem('mapDebug','1')).
+  useEffect(() => {
+    if (!debugEnabled) return;
+    if (!map.current || !mapLoaded || !styleReady) return;
+    if (!locations.length) return;
+
+    const currentMap = map.current;
+
+    const compute = () => {
+      const first = locations[0];
+      const entry = markersMap.current.get(first.id);
+      if (!entry) return;
+
+      const { lat, lng } = normalizeCoordinates({
+        latitude: first.latitude as unknown as number,
+        longitude: first.longitude as unknown as number,
+      });
+
+      const projected = currentMap.project([lng, lat]);
+      const mapRect = currentMap.getContainer().getBoundingClientRect();
+
+      const markerEl = entry.element;
+      const wrapper = markerEl.parentElement; // .mapboxgl-marker
+      if (!wrapper) return;
+      const markerRect = wrapper.getBoundingClientRect();
+
+      const markerCenterX = markerRect.left - mapRect.left + markerRect.width / 2;
+      const markerCenterY = markerRect.top - mapRect.top + markerRect.height / 2;
+
+      setDebugInfo({
+        id: first.id,
+        name: first.name,
+        lat,
+        lng,
+        zoom: currentMap.getZoom(),
+        dx: markerCenterX - projected.x,
+        dy: markerCenterY - projected.y,
+      });
+    };
+
+    compute();
+
+    currentMap.on("move", compute);
+    currentMap.on("zoom", compute);
+
+    return () => {
+      currentMap.off("move", compute);
+      currentMap.off("zoom", compute);
+    };
+  }, [debugEnabled, mapLoaded, styleReady, locations]);
+
   // Handle style changes - set styleReady to false during transition
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
@@ -362,14 +438,14 @@ const MapView = ({
     // Clear existing markers before style change
     markersMap.current.forEach(({ marker }) => marker.remove());
     markersMap.current.clear();
-    
+
     // Remove 3D effects before changing style (if not going to a 3D style)
     if (mapStyle !== "3d" && mapStyle !== "satellite-3d") {
       remove3DStyle(map.current);
     }
-    
+
     map.current.setStyle(MAP_STYLE_URLS[mapStyle]);
-    
+
     // Apply style-specific customizations after style fully loads
     if (mapStyle === "blueprint") {
       map.current.once("idle", () => {
@@ -639,6 +715,48 @@ const MapView = ({
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainer} className="w-full h-full" />
+
+      {debugEnabled && (
+        <div className="absolute left-3 top-3 z-20 w-[320px] rounded-lg border border-border bg-card/95 p-3 text-xs text-card-foreground shadow-lg backdrop-blur">
+          <div className="flex items-start justify-between gap-3">
+            <div className="font-semibold">Map debug</div>
+            <div className="text-muted-foreground">?mapDebug=1</div>
+          </div>
+          {!debugInfo ? (
+            <div className="mt-2 text-muted-foreground">
+              Waiting for markers…
+            </div>
+          ) : (
+            <div className="mt-2 space-y-1">
+              <div className="text-muted-foreground">First marker</div>
+              <div className="font-medium leading-snug">{debugInfo.name}</div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+                <div>
+                  <span className="text-muted-foreground">zoom</span>: {debugInfo.zoom.toFixed(2)}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">id</span>: {debugInfo.id.slice(0, 8)}…
+                </div>
+                <div>
+                  <span className="text-muted-foreground">lat</span>: {debugInfo.lat.toFixed(6)}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">lng</span>: {debugInfo.lng.toFixed(6)}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">dx</span>: {debugInfo.dx.toFixed(2)}px
+                </div>
+                <div>
+                  <span className="text-muted-foreground">dy</span>: {debugInfo.dy.toFixed(2)}px
+                </div>
+              </div>
+              <div className="mt-2 text-muted-foreground">
+                If dx/dy isn’t near ~0px, we’ve got a consistent offset we can correct.
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
