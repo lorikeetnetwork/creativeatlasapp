@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Palette } from "lucide-react";
+import { Menu, Compass, Calendar, Briefcase, Users, BookOpen, CreditCard, LogOut, LayoutDashboard, Handshake } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoImage from "@/assets/creative-atlas-logo.png";
 import type { Session } from "@supabase/supabase-js";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
   session?: Session | null;
@@ -64,35 +65,18 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
     navigate("/");
   };
 
-  const baseNavItems = session
-    ? [
-        { label: "Explore Map", onClick: () => navigate("/map") },
-        { label: "Discover Artists", onClick: () => navigate("/discover") },
-        { label: "Events", onClick: () => navigate("/events") },
-        { label: "Opportunities", onClick: () => navigate("/opportunities") },
-        { label: "Community", onClick: () => navigate("/community") },
-        { label: "Blog", onClick: () => navigate("/blog") },
-        { label: "Collaborate", onClick: () => navigate("/collaborate") },
-        { label: "Dashboard", onClick: () => navigate("/dashboard") },
-      ]
-    : [
-        { label: "Explore Map", onClick: () => navigate("/map") },
-        { label: "Discover Artists", onClick: () => navigate("/discover") },
-        { label: "Events", onClick: () => navigate("/events") },
-        { label: "Opportunities", onClick: () => navigate("/opportunities") },
-        { label: "Community", onClick: () => navigate("/community") },
-        { label: "Blog", onClick: () => navigate("/blog") },
-        { label: "Collaborate", onClick: () => navigate("/collaborate") },
-        { label: "Pricing", onClick: () => navigate("/pricing") },
-      ];
+  // Get dashboard destination based on role
+  const getDashboardPath = () => hasCollaboratorAccess ? '/collaborator' : '/dashboard';
 
-  // Add collaborator dashboard link if user has collaborator/admin access
+  // Main nav items (always visible)
   const navItems = [
-    ...baseNavItems,
-    ...(hasCollaboratorAccess ? [{ label: "Collaborator", onClick: () => navigate("/collaborator"), icon: Palette }] : []),
-    session
-      ? { label: "Sign Out", onClick: handleSignOut }
-      : { label: "Sign In", onClick: () => navigate("/auth") },
+    { label: "Explore Map", icon: Compass, onClick: () => navigate("/map") },
+    { label: "Discover", icon: Compass, onClick: () => navigate("/discover") },
+    { label: "Events", icon: Calendar, onClick: () => navigate("/events") },
+    { label: "Opportunities", icon: Briefcase, onClick: () => navigate("/opportunities") },
+    { label: "Community", icon: Users, onClick: () => navigate("/community") },
+    { label: "Blog", icon: BookOpen, onClick: () => navigate("/blog") },
+    { label: "Collaborate", icon: Handshake, onClick: () => navigate("/collaborate") },
   ];
 
   return (
@@ -110,20 +94,56 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
         </div>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-1">
           {navItems.map(item => (
             <Button 
               key={item.label} 
               variant="ghost" 
               onClick={item.onClick} 
-              className={`text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors ${
-                'icon' in item ? 'gap-1.5' : ''
-              }`}
+              className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-2"
             >
-              {'icon' in item && item.icon && <item.icon className="h-4 w-4" />}
+              <item.icon className="h-4 w-4" />
               {item.label}
             </Button>
           ))}
+          
+          {/* Pricing button */}
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/pricing")} 
+            className="text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-2"
+          >
+            <CreditCard className="h-4 w-4" />
+            Pricing
+          </Button>
+
+          {/* Desktop Dropdown Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-md text-white hover:bg-transparent border border-transparent hover:border-orange-500 transition-colors">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {session ? (
+                <>
+                  <DropdownMenuItem onClick={() => navigate(getDashboardPath())}>
+                    <LayoutDashboard className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem onClick={() => navigate('/auth')}>
+                  Sign In
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -139,16 +159,65 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
                 <Button 
                   key={item.label} 
                   variant="ghost" 
-                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-2" 
+                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
                   onClick={() => {
                     item.onClick();
                     setMobileMenuOpen(false);
                   }}
                 >
-                  {'icon' in item && item.icon && <item.icon className="h-5 w-5" />}
+                  <item.icon className="h-5 w-5" />
                   {item.label}
                 </Button>
               ))}
+              <div className="border-t border-border my-2" />
+              <Button 
+                variant="ghost" 
+                className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
+                onClick={() => {
+                  navigate("/pricing");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <CreditCard className="h-5 w-5" />
+                Pricing
+              </Button>
+              {session ? (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
+                    onClick={() => {
+                      navigate(getDashboardPath());
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
+                    Dashboard
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
+                    onClick={() => {
+                      handleSignOut();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-5 w-5" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  className="justify-start text-lg h-12 text-white hover:bg-transparent hover:text-white border border-transparent hover:border-orange-500 transition-colors gap-3" 
+                  onClick={() => {
+                    navigate("/auth");
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </SheetContent>
         </Sheet>
