@@ -45,6 +45,31 @@ const DISCIPLINES = [
   'Other',
 ] as const;
 
+const ARTIST_DISCIPLINES = [
+  'Music',
+  'Visual Art',
+  'Design',
+  'Film & Video',
+  'Writing',
+  'Performance',
+  'Creative Technology',
+  'Photography',
+  'Architecture',
+  'Craft & Making',
+  'Dance',
+  'Theatre',
+  'Animation',
+  'Illustration',
+  'Sound Art',
+  'Other',
+];
+
+const CAREER_STAGES = [
+  { value: 'emerging', label: 'Emerging' },
+  { value: 'mid_career', label: 'Mid-Career' },
+  { value: 'established', label: 'Established' },
+];
+
 const STATES = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT'];
 
 const profileSchema = z.object({
@@ -52,6 +77,7 @@ const profileSchema = z.object({
   tagline: z.string().max(120, 'Tagline must be under 120 characters').optional(),
   bio: z.string().max(2000, 'Bio must be under 2000 characters').optional(),
   primary_discipline: z.string().optional(),
+  career_stage: z.string().optional(),
   experience_years: z.number().min(0).max(100).optional(),
   suburb: z.string().optional(),
   state: z.string().optional(),
@@ -72,7 +98,10 @@ export default function EditMemberProfile() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [skills, setSkills] = useState<string[]>([]);
+  const [artistDisciplines, setArtistDisciplines] = useState<string[]>([]);
+  const [creativeTags, setCreativeTags] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState('');
+  const [newTag, setNewTag] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
@@ -88,6 +117,7 @@ export default function EditMemberProfile() {
       tagline: '',
       bio: '',
       primary_discipline: '',
+      career_stage: '',
       experience_years: undefined,
       suburb: '',
       state: '',
@@ -128,6 +158,7 @@ export default function EditMemberProfile() {
         tagline: profile.tagline || '',
         bio: profile.bio || '',
         primary_discipline: profile.primary_discipline || '',
+        career_stage: (profile as any).career_stage || '',
         experience_years: profile.experience_years || undefined,
         suburb: profile.suburb || '',
         state: profile.state || '',
@@ -142,6 +173,8 @@ export default function EditMemberProfile() {
         show_location: profile.show_location ?? true,
       });
       setSkills(profile.skills || []);
+      setArtistDisciplines((profile as any).artist_disciplines || []);
+      setCreativeTags((profile as any).creative_tags || []);
       setAvatarUrl(profile.avatar_url);
       setBannerUrl(profile.banner_url);
     }
@@ -157,6 +190,26 @@ export default function EditMemberProfile() {
 
   const handleRemoveSkill = (skill: string) => {
     setSkills(skills.filter((s) => s !== skill));
+  };
+
+  const handleAddTag = () => {
+    const trimmed = newTag.trim();
+    if (trimmed && !creativeTags.includes(trimmed)) {
+      setCreativeTags([...creativeTags, trimmed]);
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    setCreativeTags(creativeTags.filter((t) => t !== tag));
+  };
+
+  const toggleArtistDiscipline = (discipline: string) => {
+    if (artistDisciplines.includes(discipline)) {
+      setArtistDisciplines(artistDisciplines.filter((d) => d !== discipline));
+    } else {
+      setArtistDisciplines([...artistDisciplines, discipline]);
+    }
   };
 
   const handleImageUpload = async (
@@ -196,9 +249,16 @@ export default function EditMemberProfile() {
   const onSubmit = async (data: ProfileFormData) => {
     if (!session?.user) return;
 
+    const careerStageValue = data.career_stage && ['emerging', 'mid_career', 'established'].includes(data.career_stage) 
+      ? (data.career_stage as 'emerging' | 'mid_career' | 'established') 
+      : null;
+
     const profileData = {
       ...data,
       skills,
+      artist_disciplines: artistDisciplines,
+      creative_tags: creativeTags,
+      career_stage: careerStageValue,
       avatar_url: avatarUrl,
       banner_url: bannerUrl,
       website: data.website || null,
@@ -409,25 +469,51 @@ export default function EditMemberProfile() {
 
                   <FormField
                     control={form.control}
-                    name="experience_years"
+                    name="career_stage"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Years of Experience</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min={0}
-                            max={100}
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
-                            value={field.value ?? ''}
-                          />
-                        </FormControl>
+                        <FormLabel>Career Stage</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || ''}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select career stage" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {CAREER_STAGES.map((stage) => (
+                              <SelectItem key={stage.value} value={stage.value}>
+                                {stage.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Where are you in your creative journey?</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="experience_years"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Years of Experience</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          max={100}
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          value={field.value ?? ''}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
@@ -474,6 +560,27 @@ export default function EditMemberProfile() {
 
             <Card>
               <CardHeader>
+                <CardTitle>Artist Disciplines</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Select all disciplines that apply to your practice</p>
+                <div className="flex flex-wrap gap-2">
+                  {ARTIST_DISCIPLINES.map((discipline) => (
+                    <Badge
+                      key={discipline}
+                      variant={artistDisciplines.includes(discipline) ? 'default' : 'outline'}
+                      className="cursor-pointer"
+                      onClick={() => toggleArtistDiscipline(discipline)}
+                    >
+                      {discipline}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle>Skills</CardTitle>
               </CardHeader>
               <CardContent>
@@ -495,6 +602,37 @@ export default function EditMemberProfile() {
                       <X
                         className="h-3 w-3 cursor-pointer"
                         onClick={() => handleRemoveSkill(skill)}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Creative Tags</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Add themes, genres, or interests (e.g., "experimental", "Indigenous art", "electronic")</p>
+                <div className="flex gap-2 mb-4">
+                  <Input
+                    placeholder="Add a tag"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                  />
+                  <Button type="button" onClick={handleAddTag}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {creativeTags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="gap-1">
+                      {tag}
+                      <X
+                        className="h-3 w-3 cursor-pointer"
+                        onClick={() => handleRemoveTag(tag)}
                       />
                     </Badge>
                   ))}

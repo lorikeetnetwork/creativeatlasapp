@@ -42,6 +42,7 @@ import MyShowcases from "./pages/MyShowcases";
 import NotFound from "./pages/NotFound";
 import Collaborate from "./pages/Collaborate";
 import InviteAccept from "./pages/InviteAccept";
+import ArtistDiscovery from "./pages/ArtistDiscovery";
 
 const queryClient = new QueryClient();
 
@@ -109,6 +110,9 @@ const App = () => (
             <Route path="/community" element={<SubscriptionGate featureName="Community Directory"><Community /></SubscriptionGate>} />
             <Route path="/community/profile/:id" element={<SubscriptionGate featureName="Member Profile"><MemberProfile /></SubscriptionGate>} />
             <Route path="/community/edit-profile" element={<SubscriptionGate featureName="Edit Profile"><EditMemberProfile /></SubscriptionGate>} />
+            
+            {/* Artist Discovery - protected */}
+            <Route path="/discover" element={<SubscriptionGate featureName="Artist Discovery"><ArtistDiscovery /></SubscriptionGate>} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

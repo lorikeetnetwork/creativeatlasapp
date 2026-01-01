@@ -1022,10 +1022,13 @@ export type Database = {
       }
       member_profiles: {
         Row: {
+          artist_disciplines: string[] | null
           avatar_url: string | null
           banner_url: string | null
           bio: string | null
+          career_stage: Database["public"]["Enums"]["career_stage"] | null
           created_at: string
+          creative_tags: string[] | null
           display_name: string | null
           experience_years: number | null
           id: string
@@ -1050,10 +1053,13 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          artist_disciplines?: string[] | null
           avatar_url?: string | null
           banner_url?: string | null
           bio?: string | null
+          career_stage?: Database["public"]["Enums"]["career_stage"] | null
           created_at?: string
+          creative_tags?: string[] | null
           display_name?: string | null
           experience_years?: number | null
           id?: string
@@ -1078,10 +1084,13 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          artist_disciplines?: string[] | null
           avatar_url?: string | null
           banner_url?: string | null
           bio?: string | null
+          career_stage?: Database["public"]["Enums"]["career_stage"] | null
           created_at?: string
+          creative_tags?: string[] | null
           display_name?: string | null
           experience_years?: number | null
           id?: string
@@ -1916,6 +1925,7 @@ export type Database = {
         | "accepted"
       article_status: "draft" | "published" | "archived"
       article_type: "article" | "update" | "announcement" | "event"
+      career_stage: "emerging" | "mid_career" | "established"
       collaborator_application_status: "pending" | "approved" | "rejected"
       compensation_type:
         | "paid"
@@ -2311,6 +2321,7 @@ export const Constants = {
       ],
       article_status: ["draft", "published", "archived"],
       article_type: ["article", "update", "announcement", "event"],
+      career_stage: ["emerging", "mid_career", "established"],
       collaborator_application_status: ["pending", "approved", "rejected"],
       compensation_type: [
         "paid",

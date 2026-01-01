@@ -67,6 +67,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
   const baseNavItems = session
     ? [
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Discover Artists", onClick: () => navigate("/discover") },
         { label: "Events", onClick: () => navigate("/events") },
         { label: "Opportunities", onClick: () => navigate("/opportunities") },
         { label: "Community", onClick: () => navigate("/community") },
@@ -76,6 +77,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
       ]
     : [
         { label: "Explore Map", onClick: () => navigate("/map") },
+        { label: "Discover Artists", onClick: () => navigate("/discover") },
         { label: "Events", onClick: () => navigate("/events") },
         { label: "Opportunities", onClick: () => navigate("/opportunities") },
         { label: "Community", onClick: () => navigate("/community") },
