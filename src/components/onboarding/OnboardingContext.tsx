@@ -32,6 +32,16 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         return;
       }
 
+      // Check subscription status first - only show onboarding for subscribed users
+      const { data: subscriptionData } = await supabase.functions.invoke('check-subscription');
+      const isSubscribed = subscriptionData?.subscribed === true;
+      
+      if (!isSubscribed) {
+        // Don't show onboarding for non-subscribers
+        setShouldShowOnboarding(false);
+        return;
+      }
+
       const { data: profile } = await supabase
         .from('profiles')
         .select('onboarding_completed')
@@ -46,6 +56,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
     } catch (error) {
       console.error('Error checking onboarding status:', error);
+      setShouldShowOnboarding(false);
     }
   }, []);
 
@@ -76,8 +87,8 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
-        // Delay to allow profile creation
-        setTimeout(checkOnboardingStatus, 500);
+        // Delay to allow profile creation and subscription verification
+        setTimeout(checkOnboardingStatus, 1000);
       }
     });
 
