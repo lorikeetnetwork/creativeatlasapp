@@ -5,12 +5,21 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useOnboarding } from '../OnboardingContext';
 import { StaggerContainer, StaggerItem } from '../OnboardingStep';
+import { supabase } from '@/integrations/supabase/client';
 
 export const FinalStep: React.FC = () => {
   const navigate = useNavigate();
   const { completeOnboarding } = useOnboarding();
 
   const handleAction = async (path: string) => {
+    // Safety check: verify subscription before navigating to protected routes
+    const { data: subscriptionData } = await supabase.functions.invoke('check-subscription');
+    if (!subscriptionData?.subscribed) {
+      await completeOnboarding();
+      navigate('/pricing');
+      return;
+    }
+    
     await completeOnboarding();
     navigate(path);
   };
