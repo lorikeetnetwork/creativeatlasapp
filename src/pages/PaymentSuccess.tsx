@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Sparkles, Building2, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useOnboarding } from "@/components/onboarding/OnboardingContext";
 import logoImage from "@/assets/creative-atlas-logo.png";
 
 const PaymentSuccess = () => {
@@ -13,6 +14,7 @@ const PaymentSuccess = () => {
   const [accountType, setAccountType] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { checkOnboardingStatus } = useOnboarding();
 
   const paymentType = searchParams.get('type');
   const sessionId = searchParams.get('session_id');
@@ -37,6 +39,11 @@ const PaymentSuccess = () => {
             title: "Payment successful!",
             description: "Your account has been upgraded",
           });
+          
+          // Trigger onboarding tour after successful payment (2s delay for user to see success)
+          setTimeout(() => {
+            checkOnboardingStatus();
+          }, 2000);
         }
       } catch (error: any) {
         console.error('Verification error:', error);
