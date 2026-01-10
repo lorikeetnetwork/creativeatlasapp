@@ -50,6 +50,9 @@ const Landing = () => {
   return <div className="min-h-screen bg-[#121212]">
       <Navbar />
       <FuturisticAlienHero />
+      
+      {/* Divider between hero and main content */}
+      <Separator className="bg-border" />
 
       {/* Main Bento Content */}
       <section className="py-16 md:py-24">
