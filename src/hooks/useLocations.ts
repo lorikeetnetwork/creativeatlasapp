@@ -21,11 +21,17 @@ export const useLocations = () => {
   const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitInfo | null>(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    let isMounted = true;
+
     const fetchLocations = async () => {
       try {
         setLoading(true);
         
         const { data, error: invokeError } = await supabase.functions.invoke('get-locations');
+
+        // Check if component unmounted during fetch
+        if (!isMounted) return;
 
         if (invokeError) {
           // Check for rate limit error (429)
@@ -65,14 +71,22 @@ export const useLocations = () => {
         setIsSubscriber(data.isSubscriber || false);
         setError(null);
       } catch (err) {
+        if (!isMounted) return;
         console.error("Error fetching locations:", err);
         setError("Failed to load locations");
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchLocations();
+
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   return { locations, loading, error, isSubscriber, rateLimitInfo };

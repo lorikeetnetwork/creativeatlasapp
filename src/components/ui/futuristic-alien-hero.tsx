@@ -313,8 +313,10 @@ export const FuturisticAlienHero = () => {
         artifact.add(energyCore);
 
         // --- Nebula Particle System ---
+        // Reduce particle count on mobile devices for performance
+        const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         const nebulaGeometry = new THREE.BufferGeometry();
-        const nebulaCount = 20000;
+        const nebulaCount = isMobile ? 5000 : 20000;
         const posArray = new Float32Array(nebulaCount * 3);
         const colorArray = new Float32Array(nebulaCount * 3);
         const nebulaColors = [new THREE.Color(0x00ffff), new THREE.Color(0x8a2be2), new THREE.Color(0xff4500)];

@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-card";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, Star, Globe, Zap, Shield, Send, ExternalLink } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
@@ -49,7 +50,9 @@ const Landing = () => {
   }];
   return <div className="min-h-screen bg-[#121212]">
       <Navbar />
-      <FuturisticAlienHero />
+      <ErrorBoundary>
+        <FuturisticAlienHero />
+      </ErrorBoundary>
       
       {/* Divider between hero and main content */}
       <Separator className="bg-border" />

@@ -23,6 +23,7 @@ import { useMapPreferences, type MapStyle, type MarkerColorMode } from "@/hooks/
 import { normalizeCoordinates } from "@/utils/geo";
 import { MapStyleControl } from "@/components/map/MapStyleControl";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const IndexContent = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -166,15 +167,17 @@ const IndexContent = () => {
         />
 
         <div className="flex-1 relative">
-          <MapView
-            locations={filteredLocations}
-            selectedLocation={selectedLocation}
-            onLocationSelect={handleLocationSelect}
-            onBoundsChange={handleBoundsChange}
-            favoriteIds={favoriteIds}
-            mapStyle={mapStyle}
-            colorMode={markerColorMode}
-          />
+          <ErrorBoundary>
+            <MapView
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onBoundsChange={handleBoundsChange}
+              favoriteIds={favoriteIds}
+              mapStyle={mapStyle}
+              colorMode={markerColorMode}
+            />
+          </ErrorBoundary>
           {session && (
             <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
               <Search className="w-5 h-5 mr-2" />
@@ -263,15 +266,17 @@ const IndexContent = () => {
               />
             </div>
           )}
-          <MapView
-            locations={filteredLocations}
-            selectedLocation={selectedLocation}
-            onLocationSelect={handleLocationSelect}
-            onBoundsChange={handleBoundsChange}
-            favoriteIds={favoriteIds}
-            mapStyle={mapStyle}
-            colorMode={markerColorMode}
-          />
+          <ErrorBoundary>
+            <MapView
+              locations={filteredLocations}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onBoundsChange={handleBoundsChange}
+              favoriteIds={favoriteIds}
+              mapStyle={mapStyle}
+              colorMode={markerColorMode}
+            />
+          </ErrorBoundary>
 
         </div>
       </div>
