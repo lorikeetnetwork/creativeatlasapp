@@ -82,23 +82,18 @@ async function checkRateLimit(
     return { allowed: false, remaining: 0, resetTime, limit: limits.hourly };
   }
 
-  // Increment or create rate limit entry
-  if (hourlyData) {
-    await supabaseAdmin
-      .from('rate_limits')
-      .update({ request_count: currentCount + 1 })
-      .eq('identifier', identifier)
-      .eq('identifier_type', identifierType);
-  } else {
-    await supabaseAdmin
-      .from('rate_limits')
-      .insert({
-        identifier,
-        identifier_type: identifierType,
-        request_count: 1,
-        window_start: now.toISOString(),
-      });
-  }
+  // Use upsert to prevent race condition with duplicate key errors
+  await supabaseAdmin
+    .from('rate_limits')
+    .upsert({
+      identifier,
+      identifier_type: identifierType,
+      request_count: currentCount + 1,
+      window_start: hourlyData?.window_start || now.toISOString(),
+    }, {
+      onConflict: 'identifier,identifier_type',
+      ignoreDuplicates: false
+    });
 
   return {
     allowed: true,
