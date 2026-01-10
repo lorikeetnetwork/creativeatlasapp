@@ -9,7 +9,7 @@ import {
   Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
   GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, 
   Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, 
-  Star, Globe, Zap, Shield, Send
+  Star, Globe, Zap, Shield, Send, ExternalLink
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
@@ -105,14 +105,31 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          <BentoSectionFooter 
-            title="Tools to support creative work"
-            description="From discovery through to collaboration, Creative Atlas helps people find what's happening, who's involved, and how to get connected."
-          />
+          <div className="text-center mt-12 max-w-3xl mx-auto">
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+              Tools to support creative work
+            </h3>
+            <p className="text-gray-400 text-sm md:text-base mb-4">
+              From discovery through to collaboration, Creative Atlas helps people find what's happening, who's involved, and how to get connected.
+            </p>
+            <p className="text-gray-400 text-sm md:text-base mb-6">
+              Creative Atlas is an initiative emerging from our new platform, Residents Desk, launching soon and designed to catalyse co-creation and interdisciplinary innovation across Australia, New Zealand, and the Pacific.
+            </p>
+            <a 
+              href="https://www.residentsdesk.au" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" className="gap-2">
+                <ExternalLink className="h-4 w-4" />
+                Residents Desk
+              </Button>
+            </a>
+          </div>
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Interactive Map - Full Width */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
@@ -133,7 +150,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Core Platform Features */}
       <section className="py-16 md:py-24 bg-[#121212]">
@@ -197,7 +214,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Community Hub Grid */}
       <section className="py-16 md:py-24 bg-[#121212]">
@@ -261,7 +278,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* How It Works */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
@@ -305,7 +322,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Categories */}
       <section className="py-16 md:py-24 bg-[#121212]">
@@ -336,7 +353,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Membership Benefits */}
       <section className="py-16 md:py-24 bg-[#0a0a0a]">
@@ -407,7 +424,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-[#121212]">
@@ -436,7 +453,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <Separator className="bg-[#333]" />
+      <Separator className="bg-border" />
 
       {/* Footer */}
       <footer className="border-t border-[#333] py-8 md:py-12 bg-[#121212]">
