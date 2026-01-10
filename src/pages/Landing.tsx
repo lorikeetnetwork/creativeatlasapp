@@ -5,49 +5,35 @@ import { Separator } from "@/components/ui/separator";
 import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-card";
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
-import { Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, Star, Globe, Zap, Shield, Send, ExternalLink } from "lucide-react";
+import { 
+  Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, 
+  GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, 
+  Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, 
+  Star, Globe, Zap, Shield, Send, ExternalLink
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
+
 const Landing = () => {
   const navigate = useNavigate();
-  const categories = [{
-    name: "Music",
-    icon: Music
-  }, {
-    name: "Visual Arts",
-    icon: Palette
-  }, {
-    name: "Venues",
-    icon: Building2
-  }, {
-    name: "Festivals",
-    icon: Radio
-  }, {
-    name: "Studios",
-    icon: Camera
-  }, {
-    name: "Education",
-    icon: GraduationCap
-  }, {
-    name: "Creative Hubs",
-    icon: Sparkles
-  }, {
-    name: "Technology",
-    icon: Lightbulb
-  }, {
-    name: "Community",
-    icon: Heart
-  }, {
-    name: "Production",
-    icon: Mic2
-  }, {
-    name: "Innovation",
-    icon: FlaskConical
-  }, {
-    name: "Events",
-    icon: Calendar
-  }];
-  return <div className="min-h-screen bg-[#121212]">
+  
+  const categories = [
+    { name: "Music", icon: Music },
+    { name: "Visual Arts", icon: Palette },
+    { name: "Venues", icon: Building2 },
+    { name: "Festivals", icon: Radio },
+    { name: "Studios", icon: Camera },
+    { name: "Education", icon: GraduationCap },
+    { name: "Creative Hubs", icon: Sparkles },
+    { name: "Technology", icon: Lightbulb },
+    { name: "Community", icon: Heart },
+    { name: "Production", icon: Mic2 },
+    { name: "Innovation", icon: FlaskConical },
+    { name: "Events", icon: Calendar }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#121212]">
       <Navbar />
       <FuturisticAlienHero />
 
@@ -58,7 +44,10 @@ const Landing = () => {
           {/* Hero Intro + Stats Row */}
           <BentoGrid className="lg:grid-cols-6 mb-4">
             {/* Main Intro Card - Large */}
-            <BentoCard className="md:col-span-2 lg:col-span-3 lg:row-span-2" title="A shared platform for Australia's creative community">
+            <BentoCard 
+              className="md:col-span-2 lg:col-span-3 lg:row-span-2"
+              title="A shared platform for Australia's creative community"
+            >
               <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
                 Creative Atlas is a practical place to discover spaces, meet people, and find opportunities across Australia's creative ecosystem. It brings together venues, projects, events, and creatives to support connection, collaboration, and ongoing creative work.
               </p>
@@ -117,10 +106,20 @@ const Landing = () => {
           </BentoGrid>
 
           <div className="text-center mt-12 max-w-3xl mx-auto">
-            
-            
-            
-            <a href="https://www.residentsdesk.au" target="_blank" rel="noopener noreferrer">
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+              Tools to support creative work
+            </h3>
+            <p className="text-gray-400 text-sm md:text-base mb-4">
+              From discovery through to collaboration, Creative Atlas helps people find what's happening, who's involved, and how to get connected.
+            </p>
+            <p className="text-gray-400 text-sm md:text-base mb-6">
+              Creative Atlas is an initiative emerging from our new platform, Residents Desk, launching soon and designed to catalyse co-creation and interdisciplinary innovation across Australia, New Zealand, and the Pacific.
+            </p>
+            <a 
+              href="https://www.residentsdesk.au" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
               <Button variant="outline" className="gap-2">
                 <ExternalLink className="h-4 w-4" />
                 Residents Desk
@@ -208,7 +207,10 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          <BentoSectionFooter title="A connected creative ecosystem" description="Creative Atlas supports participation through events, shared knowledge, opportunities, and conversation—helping creative work happen in real contexts." />
+          <BentoSectionFooter 
+            title="A connected creative ecosystem"
+            description="Creative Atlas supports participation through events, shared knowledge, opportunities, and conversation—helping creative work happen in real contexts."
+          />
         </div>
       </section>
 
@@ -224,7 +226,10 @@ const Landing = () => {
           </div>
           
           <BentoGrid className="lg:grid-cols-3 mb-4">
-            <BentoCard className="lg:row-span-2" onClick={() => navigate("/discussions")}>
+            <BentoCard 
+              className="lg:row-span-2"
+              onClick={() => navigate("/discussions")}
+            >
               <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-pink-500/10 mb-4">
                 <MessageSquare className="w-6 h-6 text-pink-400" />
               </div>
@@ -310,7 +315,10 @@ const Landing = () => {
             </BentoCard>
           </BentoGrid>
 
-          <BentoSectionFooter title="Get started in a few simple steps" description="Whether you're an individual creative or an organisation, Creative Atlas is designed to be easy to use and open to participation." />
+          <BentoSectionFooter 
+            title="Get started in a few simple steps"
+            description="Whether you're an individual creative or an organisation, Creative Atlas is designed to be easy to use and open to participation."
+          />
         </div>
       </section>
 
@@ -327,14 +335,20 @@ const Landing = () => {
           </div>
           
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 max-w-4xl mx-auto">
-            {categories.map((category, index) => <BentoCard key={index} className="p-3 md:p-4" onClick={() => navigate("/map")}>
+            {categories.map((category, index) => (
+              <BentoCard 
+                key={index}
+                className="p-3 md:p-4"
+                onClick={() => navigate("/map")}
+              >
                 <div className="flex flex-col items-center text-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-[#333] flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                     <category.icon className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
                   </div>
                   <span className="text-xs font-medium text-white">{category.name}</span>
                 </div>
-              </BentoCard>)}
+              </BentoCard>
+            ))}
           </div>
         </div>
       </section>
@@ -457,6 +471,8 @@ const Landing = () => {
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Landing;
