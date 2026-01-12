@@ -273,33 +273,33 @@
 }
 
 .mapboxgl-popup-content {
-  background-color: var(--card);
-  color: var(--card-foreground);
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
   @apply shadow-lg rounded-lg p-0 border-0;
 }
 
 .mapboxgl-popup-close-button {
-  color: var(--foreground);
+  color: hsl(var(--foreground));
   @apply text-xl leading-none p-2;
 }
 
 .mapboxgl-popup-close-button:hover {
-  color: var(--primary);
+  color: hsl(var(--primary));
 }
 
 .mapboxgl-ctrl-group {
-  background-color: var(--card);
-  border-color: var(--border);
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
   @apply rounded-lg overflow-hidden;
   box-shadow: var(--shadow-warm);
 }
 
 .mapboxgl-ctrl button {
-  color: var(--foreground);
+  color: hsl(var(--foreground));
 }
 
 .mapboxgl-ctrl button:hover {
-  background-color: var(--muted);
+  background-color: hsl(var(--muted));
 }
 
 /* Selected marker pulse animation */
