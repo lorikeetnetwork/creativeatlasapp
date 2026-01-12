@@ -114,7 +114,7 @@ const Topbar = ({
   ];
 
   return (
-    <header className={`h-14 flex-shrink-0 border-b-2 border-border bg-background text-foreground flex items-center justify-between w-full p-0 m-0 ${className || ''}`}>
+    <header className={`h-14 flex-shrink-0 border-b-2 border-border bg-background text-foreground flex items-center justify-between w-full p-0 m-0 ${className || ''}`} style={{ backgroundColor: 'hsl(0 0% 0%)', color: 'hsl(0 0% 100%)' }}>
       {/* Logo */}
       <div className="flex items-center h-full pl-5">
         <img 
