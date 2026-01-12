@@ -5,6 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import logoImage from "@/assets/creative-atlas-logo.png";
+import betaBadge from "@/assets/beta.png";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   NavigationMenu,
@@ -244,14 +245,17 @@ const Topbar = ({
             </Button>
           </div>
         ) : (
-          <Button 
-            variant="default"
-            onClick={onSignIn}
-            className="hidden md:flex border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all font-bold uppercase text-sm"
-          >
-            <User className="h-4 w-4 mr-2" />
-            Sign In
-          </Button>
+          <div className="hidden md:flex items-center gap-2">
+            <img src={betaBadge} alt="Beta" className="h-6 w-auto" />
+            <Button 
+              variant="default"
+              onClick={onSignIn}
+              className="border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all font-bold uppercase text-sm"
+            >
+              <User className="h-4 w-4 mr-2" />
+              Sign In
+            </Button>
+          </div>
         )}
 
         {/* Mobile Nav Sheet */}
@@ -326,17 +330,20 @@ const Topbar = ({
                   </Button>
                 </>
               ) : (
-                <Button 
-                  variant="default" 
-                  className="justify-start text-lg h-12 border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all font-bold uppercase gap-3" 
-                  onClick={() => {
-                    onSignIn();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  <User className="h-5 w-5" />
-                  Sign In
-                </Button>
+                <div className="flex items-center gap-2">
+                  <img src={betaBadge} alt="Beta" className="h-5 w-auto" />
+                  <Button 
+                    variant="default" 
+                    className="flex-1 justify-start text-lg h-12 border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all font-bold uppercase gap-3" 
+                    onClick={() => {
+                      onSignIn();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <User className="h-5 w-5" />
+                    Sign In
+                  </Button>
+                </div>
               )}
             </div>
           </SheetContent>
