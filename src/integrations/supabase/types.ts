@@ -425,6 +425,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_form_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          id: string
+          ip_address: string | null
+          location_id: string
+          rows_accessed: number
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          access_type?: string
+          accessed_at?: string
+          id?: string
+          ip_address?: string | null
+          location_id: string
+          rows_accessed?: number
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          id?: string
+          ip_address?: string | null
+          location_id?: string
+          rows_accessed?: number
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_form_submissions: {
         Row: {
           created_at: string | null
@@ -1902,9 +1935,39 @@ export type Database = {
           },
         ]
       }
+      suspicious_contact_access: {
+        Row: {
+          access_count_24h: number | null
+          last_access: string | null
+          location_id: string | null
+          location_name: string | null
+          total_rows_accessed_24h: number | null
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_rate_limits: { Args: never; Returns: undefined }
+      get_contact_submissions_logged: {
+        Args: { p_limit?: number; p_location_id: string; p_offset?: number }
+        Returns: {
+          created_at: string
+          id: string
+          inquiry_type: string
+          location_id: string
+          message: string
+          read_at: string
+          replied_at: string
+          sender_email: string
+          sender_name: string
+          sender_phone: string
+          status: string
+          subject: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
