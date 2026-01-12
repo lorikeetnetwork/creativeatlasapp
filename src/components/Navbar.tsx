@@ -123,7 +123,7 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
   ];
 
   return (
-    <header className="h-14 flex-shrink-0 border-b-2 border-border bg-background flex items-center justify-between w-full sticky top-0 z-50">
+    <header className="h-14 flex-shrink-0 border-b-2 border-border bg-background text-foreground flex items-center justify-between w-full sticky top-0 z-50">
       {/* Logo */}
       <div className="flex items-center h-full pl-5">
         <img 
