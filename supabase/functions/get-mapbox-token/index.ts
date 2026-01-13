@@ -13,40 +13,9 @@ serve(async (req) => {
   }
 
   try {
-    // Verify authentication
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      console.log("[get-mapbox-token] No authorization header provided");
-      return new Response(
-        JSON.stringify({ error: "Authentication required" }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
-    }
-
-    // Create Supabase client and verify user
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
-
-    if (authError || !user) {
-      console.log("[get-mapbox-token] Invalid or expired token");
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
-    }
-
-    console.log("[get-mapbox-token] Authenticated user:", user.id);
+    // Mapbox public tokens (pk.*) are designed to be public
+    // No authentication required for retrieving this token
+    console.log("[get-mapbox-token] Fetching public Mapbox token");
 
     const mapboxToken = Deno.env.get("VITE_MAPBOX_TOKEN");
     
