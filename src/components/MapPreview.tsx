@@ -34,6 +34,7 @@ const MapPreview = () => {
         locations={locations}
         selectedLocation={null}
         onLocationSelect={() => {}}
+        mapStyle="blueprint"
       />
 
       {/* Overlay CTA */}
