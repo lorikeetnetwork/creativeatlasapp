@@ -140,14 +140,15 @@ const PaymentSuccess = () => {
                           Start Exploring
                           <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
-                        <Button 
-                          className="flex-1" 
-                          variant="outline"
-                          size="lg"
-                          onClick={() => navigate("/pricing")}
-                        >
-                          Upgrade to Listing
-                        </Button>
+                        <a href="/#membership" className="flex-1">
+                          <Button 
+                            className="w-full" 
+                            variant="outline"
+                            size="lg"
+                          >
+                            Upgrade to Listing
+                          </Button>
+                        </a>
                       </div>
                     </>
                   ) : (

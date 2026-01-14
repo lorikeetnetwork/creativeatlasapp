@@ -80,7 +80,7 @@ export const ContactDetailsGate = ({
           )}
           <Button 
             size="sm" 
-            onClick={() => navigate(isAuthenticated ? "/pricing" : "/auth")}
+            onClick={() => isAuthenticated ? window.location.href = "/#membership" : navigate("/auth")}
             className="mt-2"
           >
             <Crown className="w-4 h-4 mr-2" />
@@ -102,7 +102,7 @@ export const ContactDetailsGate = ({
         variant="link" 
         size="sm" 
         className="p-0 h-auto text-xs"
-        onClick={() => navigate(isAuthenticated ? "/pricing" : "/auth")}
+        onClick={() => isAuthenticated ? window.location.href = "/#membership" : navigate("/auth")}
       >
         Unlock
       </Button>

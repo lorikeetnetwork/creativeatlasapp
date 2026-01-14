@@ -53,7 +53,7 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
                 <p className="text-sm text-gray-500">
-                  Starting from $15/year
+                  Starting from $35/year
                 </p>
               </CardContent>
             </Card>
@@ -112,16 +112,17 @@ export const SubscriptionGate = ({ children, featureName = "this feature" }: Sub
                 </div>
                 
                 <div className="space-y-3">
-                  <Button 
-                    className="w-full" 
-                    size="lg"
-                    onClick={() => navigate('/pricing')}
-                  >
-                    View Pricing Plans
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
+                  <a href="/#membership">
+                    <Button 
+                      className="w-full" 
+                      size="lg"
+                    >
+                      View Pricing Plans
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </a>
                   <p className="text-xs text-gray-500">
-                    Starting from just $15/year
+                    Starting from just $35/year
                   </p>
                 </div>
               </CardContent>
