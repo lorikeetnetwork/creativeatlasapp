@@ -217,10 +217,12 @@ const Dashboard = () => {
                     <p className="text-xs md:text-sm mb-3 text-gray-400">
                       <strong className="text-white">List your creative business</strong> on the map to reach more customers.
                     </p>
-                    <Button size="sm" onClick={() => navigate('/pricing')}>
-                      View Pricing
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
+                    <a href="/#membership">
+                      <Button size="sm">
+                        View Pricing
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </a>
                   </div>
                 )}
 
@@ -262,9 +264,11 @@ const Dashboard = () => {
                 </Button>
               )}
               {canUpgrade && (
-                <Button className="w-full justify-start text-sm" onClick={() => navigate('/pricing')}>
-                  List Your Business
-                </Button>
+                <a href="/#membership">
+                  <Button className="w-full justify-start text-sm">
+                    List Your Business
+                  </Button>
+                </a>
               )}
             </div>
           </BentoSidebarCard>
@@ -280,9 +284,11 @@ const Dashboard = () => {
               <Clock className="w-10 h-10 md:w-12 md:h-12 text-gray-500 mx-auto mb-4" />
               <p className="text-sm md:text-base text-gray-400 mb-4">No payment history yet</p>
               {profile.account_type === 'free' && (
-              <Button size="sm" onClick={() => navigate('/pricing')}>
-                View Pricing Plans
-              </Button>
+                <a href="/#membership">
+                  <Button size="sm">
+                    View Pricing Plans
+                  </Button>
+                </a>
               )}
             </div>
           ) : (

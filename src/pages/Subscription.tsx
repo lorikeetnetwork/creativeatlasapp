@@ -227,9 +227,11 @@ const Subscription = () => {
                 <p className="text-sm text-muted-foreground">
                   You're currently on the free plan. Upgrade to unlock more features!
                 </p>
-                <Button onClick={() => navigate('/pricing')} className="w-full sm:w-auto">
-                  View Pricing Plans
-                </Button>
+                <a href="/#membership">
+                  <Button className="w-full sm:w-auto">
+                    View Pricing Plans
+                  </Button>
+                </a>
               </div>
             )}
           </CardContent>

@@ -149,10 +149,10 @@ const LocationDetail = ({
                           <Phone className="w-3 h-3" />
                           <span>Call</span>
                         </a>}
-                    </> : <button onClick={() => navigate('/pricing')} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
+                    </> : <a href="/#membership" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
                       <Lock className="w-3 h-3" />
                       <span className="underline">Unlock Contact</span>
-                    </button>)}
+                    </a>)}
               </div>
             </div>}
 

@@ -219,12 +219,12 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
 
           {/* Pricing Link */}
           <NavigationMenuItem>
-            <Link to="/pricing">
+            <a href="/#membership">
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <CreditCard className="h-4 w-4 mr-2" />
                 Pricing
               </NavigationMenuLink>
-            </Link>
+            </a>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
@@ -289,17 +289,15 @@ const Navbar = ({ session: propSession }: NavbarProps) => {
                 </Button>
               ))}
               <div className="border-t-2 border-border my-2" />
-              <Button 
-                variant="ghost" 
-                className="justify-start text-lg h-12 border-2 border-transparent hover:border-primary hover:translate-x-[2px] hover:translate-y-[2px] transition-all font-bold uppercase gap-3" 
-                onClick={() => {
-                  navigate("/pricing");
-                  setMobileMenuOpen(false);
-                }}
-              >
-                <CreditCard className="h-5 w-5" />
-                Pricing
-              </Button>
+              <a href="/#membership" onClick={() => setMobileMenuOpen(false)}>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start text-lg h-12 border-2 border-transparent hover:border-primary hover:translate-x-[2px] hover:translate-y-[2px] transition-all font-bold uppercase gap-3"
+                >
+                  <CreditCard className="h-5 w-5" />
+                  Pricing
+                </Button>
+              </a>
               <Button 
                 variant="ghost" 
                 className="justify-start text-lg h-12 border-2 border-dashed border-secondary hover:bg-secondary/20 hover:translate-x-[2px] hover:translate-y-[2px] transition-all font-bold uppercase gap-3" 

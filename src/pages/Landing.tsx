@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,11 +7,64 @@ import { BentoCard, BentoGrid, BentoSectionFooter } from "@/components/ui/bento-
 import MapPreview from "@/components/MapPreview";
 import { FuturisticAlienHero } from "@/components/ui/futuristic-alien-hero";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, Star, Globe, Zap, Shield, Send, ExternalLink } from "lucide-react";
+import { Map, Users, ArrowRight, Building2, Music, Palette, Camera, Radio, GraduationCap, Heart, Briefcase, Sparkles, Lightbulb, Users2, Mic2, FlaskConical, Calendar, FileText, MessageSquare, Award, Star, Globe, Zap, Shield, Send, ExternalLink, User, Check, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Session } from "@supabase/supabase-js";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 const Landing = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handlePurchase = async (paymentType: 'basic_account' | 'creative_listing') => {
+    if (!session) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to continue with payment"
+      });
+      navigate(`/auth?return=${encodeURIComponent('/#membership')}`);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-account-payment', {
+        body: { payment_type: paymentType }
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        toast({
+          title: "Redirecting to payment",
+          description: "Complete your payment in the new window"
+        });
+      }
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment error",
+        description: error.message || "Failed to initiate payment",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const categories = [{
     name: "Music",
     icon: Music
@@ -349,72 +403,135 @@ const Landing = () => {
 
       <Separator className="bg-border" />
 
-      {/* Membership Benefits */}
-      <section className="py-16 md:py-24 bg-[#0a0a0a]">
+      {/* Membership & Pricing */}
+      <section id="membership" className="py-16 md:py-24 bg-[#0a0a0a] scroll-mt-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4 px-4 py-1.5">
               Membership
             </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Simple, affordable pricing</h2>
+            <p className="text-gray-400 text-sm md:text-base max-w-xl mx-auto">
+              Annual subscriptions that support the platform and community
+            </p>
           </div>
           
-          <BentoGrid className="lg:grid-cols-3 max-w-5xl mx-auto">
-            <BentoCard>
-              <div className="flex items-center gap-3 mb-4">
-                <Users className="w-6 h-6 text-primary" />
-                <h3 className="text-xl font-semibold text-white">For Creatives</h3>
+          <BentoGrid className="lg:grid-cols-3 max-w-5xl mx-auto mb-12">
+            {/* Creator Plan */}
+            <BentoCard className="relative border-primary/50">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+                Most Popular
+              </Badge>
+              <div className="flex items-center gap-3 mb-2 pt-2">
+                <User className="w-6 h-6 text-primary" />
+                <h3 className="text-xl font-semibold text-white">Creator</h3>
               </div>
-              <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Access the interactive map</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Browse and RSVP to events</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Apply for opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a public profile</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Join community discussions</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Publish articles and stories</li>
+              <div className="mb-4">
+                <span className="text-3xl font-bold text-white">$35</span>
+                <span className="text-gray-400 text-sm">/year</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">Full access for individual creatives</p>
+              <ul className="space-y-2 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Browse all creative spaces</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Save favorite locations</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Create member profile</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> RSVP & host events</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Opportunities board</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Publish blog articles</li>
               </ul>
-              <Button className="w-full" onClick={() => navigate("/pricing")}>
-                View Pricing
+              <Button 
+                className="w-full" 
+                onClick={() => handlePurchase('basic_account')}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Get Creator - $35/year
               </Button>
             </BentoCard>
             
+            {/* Business Plan */}
             <BentoCard>
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <Building2 className="w-6 h-6 text-primary" />
-                <h3 className="text-xl font-semibold text-white">For Creative Entities</h3>
+                <h3 className="text-xl font-semibold text-white">Business</h3>
               </div>
-              <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> List a venue, studio, or organisation</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Create a detailed profile</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Post events and opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Share work and offerings</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Receive enquiries</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Connect with the wider community</li>
+              <div className="mb-4">
+                <span className="text-3xl font-bold text-white">$55</span>
+                <span className="text-gray-400 text-sm">/year</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">For creative businesses & entities</p>
+              <ul className="space-y-2 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Everything in Creator</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Business listing on map</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Full business profile page</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Photo & offerings galleries</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Contact forms & social links</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Admin dashboard access</li>
               </ul>
-              <Button className="w-full" onClick={() => navigate("/pricing")}>
-                View Pricing
+              <Button 
+                className="w-full" 
+                variant="outline"
+                onClick={() => handlePurchase('creative_listing')}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Get Business - $55/year
               </Button>
             </BentoCard>
 
+            {/* Collaborator */}
             <BentoCard className="border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <Shield className="w-6 h-6 text-primary" />
-                <h3 className="text-xl font-semibold text-white">Become a Collaborator</h3>
+                <h3 className="text-xl font-semibold text-white">Collaborator</h3>
               </div>
-              <p className="text-gray-400 text-sm mb-4">
-                Collaborators help maintain and grow the platform by contributing to content, events, and community care.
-              </p>
-              <ul className="space-y-3 text-gray-400 text-sm mb-6">
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Curate events and opportunities</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Manage listings and locations</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Support showcases and articles</li>
-                <li className="flex items-center gap-2"><Star className="w-4 h-4 text-primary flex-shrink-0" /> Help shape community direction</li>
+              <div className="mb-4">
+                <span className="text-xl font-bold text-white">Free</span>
+                <span className="text-gray-400 text-sm"> (by application)</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">Help grow the platform</p>
+              <ul className="space-y-2 text-gray-400 text-sm mb-6">
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Curate events & opportunities</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Manage listings</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Support showcases & articles</li>
+                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Shape community direction</li>
               </ul>
-              <Button className="w-full gap-2" onClick={() => navigate("/collaborate")}>
+              <Button className="w-full gap-2" variant="secondary" onClick={() => navigate("/collaborate")}>
                 <Send className="w-4 h-4" />
                 Apply to Collaborate
               </Button>
             </BentoCard>
           </BentoGrid>
+
+          {/* Simple FAQ */}
+          <div className="max-w-2xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="free" className="border-[#333]">
+                <AccordionTrigger className="text-white hover:text-primary text-sm">
+                  Can I browse the map for free?
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-400 text-sm">
+                  Yes! The map is free to explore. Subscriptions unlock community features like events, opportunities, profiles, and more.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="difference" className="border-[#333]">
+                <AccordionTrigger className="text-white hover:text-primary text-sm">
+                  What's the difference between Creator and Business?
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-400 text-sm">
+                  Creator is for individuals wanting to participate in the community. Business adds a map listing, dedicated profile page, galleries, and contact forms for venues, studios, and organisations.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="billing" className="border-[#333]">
+                <AccordionTrigger className="text-white hover:text-primary text-sm">
+                  How does billing work?
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-400 text-sm">
+                  Subscriptions are billed annually. You can manage or cancel anytime from your dashboard.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </div>
       </section>
 

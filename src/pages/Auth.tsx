@@ -54,11 +54,10 @@ const Auth = () => {
     } else {
       toast({
         title: "Account created!",
-        description: "Redirecting to complete your subscription...",
+        description: "Redirecting to dashboard...",
       });
-      // Redirect new users to pricing to complete payment
       setTimeout(() => {
-        navigate("/pricing");
+        navigate("/dashboard");
       }, 500);
     }
   };
