@@ -31,8 +31,8 @@ const getSafeErrorMessage = (error: Error): string => {
 
 // Price IDs for yearly subscriptions
 const PRICE_IDS = {
-  basic_account: 'price_1Sh37nCxyWFCnV0cO69jutux', // $15 AUD/year
-  creative_listing: 'price_1ShPnwCxyWFCnV0c8O6fxc3O', // $20 AUD/year
+  basic_account: 'price_1SpRQ1CxyWFCnV0cquGYlXQY', // $35 AUD/year
+  creative_listing: 'price_1SpRUsCxyWFCnV0cqASYSiB7', // $55 AUD/year
 };
 
 const ACCOUNT_TYPES = {
@@ -41,8 +41,8 @@ const ACCOUNT_TYPES = {
 };
 
 const AMOUNTS = {
-  basic_account: 1500,
-  creative_listing: 2000,
+  basic_account: 3500,
+  creative_listing: 5500,
 };
 
 serve(async (req) => {

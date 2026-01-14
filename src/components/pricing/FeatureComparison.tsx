@@ -76,11 +76,11 @@ export const FeatureComparison = () => {
           </div>
           <div className="text-center">
             <span className="text-sm font-semibold text-primary">Creator</span>
-            <p className="text-xs text-muted-foreground mt-0.5">$15/year</p>
+            <p className="text-xs text-muted-foreground mt-0.5">$35/year</p>
           </div>
           <div className="text-center">
             <span className="text-sm font-semibold text-foreground">Business</span>
-            <p className="text-xs text-muted-foreground mt-0.5">$20/year</p>
+            <p className="text-xs text-muted-foreground mt-0.5">$55/year</p>
           </div>
         </div>
 

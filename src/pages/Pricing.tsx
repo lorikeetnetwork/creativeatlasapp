@@ -14,7 +14,7 @@ import { PricingCTA } from "@/components/pricing/PricingCTA";
 const pricingTiers: PricingTier[] = [
   {
     name: "Creator",
-    price: 15,
+    price: 35,
     period: "year",
     description: "Full access for individual creatives",
     features: [
@@ -27,13 +27,13 @@ const pricingTiers: PricingTier[] = [
       "Publish blog articles",
       "Connect with creatives",
     ],
-    cta: "Get Creator - $15/year",
+    cta: "Get Creator - $35/year",
     popular: true,
     icon: <User className="w-6 h-6" />,
   },
   {
     name: "Business",
-    price: 20,
+    price: 55,
     period: "year",
     description: "For creative businesses & entities",
     features: [
@@ -46,7 +46,7 @@ const pricingTiers: PricingTier[] = [
       "Admin dashboard access",
       "Priority support",
     ],
-    cta: "List Business - $20/year",
+    cta: "List Business - $55/year",
     icon: <Building2 className="w-6 h-6" />,
   },
 ];
