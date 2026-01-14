@@ -16,20 +16,28 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import lorikeetLogo from "@/assets/lorikeet-network-logo.png";
 const Landing = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({
+      data: {
+        session
+      }
+    }) => {
       setSession(session);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: {
+        subscription
+      }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
     return () => subscription.unsubscribe();
   }, []);
-
   const handlePurchase = async (paymentType: 'basic_account' | 'creative_listing') => {
     if (!session) {
       toast({
@@ -39,11 +47,15 @@ const Landing = () => {
       navigate(`/auth?return=${encodeURIComponent('/#membership')}`);
       return;
     }
-
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-account-payment', {
-        body: { payment_type: paymentType }
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke('create-account-payment', {
+        body: {
+          payment_type: paymentType
+        }
       });
       if (error) throw error;
       if (data?.url) {
@@ -64,7 +76,6 @@ const Landing = () => {
       setIsLoading(false);
     }
   };
-
   const categories = [{
     name: "Music",
     icon: Music
@@ -439,11 +450,7 @@ const Landing = () => {
                 <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Opportunities board</li>
                 <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Publish blog articles</li>
               </ul>
-              <Button 
-                className="w-full" 
-                onClick={() => handlePurchase('basic_account')}
-                disabled={isLoading}
-              >
+              <Button className="w-full" onClick={() => handlePurchase('basic_account')} disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                 Get Creator - $35/year
               </Button>
@@ -468,12 +475,7 @@ const Landing = () => {
                 <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Contact forms & social links</li>
                 <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary flex-shrink-0" /> Admin dashboard access</li>
               </ul>
-              <Button 
-                className="w-full" 
-                variant="outline"
-                onClick={() => handlePurchase('creative_listing')}
-                disabled={isLoading}
-              >
+              <Button className="w-full" variant="outline" onClick={() => handlePurchase('creative_listing')} disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                 Get Business - $55/year
               </Button>
@@ -486,7 +488,7 @@ const Landing = () => {
                 <h3 className="text-xl font-semibold text-white">Collaborator</h3>
               </div>
               <div className="mb-4">
-                <span className="text-xl font-bold text-white">Free</span>
+                <span className="text-xl font-bold text-white"></span>
                 <span className="text-gray-400 text-sm"> (by application)</span>
               </div>
               <p className="text-gray-400 text-sm mb-4">Help grow the platform</p>
