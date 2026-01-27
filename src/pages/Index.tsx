@@ -24,6 +24,8 @@ import { normalizeCoordinates } from "@/utils/geo";
 import { MapStyleControl } from "@/components/map/MapStyleControl";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { QuickAddButton } from "@/components/admin/QuickAddButton";
+import { QuickAddLocation } from "@/components/admin/QuickAddLocation";
 
 const IndexContent = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -38,6 +40,10 @@ const IndexContent = () => {
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
+  
+  // Quick Add state
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [quickAddCoords, setQuickAddCoords] = useState<{ lat: number; lng: number } | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
@@ -145,6 +151,24 @@ const IndexContent = () => {
     setIsFormOpen(true);
   };
 
+  // Quick Add handlers
+  const handleQuickAddOpen = () => {
+    setIsQuickAddOpen(true);
+    setQuickAddCoords(null);
+  };
+
+  const handleQuickAddMapClick = (coords: { lat: number; lng: number }) => {
+    setQuickAddCoords(coords);
+    if (!isQuickAddOpen) {
+      setIsQuickAddOpen(true);
+    }
+  };
+
+  const handleQuickAddSuccess = () => {
+    // Refresh locations after adding
+    window.location.reload();
+  };
+
   // Mobile Layout
   if (isMobile) {
     return (
@@ -176,17 +200,26 @@ const IndexContent = () => {
               favoriteIds={favoriteIds}
               mapStyle={mapStyle}
               colorMode={markerColorMode}
+              isAddMode={isQuickAddOpen}
+              onMapClick={handleQuickAddMapClick}
+              tempMarkerCoords={quickAddCoords}
             />
           </ErrorBoundary>
           {session && (
-            <Button onClick={() => setMobileSheetOpen(true)} className="absolute bottom-6 left-4 h-14 px-5 rounded-full shadow-lg z-10">
-              <Search className="w-5 h-5 mr-2" />
-              Search
-              <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
-                {filteredLocations.length}
-              </span>
-            </Button>
+            <div className="absolute bottom-6 left-4 flex gap-2 z-10">
+              <Button onClick={() => setMobileSheetOpen(true)} className="h-14 px-5 rounded-full shadow-lg">
+                <Search className="w-5 h-5 mr-2" />
+                Search
+                <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                  {filteredLocations.length}
+                </span>
+              </Button>
+            </div>
           )}
+          {/* Quick Add Button for master users - mobile */}
+          <div className="absolute bottom-6 right-4 z-10">
+            <QuickAddButton onClick={handleQuickAddOpen} />
+          </div>
         </div>
 
         {session && <MobileLocationSheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen} searchQuery={searchQuery} onSearchChange={setSearchQuery} selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} region={region} onRegionChange={setRegion} locations={filteredLocations} selectedLocation={selectedLocation} onLocationSelect={handleLocationSelect} />}
@@ -198,6 +231,21 @@ const IndexContent = () => {
             <LocationSubmissionForm session={session} onSuccess={() => setIsFormOpen(false)} onCancel={() => setIsFormOpen(false)} />
           </DialogContent>
         </Dialog>
+
+        {/* Quick Add Location Modal - mobile */}
+        <QuickAddLocation
+          open={isQuickAddOpen}
+          onOpenChange={setIsQuickAddOpen}
+          coordinates={quickAddCoords}
+          onSuccess={handleQuickAddSuccess}
+          onClickMap={() => {
+            setIsQuickAddOpen(false);
+            toast({
+              title: "Click on the map",
+              description: "Click anywhere on the map to set the location coordinates",
+            });
+          }}
+        />
       </div>
     );
   }
@@ -275,9 +323,16 @@ const IndexContent = () => {
               favoriteIds={favoriteIds}
               mapStyle={mapStyle}
               colorMode={markerColorMode}
+              isAddMode={isQuickAddOpen}
+              onMapClick={handleQuickAddMapClick}
+              tempMarkerCoords={quickAddCoords}
             />
           </ErrorBoundary>
-
+          
+          {/* Quick Add Button for master users - desktop */}
+          <div className="absolute bottom-6 right-4 z-10">
+            <QuickAddButton onClick={handleQuickAddOpen} />
+          </div>
         </div>
       </div>
 
@@ -286,6 +341,22 @@ const IndexContent = () => {
           <LocationSubmissionForm session={session} onSuccess={() => setIsFormOpen(false)} onCancel={() => setIsFormOpen(false)} />
         </DialogContent>
       </Dialog>
+
+      {/* Quick Add Location Modal */}
+      <QuickAddLocation
+        open={isQuickAddOpen}
+        onOpenChange={setIsQuickAddOpen}
+        coordinates={quickAddCoords}
+        onSuccess={handleQuickAddSuccess}
+        onClickMap={() => {
+          // Close modal temporarily to allow map click
+          setIsQuickAddOpen(false);
+          toast({
+            title: "Click on the map",
+            description: "Click anywhere on the map to set the location coordinates",
+          });
+        }}
+      />
     </div>
   );
 };

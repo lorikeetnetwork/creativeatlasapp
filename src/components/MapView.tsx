@@ -26,6 +26,9 @@ interface MapViewProps {
   colorMode?: MarkerColorMode;
   onStyleChange?: (style: MapStyle) => void;
   onColorModeChange?: (mode: MarkerColorMode) => void;
+  isAddMode?: boolean;
+  onMapClick?: (coords: { lat: number; lng: number }) => void;
+  tempMarkerCoords?: { lat: number; lng: number } | null;
 }
 
 const MAP_STYLE_URLS: Record<MapStyle, string> = {
@@ -265,6 +268,9 @@ const MapView = ({
   colorMode = "category",
   onStyleChange,
   onColorModeChange,
+  isAddMode = false,
+  onMapClick,
+  tempMarkerCoords,
 }: MapViewProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -436,6 +442,16 @@ const MapView = ({
             south: bounds.getSouth(),
             east: bounds.getEast(),
             west: bounds.getWest(),
+          });
+        }
+      });
+
+      // Handle map clicks for add mode
+      map.current.on("click", (e) => {
+        if (isAddMode && onMapClick) {
+          onMapClick({
+            lat: e.lngLat.lat,
+            lng: e.lngLat.lng,
           });
         }
       });
@@ -633,9 +649,57 @@ const MapView = ({
     );
   }
 
+  // Handle cursor change for add mode
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    const canvas = map.current.getCanvas();
+    if (isAddMode) {
+      canvas.style.cursor = "crosshair";
+    } else {
+      canvas.style.cursor = "";
+    }
+  }, [isAddMode, mapLoaded]);
+
+  // Handle temporary marker for add mode
+  const tempMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    
+    // Remove existing temp marker
+    if (tempMarkerRef.current) {
+      tempMarkerRef.current.remove();
+      tempMarkerRef.current = null;
+    }
+    
+    // Add new temp marker if coords provided
+    if (tempMarkerCoords) {
+      const el = document.createElement("div");
+      el.className = "temp-add-marker";
+      el.style.width = "24px";
+      el.style.height = "24px";
+      el.style.borderRadius = "50%";
+      el.style.backgroundColor = "#22c55e";
+      el.style.border = "3px solid white";
+      el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+      el.style.cursor = "pointer";
+      
+      tempMarkerRef.current = new mapboxgl.Marker(el)
+        .setLngLat([tempMarkerCoords.lng, tempMarkerCoords.lat])
+        .addTo(map.current);
+    }
+    
+    return () => {
+      if (tempMarkerRef.current) {
+        tempMarkerRef.current.remove();
+        tempMarkerRef.current = null;
+      }
+    };
+  }, [tempMarkerCoords, mapLoaded]);
+
   return (
     <div className="w-full h-full relative">
-      <div ref={mapContainer} className="w-full h-full" />
+      <div ref={mapContainer} className={`w-full h-full ${isAddMode ? "cursor-crosshair" : ""}`} />
 
       {/* Map Controls */}
       {(onStyleChange || onColorModeChange) && (
