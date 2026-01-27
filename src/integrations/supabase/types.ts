@@ -2356,7 +2356,11 @@ export type Database = {
         | "Software, Development & Digital Platforms"
         | "Media Infrastructure & Cloud Technology"
         | "Business, Logistics & Support Services"
-      location_source: "UserSubmitted" | "AdminImported" | "AdminCreated"
+      location_source:
+        | "UserSubmitted"
+        | "AdminImported"
+        | "AdminCreated"
+        | "AdminAdded"
       location_status:
         | "Pending"
         | "Active"
@@ -2756,7 +2760,12 @@ export const Constants = {
         "Media Infrastructure & Cloud Technology",
         "Business, Logistics & Support Services",
       ],
-      location_source: ["UserSubmitted", "AdminImported", "AdminCreated"],
+      location_source: [
+        "UserSubmitted",
+        "AdminImported",
+        "AdminCreated",
+        "AdminAdded",
+      ],
       location_status: [
         "Pending",
         "Active",
