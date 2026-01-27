@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MapPin, Loader2, Check, Plus, X } from "lucide-react";
+import AddressAutocomplete, { ParsedAddress } from "@/components/AddressAutocomplete";
 import type { Database } from "@/integrations/supabase/types";
 
 type LocationCategory = Database["public"]["Enums"]["location_category"];
@@ -254,14 +255,21 @@ export function QuickAddLocation({
             )}
           </div>
 
-          {/* Address (auto-filled from reverse geocode) */}
+          {/* Address with Autocomplete */}
           <div className="space-y-2">
-            <Label htmlFor="address">Address *</Label>
-            <Input
-              id="address"
-              placeholder="Street address"
-              {...register("address")}
-              className={errors.address ? "border-destructive" : ""}
+            <Label>Address *</Label>
+            <AddressAutocomplete
+              placeholder="Start typing an address..."
+              defaultValue={watch("address") || ""}
+              onAddressSelect={(parsed: ParsedAddress) => {
+                setValue("address", parsed.address);
+                setValue("suburb", parsed.suburb);
+                setValue("state", parsed.state);
+                setValue("postcode", parsed.postcode);
+                setValue("country", parsed.country);
+                setValue("latitude", parsed.latitude);
+                setValue("longitude", parsed.longitude);
+              }}
             />
             {errors.address && (
               <p className="text-xs text-destructive">{errors.address.message}</p>
