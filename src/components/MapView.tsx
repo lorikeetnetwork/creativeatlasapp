@@ -603,6 +603,54 @@ const MapView = ({
     hasInitiallyFitBounds.current = true;
   }, [mapLoaded]);
 
+  // Handle cursor change for add mode - must be before conditional returns
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    const canvas = map.current.getCanvas();
+    if (isAddMode) {
+      canvas.style.cursor = "crosshair";
+    } else {
+      canvas.style.cursor = "";
+    }
+  }, [isAddMode, mapLoaded]);
+
+  // Handle temporary marker for add mode - must be before conditional returns
+  const tempMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    
+    // Remove existing temp marker
+    if (tempMarkerRef.current) {
+      tempMarkerRef.current.remove();
+      tempMarkerRef.current = null;
+    }
+    
+    // Add new temp marker if coords provided
+    if (tempMarkerCoords) {
+      const el = document.createElement("div");
+      el.className = "temp-add-marker";
+      el.style.width = "24px";
+      el.style.height = "24px";
+      el.style.borderRadius = "50%";
+      el.style.backgroundColor = "#22c55e";
+      el.style.border = "3px solid white";
+      el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+      el.style.cursor = "pointer";
+      
+      tempMarkerRef.current = new mapboxgl.Marker(el)
+        .setLngLat([tempMarkerCoords.lng, tempMarkerCoords.lat])
+        .addTo(map.current);
+    }
+    
+    return () => {
+      if (tempMarkerRef.current) {
+        tempMarkerRef.current.remove();
+        tempMarkerRef.current = null;
+      }
+    };
+  }, [tempMarkerCoords, mapLoaded]);
+
   if (tokenLoading) {
     return (
       <div className="w-full h-full bg-card border border-border flex items-center justify-center">
@@ -648,54 +696,6 @@ const MapView = ({
       </div>
     );
   }
-
-  // Handle cursor change for add mode
-  useEffect(() => {
-    if (!map.current || !mapLoaded) return;
-    const canvas = map.current.getCanvas();
-    if (isAddMode) {
-      canvas.style.cursor = "crosshair";
-    } else {
-      canvas.style.cursor = "";
-    }
-  }, [isAddMode, mapLoaded]);
-
-  // Handle temporary marker for add mode
-  const tempMarkerRef = useRef<mapboxgl.Marker | null>(null);
-  
-  useEffect(() => {
-    if (!map.current || !mapLoaded) return;
-    
-    // Remove existing temp marker
-    if (tempMarkerRef.current) {
-      tempMarkerRef.current.remove();
-      tempMarkerRef.current = null;
-    }
-    
-    // Add new temp marker if coords provided
-    if (tempMarkerCoords) {
-      const el = document.createElement("div");
-      el.className = "temp-add-marker";
-      el.style.width = "24px";
-      el.style.height = "24px";
-      el.style.borderRadius = "50%";
-      el.style.backgroundColor = "#22c55e";
-      el.style.border = "3px solid white";
-      el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-      el.style.cursor = "pointer";
-      
-      tempMarkerRef.current = new mapboxgl.Marker(el)
-        .setLngLat([tempMarkerCoords.lng, tempMarkerCoords.lat])
-        .addTo(map.current);
-    }
-    
-    return () => {
-      if (tempMarkerRef.current) {
-        tempMarkerRef.current.remove();
-        tempMarkerRef.current = null;
-      }
-    };
-  }, [tempMarkerCoords, mapLoaded]);
 
   return (
     <div className="w-full h-full relative">
